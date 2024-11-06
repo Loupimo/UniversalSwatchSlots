@@ -2,9 +2,9 @@ using UnrealBuildTool;
 using System.IO;
 using System;
 
-public class UniversalSwatches : ModuleRules
+public class UniversalSwatchSlots : ModuleRules
 {
-	public UniversalSwatches(ReadOnlyTargetRules Target) : base(Target)
+	public UniversalSwatchSlots(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		CppStandard = CppStandardVersion.Cpp20;

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FUniversalSwatchesModule : public IModuleInterface
+class FUniversalSwatchSlotsModule : public IModuleInterface
 {
 public:
 
