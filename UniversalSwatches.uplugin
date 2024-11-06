@@ -1,0 +1,33 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0.0",
+	"FriendlyName": "Universal Swatches",
+	"Description": "A mod that adds new swatches (one for each item in the game) splitted into categories. These swatches comes with default colors depending on the item it correspond to. You can add swatches of your own or modify the existing ones by modifying the JSON file. It also means that you can share swatches between different save game.",
+	"Category": "Modding",
+	"CreatedBy": "Loupimo",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "UniversalSwatches",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "SML",
+			"Enabled": true,
+			"SemVersion": "^3.8.0"
+		}
+	],
+	"SemVersion": "1.0.0",
+	"GameVersion": ">=365306"
+}
