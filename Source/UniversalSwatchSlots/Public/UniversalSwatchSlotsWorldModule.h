@@ -7,6 +7,10 @@
 #include "FGBuildableSubsystem.h"
 #include "FGGameState.h"
 #include "FGFactoryColoringTypes.h"
+#include "FGCustomizationRecipe.h"
+#include "FGCustomizerSubCategory.h"
+#include "FGBuildGun.h"
+
 #include "USSCustomizerInterface.h"
 #include "UniversalSwatchSlotsWorldModule.generated.h"
 
@@ -18,9 +22,21 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 {
 	GENERATED_BODY()
 	
-	UFUNCTION(BlueprintCallable, Category = "Schematic")
-	void AddNewSwatch(FUSSSwatchInformation SwatchInformations);
+	UFUNCTION(BlueprintCallable, Category = "Swatch")
+	void AddNewSwatches(TArray<FUSSSwatchInformation> SwatchInformations);
 
-	UFUNCTION(BlueprintCallable, Category = "Schematic")
-	void ApplyColorData(AFGGameState* GameState, AFGBuildableSubsystem* BuildableSubSystem);
+	UFUNCTION(BlueprintCallable, Category = "Swatch")
+	UFGCustomizerSubCategory* GenerateDynamicSwatchGroup(int32 UniqueGroupID, FText DisplayName, float Priority);
+
+	UFUNCTION(BlueprintCallable, Category = "Swatch")
+	UFGFactoryCustomizationDescriptor_Swatch* GenerateDynamicSwatchDescriptor(int32 UniqueID, FText DisplayName, UFGCustomizerSubCategory* SwatchGroup);
+
+	UFUNCTION(BlueprintCallable, Category = "Swatch")
+	UFGCustomizationRecipe* GenerateDynamicSwatchRecipe(UFGFactoryCustomizationDescriptor_Swatch* SwatchDescriptor);
+
+
+public:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Recipe reference")
+	TSoftClassPtr<UObject> BuildGunBPClass;
 };
