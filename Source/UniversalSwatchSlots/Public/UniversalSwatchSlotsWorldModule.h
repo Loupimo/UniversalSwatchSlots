@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/Texture2D.h"
+
 #include "Module/GameWorldModule.h"
 #include "FGBuildableSubsystem.h"
 #include "FGGameState.h"
@@ -82,7 +84,6 @@ UCLASS()
 class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWorldModule
 {
 	GENERATED_BODY()
-	
 
 	/**
 	 * Add new swatch color slots to the gamestate and buildable sub system using the desired swatch informations.
@@ -113,6 +114,8 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 *
 	 * @param	UniqueID				The ID to give to the swatch descriptor.
 	 * @param	DisplayName				The name to give to the swatch descriptor.
+	 * @param   PrimaryColor			The primary color used to generate the swatch icon.
+	 * @param	SecondaryColor			The secondary color used to generate the swatch icon.
 	 * @param	SwatchGroup				The swatch group to use.
 	 *
 	 * @warning Be sure that the desired swatch descriptor doesn't exist otherwise its CDO will be modified.
@@ -120,7 +123,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @return The newly generated swatch descriptor, nullptr otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	UFGFactoryCustomizationDescriptor_Swatch* GenerateDynamicSwatchDescriptor(int32 UniqueID, FText DisplayName, UFGCustomizerSubCategory* SwatchGroup);
+	UFGFactoryCustomizationDescriptor_Swatch* GenerateDynamicSwatchDescriptor(int32 UniqueID, FText DisplayName, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup);
 
 	/**
 	 * Create a new swatch recipe using the desired swatch descriptor.
@@ -144,6 +147,8 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @param	GroupPriority				The priority to give to the swatch group. If the group already exist its priority will be changed.
 	 * @param	SwatchUniqueID				The swatch descriptor ID to use. If the descriptor ID is already in use this function will exit without doing anything.
 	 * @param	SwatchDisplayName			The name to give to the swatch descriptor.
+	 * @param   PrimaryColor				The primary color of the swatch.
+	 * @param	SecondaryColor				The secondary color of the swatch.
 	 * @param	SwatchGroup					The used swatch group. NULL if the function was aborted.
 	 * @param	SwatchDescriptor			The generated swatch descriptor. NULL if the function was aborted.
 	 * @param	SwatchRecipe				The generated swatch recipe. NULL if the function was aborted.
@@ -151,7 +156,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @return True if the swatch was created, false otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	bool GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SwatchUniqueID, FText SwatchDisplayName, UFGCustomizerSubCategory*& SwatchGroup, UFGFactoryCustomizationDescriptor_Swatch*& SwatchDescriptor, UFGCustomizationRecipe*& SwatchRecipe);
+	bool GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SwatchUniqueID, FText SwatchDisplayName, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory*& SwatchGroup, UFGFactoryCustomizationDescriptor_Swatch*& SwatchDescriptor, UFGCustomizationRecipe*& SwatchRecipe);
 
 	/**
 	 * Create a new swatch using the desired group ID and swatch name.
@@ -203,6 +208,11 @@ public:
 	/* The build gun blueprint class that will be used by the dynamically created swatch recipes. This array is modified when the GenerateDynamicSwatchRecipe function is called. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
 	TMap<int32, UFGCustomizationRecipe*> SwatchRecipeArray;
+
+
+	/* The image used as template to generate swatch icon for the awesome shop. */
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
+	UTexture2D* SwatchTemplate;*/
 	
 
 	/* The configuration that contains all the swatch to create. */
@@ -230,4 +240,5 @@ protected:
 	int32 ParseSwatchGroup(int32 GroupID, int32 StartSwatchID, UConfigPropertySection* SwatchGroup, FUSSPalette* OutPalette);
 	bool ParseSwatch(int32 SwatchID, UConfigPropertySection* Swatch, int32 GroupID, FString GroupName, float GroupPriority, FUSSPalette* OutPalette);
 	FLinearColor HexToLinearColor(FString HexCode);
+	UTexture2D* GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColor SecondaryColor);
 };

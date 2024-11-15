@@ -2,29 +2,33 @@
 
 
 #include "UniversalSwatchSlotsWorldModule.h"
-#include "FGSchematic.h"
+
+#include "RenderUtils.h"
+#include "Math/Vector2D.h"
 #include "Unlocks/FGUnlockRecipe.h"
 #include "Kismet/GameplayStatics.h"
-#include "RuntimeBlueprintFunctionLibrary.h"
+
+#include "FGSchematic.h"
 #include "Configuration/Properties/ConfigPropertyFloat.h"
 #include "Configuration/Properties/ConfigPropertyInteger.h"
 #include "Configuration/Properties/ConfigPropertySection.h"
 #include "Configuration/Properties/ConfigPropertyString.h"
 #include "Configuration/Properties/ConfigPropertyArray.h"
 #include "Configuration/Properties/ConfigPropertyBool.h"
-#include "Internationalization/Text.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogUniversalSwatchSlots, Log, All)
 
 DEFINE_LOG_CATEGORY(LogUniversalSwatchSlots)
-
 
 void UUniversalSwatchSlotsWorldModule::AddNewSwatchesColorSlots(TArray<FUSSSwatchInformation> SwatchInformations)
 {
 	AFGBuildableSubsystem* Subsystem = AFGBuildableSubsystem::Get(this);
 	AFGGameState* FGGameState = Cast<AFGGameState>(UGameplayStatics::GetGameState(this));
 
-	if (Subsystem && FGGameState) {
+	int32 StartSwatchID = 28;	// SF swatch slots ends at index 28
+
+	if (Subsystem && FGGameState)
+	{
 		for (FUSSSwatchInformation& Swatch : SwatchInformations)
 		{
 			if (Swatch.mSwatch)
@@ -42,37 +46,77 @@ void UUniversalSwatchSlotsWorldModule::AddNewSwatchesColorSlots(TArray<FUSSSwatc
 							}
 						}*/
 
-					//if (!Subsystem->mColorSlots_Data.IsValidIndex(ColourIndex))
-					{
-						UE_LOG(LogUniversalSwatchSlots, Log, TEXT("Try to add new color Slot at index, %d - %d"), ColourIndex, Subsystem->mColorSlots_Data.Num());
+					FFactoryCustomizationColorSlot NewColourSlot = FFactoryCustomizationColorSlot(FLinearColor::Black, FLinearColor::Black);
+
+					if (Subsystem->mColorSlots_Data.Num() <= ColourIndex)
+					{	// We need to create some default swatch slots
 
 						for (uint8 i = Subsystem->mColorSlots_Data.Num(); i <= ColourIndex; ++i)
 						{
-							// Defaults
-							FFactoryCustomizationColorSlot NewColourSlot = FFactoryCustomizationColorSlot(Swatch.mPrimaryColour, Swatch.mSecondaryColour);
-
-							if (!Subsystem->mColorSlots_Data.IsValidIndex(ColourIndex))
+							if (!Subsystem->mColorSlots_Data.IsValidIndex(i))
 							{	// We need to add a new slot
 
 								Subsystem->mColorSlots_Data.Add(NewColourSlot);
+								UE_LOG(LogUniversalSwatchSlots, Log, TEXT("New Colour slot added: %d"), i);
 							}
-							FGGameState->SetupColorSlots_Data(Subsystem->mColorSlots_Data);
-							FGGameState->Server_SetBuildingColorDataForSlot(i, NewColourSlot);
-
-							FTimerDelegate TimerDel;
-							FTimerHandle   TimerHandle;
-							TimerDel.BindUFunction(Subsystem, FName("SetColorSlot_Data"), i, NewColourSlot);
-							GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 2.0f, false);
-							TimerDel.BindUFunction(FGGameState, FName("Server_SetBuildingColorDataForSlot"), i, NewColourSlot);
-							GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 2.0f, false);
-
-							Subsystem->SetColorSlot_Data(i, NewColourSlot);
-
-							// Mark Slots as Dirty
-							Subsystem->mColorSlotsAreDirty = true;
-
-							UE_LOG(LogUniversalSwatchSlots, Log, TEXT("New Colour slot added: %d"), i);
 						}
+					}
+
+					// Changes the colour to the desired one
+					NewColourSlot.PrimaryColor = Swatch.mPrimaryColour;
+					NewColourSlot.SecondaryColor = Swatch.mSecondaryColour;
+
+					// Update the subsystem and game state 
+					Subsystem->SetColorSlot_Data(ColourIndex, NewColourSlot);
+					FGGameState->SetupColorSlots_Data(Subsystem->mColorSlots_Data);
+					FGGameState->Server_SetBuildingColorDataForSlot(ColourIndex, NewColourSlot);
+
+					FTimerDelegate TimerDel;
+					FTimerHandle   TimerHandle;
+					TimerDel.BindUFunction(Subsystem, FName("SetColorSlot_Data"), ColourIndex, NewColourSlot);
+					GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 2.0f, false);
+					TimerDel.BindUFunction(FGGameState, FName("Server_SetBuildingColorDataForSlot"), ColourIndex, NewColourSlot);
+					GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 2.0f, false);
+
+					// Mark Slots as Dirty
+					Subsystem->mColorSlotsAreDirty = true;
+
+					UE_LOG(LogUniversalSwatchSlots, Log, TEXT("Swatch found and success: %d > %s (%d/%d)"), ColourIndex, *Swatch.mSwatch->GetName(), FGGameState->mBuildingColorSlots_Data.Num(), Subsystem->mColorSlots_Data.Num());
+
+					/*UE_LOG(LogUniversalSwatchSlots, Log, TEXT("Try to add new color Slot at index, %d - %d"), ColourIndex, Subsystem->mColorSlots_Data.Num());
+
+					for (uint8 i = StartSwatchID; i <= ColourIndex; ++i)
+					{
+						bool isNewlyCreated = false;
+
+						// Defaults
+						FFactoryCustomizationColorSlot NewColourSlot = FFactoryCustomizationColorSlot(Swatch.mPrimaryColour, Swatch.mSecondaryColour);
+
+						if (!Subsystem->mColorSlots_Data.IsValidIndex(ColourIndex))
+						{	// We need to add a new slot
+
+							Subsystem->mColorSlots_Data.Add(NewColourSlot);
+							isNewlyCreated = true;
+						}
+						FGGameState->SetupColorSlots_Data(Subsystem->mColorSlots_Data);
+						FGGameState->Server_SetBuildingColorDataForSlot(i, NewColourSlot);
+
+						FTimerDelegate TimerDel;
+						FTimerHandle   TimerHandle;
+						TimerDel.BindUFunction(Subsystem, FName("SetColorSlot_Data"), i, NewColourSlot);
+						GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 2.0f, false);
+						TimerDel.BindUFunction(FGGameState, FName("Server_SetBuildingColorDataForSlot"), i, NewColourSlot);
+						GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 2.0f, false);
+
+						if (isNewlyCreated || i == ColourIndex)
+						{	// We only color
+							Subsystem->SetColorSlot_Data(i, NewColourSlot);
+						}
+
+						// Mark Slots as Dirty
+						Subsystem->mColorSlotsAreDirty = true;
+
+						UE_LOG(LogUniversalSwatchSlots, Log, TEXT("New Colour slot added: %d"), i);
 					}
 
 					// Add to Array
@@ -88,7 +132,7 @@ void UUniversalSwatchSlotsWorldModule::AddNewSwatchesColorSlots(TArray<FUSSSwatc
 					FGGameState->SetupColorSlots_Data(Subsystem->mColorSlots_Data);
 					Subsystem->mColorSlotsAreDirty = true;
 					UE_LOG(LogUniversalSwatchSlots, Log, TEXT("Swatch found and success: %d > %s (%d/%d)"), ColourIndex, *Swatch.mSwatch->GetName(), FGGameState->mBuildingColorSlots_Data.Num(), Subsystem->mColorSlots_Data.Num());
-				}
+				*/}
 			}
 		}
 
@@ -181,7 +225,7 @@ UFGCustomizerSubCategory* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatc
 }
 
 
-UFGFactoryCustomizationDescriptor_Swatch* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescriptor(int32 UniqueID, FText DisplayName, UFGCustomizerSubCategory* SwatchGroup)
+UFGFactoryCustomizationDescriptor_Swatch* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescriptor(int32 UniqueID, FText DisplayName, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup)
 {
 	// Create a dynamic derivated class
 	UClass* NewClass = GenerateDynamicClass(UFGFactoryCustomizationDescriptor_Swatch::StaticClass(), FName(*FString::Printf(TEXT("Gen_USS_SwatchDesc_%d"), UniqueID)));
@@ -200,6 +244,9 @@ UFGFactoryCustomizationDescriptor_Swatch* UUniversalSwatchSlotsWorldModule::Gene
 				CDO->ID = UniqueID;
 				CDO->mDisplayName = DisplayName;
 				CDO->mDescription = this->SwatchDescription;
+				CDO->mIcon = this->GenerateSwatchIcon(PrimaryColor, SecondaryColor);
+				CDO->mPersistentBigIcon = CDO->mIcon.Get();
+				CDO->mSmallIcon = CDO->mIcon.Get();
 				CDO->mCategory = this->SwatchCategory;
 				if (SwatchGroup != nullptr) CDO->mSubCategories.Add(SwatchGroup->GetClass());
 			}
@@ -211,7 +258,9 @@ UFGFactoryCustomizationDescriptor_Swatch* UUniversalSwatchSlotsWorldModule::Gene
 				InstClass->ID = UniqueID;
 				InstClass->mDisplayName = DisplayName;
 				InstClass->mDescription = this->SwatchDescription;
-
+				InstClass->mIcon = CDO->mIcon;
+				InstClass->mPersistentBigIcon = CDO->mPersistentBigIcon;
+				InstClass->mSmallIcon = CDO->mSmallIcon;
 				InstClass->mCategory = this->SwatchCategory;
 				if (SwatchGroup != nullptr) InstClass->mSubCategories.Add(SwatchGroup->GetClass());
 			}
@@ -283,7 +332,7 @@ UFGCustomizationRecipe* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchR
 }
 
 
-bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SwatchUniqueID, FText SwatchDisplayName, UFGCustomizerSubCategory*& SwatchGroup, UFGFactoryCustomizationDescriptor_Swatch*& SwatchDescriptor, UFGCustomizationRecipe*& SwatchRecipe)
+bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SwatchUniqueID, FText SwatchDisplayName, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory*& SwatchGroup, UFGFactoryCustomizationDescriptor_Swatch*& SwatchDescriptor, UFGCustomizationRecipe*& SwatchRecipe)
 {
 	if (this->SwatchDescriptorArray.Contains(SwatchUniqueID) || this->SwatchRecipeArray.Contains(SwatchUniqueID))
 	{	// We can't overwrite existing swatch. (Well we could but I don't want to in order to not mess up evrything)
@@ -295,7 +344,7 @@ bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatch(int32 UniqueGroupID, FT
 	}
 
 	UFGCustomizerSubCategory* SG = this->GenerateDynamicSwatchGroup(UniqueGroupID, GroupDisplayName, GroupPriority);
-	UFGFactoryCustomizationDescriptor_Swatch* SD = this->GenerateDynamicSwatchDescriptor(SwatchUniqueID, SwatchDisplayName, SG);
+	UFGFactoryCustomizationDescriptor_Swatch* SD = this->GenerateDynamicSwatchDescriptor(SwatchUniqueID, SwatchDisplayName, PrimaryColor, SecondaryColor, SG);
 	UFGCustomizationRecipe* SR = this->GenerateDynamicSwatchRecipe(SD);
 
 	SwatchGroup = SG;
@@ -308,7 +357,7 @@ bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatch(int32 UniqueGroupID, FT
 
 bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatchUsingInfo(FUSSSwatch SwatchInformation, UFGCustomizerSubCategory*& SwatchGroup, UFGFactoryCustomizationDescriptor_Swatch*& SwatchDescriptor, UFGCustomizationRecipe*& SwatchRecipe)
 {
-	return this->GenerateNewSwatch(SwatchInformation.UniqueGroupID, SwatchInformation.GroupDisplayName, SwatchInformation.GroupPriority, SwatchInformation.SwatchUniqueID, SwatchInformation.SwatchDisplayName, SwatchGroup, SwatchDescriptor, SwatchRecipe);
+	return this->GenerateNewSwatch(SwatchInformation.UniqueGroupID, SwatchInformation.GroupDisplayName, SwatchInformation.GroupPriority, SwatchInformation.SwatchUniqueID, SwatchInformation.SwatchDisplayName, SwatchInformation.PrimaryColour, SwatchInformation.SecondaryColour, SwatchGroup, SwatchDescriptor, SwatchRecipe);
 }
 
 
@@ -689,4 +738,165 @@ FLinearColor UUniversalSwatchSlotsWorldModule::HexToLinearColor(FString HexCode)
 		B / 255.0f,
 		A / 255.0f
 	);
+}
+
+UTexture2D* UUniversalSwatchSlotsWorldModule::GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColor SecondaryColor)
+{
+	/*if (!this->SwatchTemplate)
+	{
+		UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("Template texture is null."));
+		return nullptr;
+	}
+
+	// Obtenir la taille de la texture
+	int32 Width = SwatchTemplate->GetSizeX();
+	int32 Height = SwatchTemplate->GetSizeY();
+
+	// Vérifier que la texture est carrée
+	if (Width != Height)
+	{
+		UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("Template texture must be square."));
+		return nullptr;
+	}
+
+	// Rayon du cercle
+	int32 Radius = Width / 2 - 14;
+
+	// Centre du cercle
+	FVector2D Center(Width / 2, Width / 2);
+
+	// Créer une texture transiente
+	UTexture2D* NewTexture = UTexture2D::CreateTransient(Width, Height, PF_B8G8R8A8);
+	if (!NewTexture)
+	{
+		UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("Failed to create transient texture."));
+		return nullptr;
+	}
+
+	// Empêcher le garbage collector de supprimer la texture
+	NewTexture->AddToRoot();
+
+	// Copier les données de la texture template dans la nouvelle texture
+	FTexture2DMipMap& TemplateMip = SwatchTemplate->GetPlatformData()->Mips[0];
+	FTexture2DMipMap& NewMip = NewTexture->GetPlatformData()->Mips[0];
+
+	void* TemplateData = TemplateMip.BulkData.Lock(LOCK_READ_ONLY);
+	void* NewData = NewMip.BulkData.Lock(LOCK_READ_WRITE);
+
+	//FColor* TemplatePixels = static_cast<FColor*>(TemplateData);
+	FColor* NewPixels = static_cast<FColor*>(NewData);
+
+	//FMemory::Memcpy(NewPixels, TemplatePixels, Width * Height * sizeof(FColor));
+
+	//TemplateMip.BulkData.Unlock();
+
+	FColor prim = PrimaryColor.ToFColor(true);
+	FColor sec = SecondaryColor.ToFColor(true);
+
+	// Modifier uniquement les pixels dans le cercle
+	for (int32 Y = 0; Y < Height; ++Y)
+	{
+		for (int32 X = 0; X < Width; ++X)
+		{
+			FVector2D Pixel(X, Y);
+
+			// Vérifier si le pixel est dans le cercle
+			if (FVector2D::Distance(Pixel, Center) <= Radius)
+			{
+				// Vérifier si le pixel est au-dessus ou en dessous de la diagonale
+				if (X >= Height - Y - 1) // Par rapport à la diagonale
+				{
+					NewPixels[Y * Width + X] = prim;
+				}
+				else
+				{
+					NewPixels[Y * Width + X] = sec;
+				}
+			}
+		}
+	}
+
+	NewMip.BulkData.Unlock();
+
+	// Mettre à jour la texture
+	NewTexture->UpdateResource();
+
+	return NewTexture;*/
+
+	int32 Width = 128;
+	int32 ArcThickness = 15;
+	FColor ArcColor = FColor(192, 192, 192, 255);
+	FColor prim = PrimaryColor.ToFColor(true);
+	FColor sec = SecondaryColor.ToFColor(true);
+
+	if (Width <= 0 || ArcThickness <= 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Invalid texture dimensions or arc thickness."));
+		return nullptr;
+	}
+
+	// Vérifier que la largeur est une puissance de 2 pour assurer une compatibilité optimale
+	if ((Width & (Width - 1)) != 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Width is not a power of 2. The texture might not behave optimally in some scenarios."));
+	}
+
+	// Rayon et centre du cercle
+	int32 Radius = Width / 2;
+	FVector2D Center(Radius, Radius);
+
+	// Créer une texture transiente
+	UTexture2D* NewTexture = UTexture2D::CreateTransient(Width, Width, PF_B8G8R8A8);
+	if (!NewTexture)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to create transient texture."));
+		return nullptr;
+	}
+
+	// Empêcher le garbage collector de supprimer la texture
+	NewTexture->AddToRoot();
+
+	// Initialiser les données de la texture
+	FTexture2DMipMap& Mip = NewTexture->PlatformData->Mips[0];
+	void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
+	FColor* Pixels = static_cast<FColor*>(Data);
+
+	// Remplir la texture
+	for (int32 Y = 0; Y < Width; ++Y)
+	{
+		for (int32 X = 0; X < Width; ++X)
+		{
+			FVector2D Pixel(X, Y);
+			float DistanceToCenter = FVector2D::Distance(Pixel, Center);
+
+			if (DistanceToCenter > Radius - ArcThickness && DistanceToCenter <= Radius)
+			{
+				// Pixel dans l'arceau
+				Pixels[Y * Width + X] = ArcColor;
+			}
+			else if (DistanceToCenter <= Radius - ArcThickness)
+			{
+				// Pixel à l'intérieur du cercle
+				if (X >= Width - Y - 1) // Diagonale inversée
+				{
+					Pixels[Y * Width + X] = prim;
+				}
+				else
+				{
+					Pixels[Y * Width + X] = sec;
+				}
+			}
+			else
+			{
+				// Pixel en dehors du cercle
+				Pixels[Y * Width + X] = FColor::Transparent; // Couleur transparente
+			}
+		}
+	}
+
+	// Déverrouiller les données et mettre à jour la texture
+	Mip.BulkData.Unlock();
+	NewTexture->UpdateResource();
+
+	return NewTexture;
 }
