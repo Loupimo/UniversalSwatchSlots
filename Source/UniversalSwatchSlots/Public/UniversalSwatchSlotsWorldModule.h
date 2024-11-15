@@ -11,8 +11,10 @@
 #include "FGCustomizerSubCategory.h"
 #include "FGBuildGun.h"
 
-#include "UniversalSwatchSlotsWorldModule.generated.h"
+#include "ModConfiguration.h"
+#include "ConfigPropertyArray.h"
 
+#include "UniversalSwatchSlotsWorldModule.generated.h"
 
 USTRUCT(BlueprintType)
 struct FUSSSwatchInformation {
@@ -27,6 +29,7 @@ struct FUSSSwatchInformation {
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FLinearColor mSecondaryColour = FLinearColor(95, 102, 140, 255);
 };
+
 
 USTRUCT(BlueprintType)
 struct FUSSSwatch {
@@ -48,12 +51,29 @@ struct FUSSSwatch {
 	FText SwatchDisplayName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FLinearColor mPrimaryColour = FLinearColor(250, 149, 73, 255);
+	FLinearColor PrimaryColour = FLinearColor(250, 149, 73, 255);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FLinearColor mSecondaryColour = FLinearColor(95, 102, 140, 255);
+	FLinearColor SecondaryColour = FLinearColor(95, 102, 140, 255);
 };
 
+
+USTRUCT(BlueprintType)
+struct FUSSPalette {
+	GENERATED_BODY()
+
+	/* The palette name. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString PaletteName;
+
+	/* The associated session to this palette. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray <FString> AssociatedSessions;
+
+	/* The swatches contained in this palette. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray <FUSSSwatch> Swatches;
+};
 
 /**
  * 
@@ -65,9 +85,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	
 
 	/**
-	 * Add new swatch color slots to the gamestate and buildable sub system using the desired swatch information.
-	 *
-	 * Note : The newly generated swatch group will be added to the SwatchGroupArray at the given UniqueGroupID.
+	 * Add new swatch color slots to the gamestate and buildable sub system using the desired swatch informations.
 	 *
 	 * @param	SwatchInformations		The swatch informations to use.
 	 */
@@ -150,12 +168,29 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	bool GenerateNewSwatchUsingInfo(FUSSSwatch SwatchInformation, UFGCustomizerSubCategory*& SwatchGroup, UFGFactoryCustomizationDescriptor_Swatch*& SwatchDescriptor, UFGCustomizationRecipe*& SwatchRecipe);
 
+	/**
+	 * Parse the mod's configuration referenced by the variable ModConfig.
+	 * 
+	 * @return True if the has been correctly parsed, false otherwise.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Config")
+	bool ParseModConfig();
+
 
 public:
 
 	/* The build gun blueprint class that will be used by the dynamically created swatch recipes. */
-	UPROPERTY(EditDefaultsOnly, Category = "Recipe reference")
+	UPROPERTY(EditDefaultsOnly, Category = "Swatch")
 	TSoftClassPtr<UObject> BuildGunBPClass;
+
+	/* The category under which the generated swatch group should appear. */
+	UPROPERTY(EditDefaultsOnly, Category = "Swatch")
+	TSubclassOf<UFGCustomizerCategory> SwatchCategory = UFGCustomizerCategory::StaticClass();
+
+
+	/* The description that should be added to all swatches. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	FText SwatchDescription;
 
 	/* The list of all available swatch groups. This array is modified when the GenerateDynamicSwatchGroup function is called. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
@@ -169,10 +204,30 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
 	TMap<int32, UFGCustomizationRecipe*> SwatchRecipeArray;
 	
+
+	/* The configuration that contains all the swatch to create. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	UConfigProperty* RootConfig;
+
+	/* The name of the current session. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	FString SessionName;
+
+	/* The available palettes parsed from the configuration file. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	TMap<FString, FUSSPalette> Palettes;
+
 protected:
 
 	UPROPERTY()
 	TArray<UClass*> GeneratedClasses;
 
 	UClass* GenerateDynamicClass(UClass* TemplateClass, FName GeneratedClassName);
+
+	
+	void ParseAssociations(UConfigPropertyArray* Associations);
+	void ParsePalettes(UConfigPropertyArray* PalettesArr);
+	int32 ParseSwatchGroup(int32 GroupID, int32 StartSwatchID, UConfigPropertySection* SwatchGroup, FUSSPalette* OutPalette);
+	bool ParseSwatch(int32 SwatchID, UConfigPropertySection* Swatch, int32 GroupID, FString GroupName, float GroupPriority, FUSSPalette* OutPalette);
+	FLinearColor HexToLinearColor(FString HexCode);
 };
