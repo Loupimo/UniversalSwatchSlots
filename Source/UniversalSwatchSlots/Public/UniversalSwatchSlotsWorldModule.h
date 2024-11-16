@@ -53,12 +53,31 @@ struct FUSSSwatch {
 	FText SwatchDisplayName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float SwatchPriority;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FLinearColor PrimaryColour = FLinearColor(250, 149, 73, 255);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FLinearColor SecondaryColour = FLinearColor(95, 102, 140, 255);
 };
 
+USTRUCT(BlueprintType)
+struct FUSSSession {
+	GENERATED_BODY()
+
+	/* The palette name. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString SessionName;
+
+	/* Tells if the primary colors should be added to the player clor preset or not. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool AddPrimaryColorsToPreset;
+
+	/* Tells if the secondary colors should be added to the player clor preset or not. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool AddSecondaryColorsToPreset;
+};
 
 USTRUCT(BlueprintType)
 struct FUSSPalette {
@@ -70,7 +89,7 @@ struct FUSSPalette {
 
 	/* The associated session to this palette. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray <FString> AssociatedSessions;
+	TArray <FUSSSession> AssociatedSessions;
 
 	/* The swatches contained in this palette. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -114,6 +133,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 *
 	 * @param	UniqueID				The ID to give to the swatch descriptor.
 	 * @param	DisplayName				The name to give to the swatch descriptor.
+	 * @param	Priority				The priority to give to this swatch.
 	 * @param   PrimaryColor			The primary color used to generate the swatch icon.
 	 * @param	SecondaryColor			The secondary color used to generate the swatch icon.
 	 * @param	SwatchGroup				The swatch group to use.
@@ -123,7 +143,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @return The newly generated swatch descriptor, nullptr otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	UFGFactoryCustomizationDescriptor_Swatch* GenerateDynamicSwatchDescriptor(int32 UniqueID, FText DisplayName, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup);
+	UFGFactoryCustomizationDescriptor_Swatch* GenerateDynamicSwatchDescriptor(int32 UniqueID, FText DisplayName, float Priority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup);
 
 	/**
 	 * Create a new swatch recipe using the desired swatch descriptor.
@@ -145,6 +165,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @param	UniqueGroupID				The swatch group ID to use. If the group doesn't exist it will be created.
 	 * @param	GroupDisplayName			The name to give to the swatch group. If the group already exist its name will be changed.
 	 * @param	GroupPriority				The priority to give to the swatch group. If the group already exist its priority will be changed.
+	 * @param	SwatchPriority				The priority to give to this swatch.
 	 * @param	SwatchUniqueID				The swatch descriptor ID to use. If the descriptor ID is already in use this function will exit without doing anything.
 	 * @param	SwatchDisplayName			The name to give to the swatch descriptor.
 	 * @param   PrimaryColor				The primary color of the swatch.
@@ -156,7 +177,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @return True if the swatch was created, false otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	bool GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SwatchUniqueID, FText SwatchDisplayName, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory*& SwatchGroup, UFGFactoryCustomizationDescriptor_Swatch*& SwatchDescriptor, UFGCustomizationRecipe*& SwatchRecipe);
+	bool GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SwatchUniqueID, FText SwatchDisplayName, float SwatchPriority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory*& SwatchGroup, UFGFactoryCustomizationDescriptor_Swatch*& SwatchDescriptor, UFGCustomizationRecipe*& SwatchRecipe);
 
 	/**
 	 * Create a new swatch using the desired group ID and swatch name.
