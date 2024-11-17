@@ -213,6 +213,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Swatch")
 	TSubclassOf<UFGCustomizerCategory> SwatchCategory = UFGCustomizerCategory::StaticClass();
 
+	/* The paint finish to apply to our swatches. */
+	UPROPERTY(EditDefaultsOnly, Category = "Swatch")
+	TSubclassOf<UFGFactoryCustomizationDescriptor_PaintFinish>PaintFinish;
 
 	/* The description that should be added to all swatches. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")

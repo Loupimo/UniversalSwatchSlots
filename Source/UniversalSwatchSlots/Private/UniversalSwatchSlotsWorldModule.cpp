@@ -47,6 +47,7 @@ void UUniversalSwatchSlotsWorldModule::AddNewSwatchesColorSlots(TArray<FUSSSwatc
 						}*/
 
 					FFactoryCustomizationColorSlot NewColourSlot = FFactoryCustomizationColorSlot(FLinearColor::Black, FLinearColor::Black);
+					NewColourSlot.PaintFinish = this->PaintFinish;
 
 					if (Subsystem->mColorSlots_Data.Num() <= ColourIndex)
 					{	// We need to create some default swatch slots
@@ -781,14 +782,15 @@ FLinearColor UUniversalSwatchSlotsWorldModule::HexToLinearColor(FString HexCode)
 	{
 		A = FParse::HexNumber(*HexCode.Mid(6, 2));
 	}
-
+	
 	// Convertir les valeurs entières en flottants pour FLinearColor
-	return FLinearColor(
-		R / 255.0f,
-		G / 255.0f,
-		B / 255.0f,
-		A / 255.0f
-	);
+	return FColor::FromHex(HexCode).ReinterpretAsLinear();
+	/*return FLinearColor(
+		(float)R / 255.0f,
+		(float)G / 255.0f,
+		(float)B / 255.0f,
+		0.0f
+	);*/
 }
 
 UTexture2D* UUniversalSwatchSlotsWorldModule::GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColor SecondaryColor)
