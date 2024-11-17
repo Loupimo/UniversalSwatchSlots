@@ -771,7 +771,7 @@ FLinearColor UUniversalSwatchSlotsWorldModule::HexToLinearColor(FString HexCode)
 		return FLinearColor::Black;
 	}
 
-	uint8 R = 0, G = 0, B = 0, A = 255; // Par défaut, Alpha est 255 (opaque)
+	/*uint8 R = 0, G = 0, B = 0, A = 255; // Par défaut, Alpha est 255 (opaque)
 
 	// Convertir les composantes
 	R = FParse::HexNumber(*HexCode.Mid(0, 2));
@@ -781,10 +781,11 @@ FLinearColor UUniversalSwatchSlotsWorldModule::HexToLinearColor(FString HexCode)
 	if (HexCode.Len() == 8) // Si une composante Alpha est incluse
 	{
 		A = FParse::HexNumber(*HexCode.Mid(6, 2));
-	}
+	}*/
 	
 	// Convertir les valeurs entières en flottants pour FLinearColor
-	return FColor::FromHex(HexCode).ReinterpretAsLinear();
+	return FLinearColor::FromSRGBColor(FColor::FromHex(HexCode));
+	//return FColor::FromHex(HexCode).ReinterpretAsLinear();
 	/*return FLinearColor(
 		(float)R / 255.0f,
 		(float)G / 255.0f,
