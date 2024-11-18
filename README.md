@@ -60,4 +60,4 @@ Note: If you have selected the "add color to player preset" these colors will re
 
 # Support
 For questions or support, contact:
-- **Issue Tracker:** [GitHub Issues](https://github.com/username/repository/issues)
+- **Issue Tracker:** [GitHub Issues](https://github.com/Loupimo/UniversalSwatchSlots/issues)
