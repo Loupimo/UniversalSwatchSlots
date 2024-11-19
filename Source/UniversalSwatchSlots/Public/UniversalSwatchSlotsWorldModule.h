@@ -47,7 +47,10 @@ struct FUSSSwatch {
 	float GroupPriority;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 SwatchUniqueID = 29;
+	int32 SwatchSlotID = 28;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 SwatchUniqueID = 28;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText SwatchDisplayName;
@@ -131,7 +134,8 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	/**
 	 * Create a new swatch descriptor using the desired swatch group, name and ID.
 	 *
-	 * @param	UniqueID				The ID to give to the swatch descriptor.
+	 * @param	SlotID					The slot ID used by swatch descriptor.
+	 * @param	UniqueID				The unique ID to give to the swatch descriptor. Used to create its identifier. It is the internal ID of this mod and can be different from Slot ID if other mod add swatches.
 	 * @param	DisplayName				The name to give to the swatch descriptor.
 	 * @param	Priority				The priority to give to this swatch.
 	 * @param   PrimaryColor			The primary color used to generate the swatch icon.
@@ -143,7 +147,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @return The newly generated swatch descriptor, nullptr otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	UFGFactoryCustomizationDescriptor_Swatch* GenerateDynamicSwatchDescriptor(int32 UniqueID, FText DisplayName, float Priority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup);
+	UFGFactoryCustomizationDescriptor_Swatch* GenerateDynamicSwatchDescriptor(int32 SlotID, int32 UniqueID, FText DisplayName, float Priority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup);
 
 	/**
 	 * Create a new swatch recipe using the desired swatch descriptor.
@@ -177,7 +181,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @return True if the swatch was created, false otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	bool GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SwatchUniqueID, FText SwatchDisplayName, float SwatchPriority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory*& SwatchGroup, UFGFactoryCustomizationDescriptor_Swatch*& SwatchDescriptor, UFGCustomizationRecipe*& SwatchRecipe);
+	bool GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SlotID, int32 SwatchUniqueID, FText SwatchDisplayName, float SwatchPriority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory*& SwatchGroup, UFGFactoryCustomizationDescriptor_Swatch*& SwatchDescriptor, UFGCustomizationRecipe*& SwatchRecipe);
 
 	/**
 	 * Create a new swatch using the desired group ID and swatch name.
@@ -237,7 +241,11 @@ public:
 	/* The image used as template to generate swatch icon for the awesome shop. */
 	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
 	UTexture2D* SwatchTemplate;*/
-	
+
+
+	/* The colection where the swatch should be added. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	FString SessionName;
 
 	/* The configuration that contains all the swatch to create. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
@@ -245,7 +253,7 @@ public:
 
 	/* The name of the current session. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
-	FString SessionName;
+	UFGFactoryCustomizationCollection* SwatchCollection;
 
 	/* The available palettes parsed from the configuration file. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
@@ -261,8 +269,9 @@ protected:
 	
 	void ParseAssociations(UConfigPropertyArray* Associations);
 	void ParsePalettes(UConfigPropertyArray* PalettesArr);
-	int32 ParseSwatchGroup(int32 GroupID, int32 StartSwatchID, UConfigPropertySection* SwatchGroup, FUSSPalette* OutPalette);
-	bool ParseSwatch(int32 SwatchID, UConfigPropertySection* Swatch, int32 GroupID, FString GroupName, float GroupPriority, FUSSPalette* OutPalette);
+	int32 ParseSwatchGroup(int32 GroupID, int32* SlotID, int32 StartSwatchID, UConfigPropertySection* SwatchGroup, FUSSPalette* OutPalette);
+	bool ParseSwatch(int32 SlotID, int32 SwatchID, UConfigPropertySection* Swatch, int32 GroupID, FString GroupName, float GroupPriority, FUSSPalette* OutPalette);
 	FLinearColor HexToLinearColor(FString HexCode);
 	UTexture2D* GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColor SecondaryColor);
+	int32 FindUSSStartSlotID();
 };
