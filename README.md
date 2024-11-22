@@ -51,7 +51,7 @@ It depends:
 - If you remove it without adding another swatch it will turn black or default.
 - If your remove it and add one or more swatches it will take the color of the first one.
 
-To revert it back, just re-add a new swatch with the same name anywhere in your palette.
+To revert it back, do not save, re-add a new swatch with the same name anywhere in your palette and reload your game.
 
  <span style="color:yellow">Note: if you removed one swatch without adding one, I strongly advise you to reaload your game as just reloading your save could let traces of previous swatch and lead to undifined behavior !</span>
 
@@ -60,7 +60,9 @@ To revert it back, just re-add a new swatch with the same name anywhere in your 
 If your palette has the same swatch names as the one you applied nothing wrong should happend (you will see warning in log for all other missing swatch but as long as they are not used you are good to go).
 Otherwise: 
 - If your new palette has less swatches than your previous one only the buildings that uses the first swatches (as many as your new palette has) will be changed, all other extra slots of your old palette should turned to black or default.
-- If your new palette has more or equal number of swatches than your previous one all the swatches will be modified. 
+- If your new palette has more or equal number of swatches than your previous one all the swatches will be modified.
+
+ <span style="color:yellow">Note: swatches are name dependent meaning that switching from English to French and vice versa palette will produce warnings. Even if the buildings keep their color they are not linked to a slot swatch anymore meaning that if you save it will be irrevisible. Unlinked buildings can turn back to default color at anytime.</span>
 
 **What happen if I have applied swatches of this mod to my building and uninstall the mod ?**
 
