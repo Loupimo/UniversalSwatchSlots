@@ -96,21 +96,6 @@ struct FUSSPalette {
 };
 
 
-USTRUCT(BlueprintType)
-struct FUSSSwatchInformation {
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<UUSSSwatchDesc> mSwatch = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FLinearColor mPrimaryColour = FLinearColor(250, 149, 73, 255);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FLinearColor mSecondaryColour = FLinearColor(95, 102, 140, 255);
-};
-
-
 /**
  *
  */
@@ -138,6 +123,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	FString HashName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Color")
+	FLinearColor PrimaryColour;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Color")
+	FLinearColor SecondaryColour;
 };
 
 
@@ -155,13 +146,3 @@ public:
 	FString HashName;
 };
 
-
-/**
- * 
-UCLASS()
-class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsDefinitions : public UFGFactoryCustomizationDescriptor
-{
-	GENERATED_BODY()
-	
-};
- */

@@ -43,7 +43,7 @@ void UUniversalSwatchSlotsWorldModule::RefreshColorSlots()
 	}
 }
 
-
+/*
 void UUniversalSwatchSlotsWorldModule::AddNewSwatchesColorSlots(TArray<FUSSSwatchInformation> SwatchInformations)
 {
 	AFGBuildableSubsystem* Subsystem = AFGBuildableSubsystem::Get(this);
@@ -136,10 +136,10 @@ void UUniversalSwatchSlotsWorldModule::AddNewSwatchesColorSlots(TArray<FUSSSwatc
 	UE_LOG(LogUniversalSwatchSlots, Error, TEXT("Cannot load AFGBuildableSubsystem for Swatches"));
 	return;
 }
-
+*/
 
 // Thanks to Kyrium for the basic skeleton of this function !
-/*void UUniversalSwatchSlotsWorldModule::AddNewSwatchesColorSlots(TArray<FUSSSwatchInformation> SwatchInformations)
+void UUniversalSwatchSlotsWorldModule::AddNewSwatchesColorSlots(TArray<UUSSSwatchDesc*> SwatchDescriptions)
 {
 	AFGBuildableSubsystem* Subsystem = AFGBuildableSubsystem::Get(this);
 	AFGGameState* FGGameState = Cast<AFGGameState>(UGameplayStatics::GetGameState(this));
@@ -148,60 +148,57 @@ void UUniversalSwatchSlotsWorldModule::AddNewSwatchesColorSlots(TArray<FUSSSwatc
 	{
 		int32 StartSwatchID = Subsystem->mColorSlots_Data.Num();
 
-		for (FUSSSwatchInformation& Swatch : SwatchInformations)
-		{
-			if (Swatch.mSwatch)
+		for (UUSSSwatchDesc* Swatch : SwatchDescriptions)
+		{	// Browse all the swatch descriptions
+			
+			if (Swatch)
 			{
-				UFGFactoryCustomizationDescriptor_Swatch* SwatchDefaults = Swatch.mSwatch.GetDefaultObject();
-				if (SwatchDefaults)
-				{
-					int32 ColourIndex = SwatchDefaults->ID;
+				int32 ColourIndex = Swatch->ID;
 
-					FFactoryCustomizationColorSlot NewColourSlot = FFactoryCustomizationColorSlot(FLinearColor::Black, FLinearColor::Black);
-					NewColourSlot.PaintFinish = this->PaintFinish;
+				FFactoryCustomizationColorSlot NewColourSlot = FFactoryCustomizationColorSlot(FLinearColor::Black, FLinearColor::Black);
+				NewColourSlot.PaintFinish = this->PaintFinish;
 
-					if (Subsystem->mColorSlots_Data.Num() <= ColourIndex)
-					{	// We need to create some default swatch slots
+				if (Subsystem->mColorSlots_Data.Num() <= ColourIndex)
+				{	// We need to create some default swatch slots
 
-						for (int32 i = Subsystem->mColorSlots_Data.Num(); i <= ColourIndex; ++i)
-						{
-							if (!Subsystem->mColorSlots_Data.IsValidIndex(i))
-							{	// We need to add a new slot
-								Subsystem->mColorSlots_Data.Add(NewColourSlot);
-								FGGameState->mBuildingColorSlots_Data.Add(NewColourSlot);
-								UE_LOG(LogUniversalSwatchSlots, Log, TEXT("New Colour slot added to subsystem and gamestate: %d"), i);
-							}
+					for (int32 i = Subsystem->mColorSlots_Data.Num(); i <= ColourIndex; ++i)
+					{
+						if (!Subsystem->mColorSlots_Data.IsValidIndex(i))
+						{	// We need to add a new slot
+							Subsystem->mColorSlots_Data.Add(NewColourSlot);
+							FGGameState->mBuildingColorSlots_Data.Add(NewColourSlot);
+							UE_LOG(LogUniversalSwatchSlots, Log, TEXT("New Colour slot added to subsystem and gamestate: %d"), i);
 						}
 					}
-
-					// Changes the colour to the desired one
-					NewColourSlot.PrimaryColor = Swatch.mPrimaryColour;
-					NewColourSlot.SecondaryColor = Swatch.mSecondaryColour;
-
-					// Update the subsystem and game state 
-					Subsystem->SetColorSlot_Data(ColourIndex, NewColourSlot);
-					FGGameState->SetupColorSlots_Data(Subsystem->mColorSlots_Data);
-
-					// Mark Slots as Dirty
-					FGGameState->mBuildingColorSlots_Data[ColourIndex] = NewColourSlot;
-					FGGameState->SetupColorSlots_Data(Subsystem->mColorSlots_Data);
-					Subsystem->mColorSlotsAreDirty = true;
-
-
-					FGGameState->Server_SetBuildingColorDataForSlot(ColourIndex, NewColourSlot);
-
-					FTimerDelegate TimerDel;
-					FTimerHandle   TimerHandle;
-					TimerDel.BindUFunction(Subsystem, FName("SetColorSlot_Data"), ColourIndex, NewColourSlot);
-					GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 1.0f, false);
-					TimerDel.BindUFunction(FGGameState, FName("Server_SetBuildingColorDataForSlot"), ColourIndex, NewColourSlot);
-					GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 1.0f, false);
-
-					FGGameState->Server_SetBuildingColorDataForSlot(ColourIndex, NewColourSlot);
-
-					UE_LOG(LogUniversalSwatchSlots, Log, TEXT("Swatch found and success: %d > %s (%d/%d)"), ColourIndex, *Swatch.mSwatch->GetName(), FGGameState->mBuildingColorSlots_Data.Num(), Subsystem->mColorSlots_Data.Num());
-
 				}
+
+				// Changes the colour to the desired one
+				NewColourSlot.PrimaryColor = Swatch->PrimaryColour;
+				NewColourSlot.SecondaryColor = Swatch->SecondaryColour;
+
+				// Update the subsystem and game state 
+				Subsystem->SetColorSlot_Data(ColourIndex, NewColourSlot);
+				FGGameState->SetupColorSlots_Data(Subsystem->mColorSlots_Data);
+
+				// Mark Slots as Dirty
+				FGGameState->mBuildingColorSlots_Data[ColourIndex] = NewColourSlot;
+				FGGameState->SetupColorSlots_Data(Subsystem->mColorSlots_Data);
+				Subsystem->mColorSlotsAreDirty = true;
+
+
+				FGGameState->Server_SetBuildingColorDataForSlot(ColourIndex, NewColourSlot);
+
+				FTimerDelegate TimerDel;
+				FTimerHandle   TimerHandle;
+				TimerDel.BindUFunction(Subsystem, FName("SetColorSlot_Data"), ColourIndex, NewColourSlot);
+				GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 1.0f, false);
+				TimerDel.BindUFunction(FGGameState, FName("Server_SetBuildingColorDataForSlot"), ColourIndex, NewColourSlot);
+				GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 1.0f, false);
+
+				FGGameState->Server_SetBuildingColorDataForSlot(ColourIndex, NewColourSlot);
+
+				UE_LOG(LogUniversalSwatchSlots, Log, TEXT("Swatch found and success: %d > %s (%d/%d)"), ColourIndex, *Swatch->GetClass()->GetDefaultObject()->GetName(), FGGameState->mBuildingColorSlots_Data.Num(), Subsystem->mColorSlots_Data.Num());
+
 			}
 		}
 
@@ -213,21 +210,21 @@ void UUniversalSwatchSlotsWorldModule::AddNewSwatchesColorSlots(TArray<FUSSSwatc
 		return;
 	}
 
-	if (FGGameState) {
-		for (FUSSSwatchInformation& Swatch : SwatchInformations) {
-			if (Swatch.mSwatch) {
-				UFGFactoryCustomizationDescriptor_Swatch* SwatchDefauls = Swatch.mSwatch.GetDefaultObject();
-				if (SwatchDefauls) {
-					uint8 ColourIndex = SwatchDefauls->ID;
-					SwatchDefauls->mMenuPriority = static_cast<float>(ColourIndex);
-					if (!FGGameState->mBuildingColorSlots_Data.IsValidIndex(ColourIndex))
-					{
-						FGGameState->mBuildingColorSlots_Data.SetNum(ColourIndex + 1, false);
-					}
-					FGGameState->mBuildingColorSlots_Data[ColourIndex] = Subsystem->mColorSlots_Data[ColourIndex];
-					FGGameState->SetupColorSlots_Data(Subsystem->mColorSlots_Data);
-					UE_LOG(LogUniversalSwatchSlots, Log, TEXT("Write color again to gamestate: %d / %d"), FGGameState->mBuildingColorSlots_Data.Num(), Subsystem->mColorSlots_Data.Num());
+	if (FGGameState)
+	{
+		for (UUSSSwatchDesc* Swatch : SwatchDescriptions)
+		{
+			if (Swatch)
+			{
+				uint8 ColourIndex = Swatch->ID;
+				Swatch->mMenuPriority = static_cast<float>(ColourIndex);
+				if (!FGGameState->mBuildingColorSlots_Data.IsValidIndex(ColourIndex))
+				{
+					FGGameState->mBuildingColorSlots_Data.SetNum(ColourIndex + 1, false);
 				}
+				FGGameState->mBuildingColorSlots_Data[ColourIndex] = Subsystem->mColorSlots_Data[ColourIndex];
+				FGGameState->SetupColorSlots_Data(Subsystem->mColorSlots_Data);
+				UE_LOG(LogUniversalSwatchSlots, Log, TEXT("Write color again to gamestate: %d / %d"), FGGameState->mBuildingColorSlots_Data.Num(), Subsystem->mColorSlots_Data.Num());
 			}
 		}
 	}
@@ -235,7 +232,7 @@ void UUniversalSwatchSlotsWorldModule::AddNewSwatchesColorSlots(TArray<FUSSSwatc
 	UE_LOG(LogUniversalSwatchSlots, Error, TEXT("Cannot load AFGBuildableSubsystem for Swatches"));
 	return;
 }
-*/
+
 
 void UUniversalSwatchSlotsWorldModule::UpdateSwatchDescriptorIDCDO(UUSSSwatchDesc* Target, int32 NewID)
 {
@@ -260,6 +257,8 @@ void UUniversalSwatchSlotsWorldModule::MoveCDO(UUSSSwatchDesc* Target, UUSSSwatc
 
 		Target->ID = NewID;
 		Target->HashName = Source->HashName;
+		Target->PrimaryColour = Source->PrimaryColour;
+		Target->SecondaryColour = Source->SecondaryColour;
 		Target->mDisplayName = Source->mDisplayName;
 		Target->mDescription = Source->mDescription;
 		Target->mIcon = Source->mIcon;
@@ -281,6 +280,8 @@ void UUniversalSwatchSlotsWorldModule::MoveCDO(UUSSSwatchDesc* Target, UUSSSwatc
 
 			tCDO->ID = NewID;
 			tCDO->HashName = sCDO->HashName;
+			tCDO->PrimaryColour = sCDO->PrimaryColour;
+			tCDO->SecondaryColour = sCDO->SecondaryColour;
 			tCDO->mDisplayName = sCDO->mDisplayName;
 			tCDO->mDescription = sCDO->mDescription;
 			tCDO->mIcon = sCDO->mIcon;
@@ -408,6 +409,8 @@ UUSSSwatchDesc* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescripto
 					CDO->HashName = GenName;
 					CDO->mDisplayName = DisplayName;
 					CDO->mDescription = this->SwatchDescription;
+					CDO->PrimaryColour = PrimaryColor;
+					CDO->SecondaryColour = SecondaryColor;
 					CDO->mIcon = this->GenerateSwatchIcon(PrimaryColor, SecondaryColor);
 					CDO->mPersistentBigIcon = CDO->mIcon.Get();
 					CDO->mSmallIcon = CDO->mIcon.Get();
@@ -424,6 +427,8 @@ UUSSSwatchDesc* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescripto
 					(*tmpSD)->HashName = GenName;
 					(*tmpSD)->mDisplayName = DisplayName;
 					(*tmpSD)->mDescription = this->SwatchDescription;
+					(*tmpSD)->PrimaryColour = PrimaryColor;
+					(*tmpSD)->SecondaryColour = SecondaryColor;
 					(*tmpSD)->mIcon = CDO->mIcon;
 					(*tmpSD)->mPersistentBigIcon = CDO->mPersistentBigIcon;
 					(*tmpSD)->mSmallIcon = CDO->mSmallIcon;
@@ -462,6 +467,8 @@ UUSSSwatchDesc* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescripto
 
 					CDO->ID = SlotID;
 					CDO->HashName = GenName;
+					CDO->PrimaryColour = PrimaryColor;
+					CDO->SecondaryColour = SecondaryColor;
 					CDO->mDisplayName = DisplayName;
 					CDO->mDescription = this->SwatchDescription;
 					CDO->mIcon = this->GenerateSwatchIcon(PrimaryColor, SecondaryColor);
@@ -477,6 +484,8 @@ UUSSSwatchDesc* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescripto
 
 					InstClass->ID = SlotID;
 					InstClass->HashName = GenName;
+					InstClass->PrimaryColour = PrimaryColor;
+					InstClass->SecondaryColour = SecondaryColor;
 					InstClass->mDisplayName = DisplayName;
 					InstClass->mDescription = this->SwatchDescription;
 					InstClass->mIcon = CDO->mIcon;
@@ -556,7 +565,8 @@ UUSSSwatchRecipe* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchRecipe(
 }
 
 
-bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SwatchUniqueID, FText SwatchDisplayName, float SwatchPriority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe)
+bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatchUsingInfo(FUSSSwatch SwatchInformation, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe)
+
 {
 	int32 slotID = this->ValidSlotIDs[0];
 
@@ -569,10 +579,10 @@ bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatch(int32 UniqueGroupID, FT
 		return false;
 	}
 
-	SwatchGroup = this->GenerateDynamicSwatchGroup(UniqueGroupID, GroupDisplayName, GroupPriority);
+	SwatchGroup = this->GenerateDynamicSwatchGroup(SwatchInformation.UniqueGroupID, SwatchInformation.GroupDisplayName, SwatchInformation.GroupPriority);
 
 	int32 nameCount = 0;
-	int32* tmpPtr = this->SwatchNameCount.Find(SwatchDisplayName.ToString());
+	int32* tmpPtr = this->SwatchNameCount.Find(SwatchInformation.SwatchDisplayName.ToString());
 	
 	if (tmpPtr)
 	{	// The name already exist in the listwe need to generate a new one
@@ -583,10 +593,10 @@ bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatch(int32 UniqueGroupID, FT
 	else
 	{	// The name doesn't exist yet
 
-		this->SwatchNameCount.Add(SwatchDisplayName.ToString(), 1);
+		this->SwatchNameCount.Add(SwatchInformation.SwatchDisplayName.ToString(), 1);
 	}
 
-	FString genName = AUniversalSwatchSlotsSubsystem::BuildSwatchGenName(SwatchDisplayName.ToString(), "SD", nameCount);
+	FString genName = AUniversalSwatchSlotsSubsystem::BuildSwatchGenName(SwatchInformation.SwatchDisplayName.ToString(), "SD", nameCount);
 
 	FUSSSwatchSaveInfo tmpSaved;
 	bool hasSwapped = false;
@@ -597,8 +607,8 @@ bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatch(int32 UniqueGroupID, FT
 
 		slotID = tmpSaved.SwatchSlotID;
 		UE_LOG(LogUniversalSwatchSlots, Verbose, TEXT("Found saved color \"%s\" at slot : %d"), *genName, slotID); 
-		SwatchDescriptor = this->GenerateDynamicSwatchDescriptor(slotID, this->ValidSlotIDs[0], SwatchDisplayName, genName, SwatchPriority, PrimaryColor, SecondaryColor, SwatchGroup, hasSwapped);
-
+		SwatchDescriptor = this->GenerateDynamicSwatchDescriptor(slotID, this->ValidSlotIDs[0], SwatchInformation.SwatchDisplayName, genName, SwatchInformation.SwatchPriority, SwatchInformation.PrimaryColour, SwatchInformation.SecondaryColour, SwatchGroup, hasSwapped);
+		
 		if (hasSwapped)
 		{	// A swap occured
 
@@ -613,19 +623,27 @@ bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatch(int32 UniqueGroupID, FT
 	else
 	{	// We can remove this slot from the valid one.
 
-		SwatchDescriptor = this->GenerateDynamicSwatchDescriptor(slotID, SwatchUniqueID, SwatchDisplayName, genName, SwatchPriority, PrimaryColor, SecondaryColor, SwatchGroup, hasSwapped);
+		SwatchDescriptor = this->GenerateDynamicSwatchDescriptor(slotID, SwatchInformation.SwatchUniqueID, SwatchInformation.SwatchDisplayName, genName, SwatchInformation.SwatchPriority, SwatchInformation.PrimaryColour, SwatchInformation.SecondaryColour, SwatchGroup, hasSwapped);
 		this->ValidSlotIDs.RemoveAt(0);
 	}
 
+	SwatchInformation.SwatchUniqueID = slotID;
 	SwatchRecipe = this->GenerateDynamicSwatchRecipe(slotID, SwatchDescriptor);
 
 	return true;
 }
 
-
-bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatchUsingInfo(FUSSSwatch SwatchInformation, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe)
+bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SwatchUniqueID, FText SwatchDisplayName, float SwatchPriority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe)
 {
-	return this->GenerateNewSwatch(SwatchInformation.UniqueGroupID, SwatchInformation.GroupDisplayName, SwatchInformation.GroupPriority, SwatchInformation.SwatchUniqueID, SwatchInformation.SwatchDisplayName, SwatchInformation.SwatchPriority, SwatchInformation.PrimaryColour, SwatchInformation.SecondaryColour, SwatchGroup, SwatchDescriptor, SwatchRecipe);
+	FUSSSwatch SwatchInformation;
+	SwatchInformation.UniqueGroupID = UniqueGroupID;
+	SwatchInformation.GroupDisplayName = GroupDisplayName;
+	SwatchInformation.GroupPriority = GroupPriority;
+	SwatchInformation.SwatchUniqueID = SwatchUniqueID;
+	SwatchInformation.SwatchDisplayName = SwatchDisplayName;
+	SwatchInformation.PrimaryColour = PrimaryColor;
+	SwatchInformation.SecondaryColour = SecondaryColor;
+	return this->GenerateNewSwatchUsingInfo(SwatchInformation, SwatchGroup, SwatchDescriptor, SwatchRecipe);
 }
 
 

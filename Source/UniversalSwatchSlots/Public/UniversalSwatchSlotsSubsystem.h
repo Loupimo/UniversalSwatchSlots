@@ -58,7 +58,7 @@ public:
 	 * @return True if the swatch was found, false otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	void UpdateSavedSwatches(TArray<FUSSSwatchInformation> ToSave);
+	void UpdateSavedSwatches(TArray<UUSSSwatchDesc*> ToSave);
 
 public:
 

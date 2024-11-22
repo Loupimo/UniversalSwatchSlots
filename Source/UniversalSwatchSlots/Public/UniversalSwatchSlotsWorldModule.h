@@ -37,7 +37,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @param	SwatchInformations		The swatch informations to use.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	void AddNewSwatchesColorSlots(TArray<FUSSSwatchInformation> SwatchInformations);
+	void AddNewSwatchesColorSlots(TArray<UUSSSwatchDesc* > SwatchDescriptions);
 
 	/**
 	 * Updates the CDO ID of the given swatch descriptor.

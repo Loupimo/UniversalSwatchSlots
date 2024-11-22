@@ -55,7 +55,7 @@ bool AUniversalSwatchSlotsSubsystem::FindSavedSwatch(FString GeneratedName, FUSS
 	return false;
 }
 
-void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<FUSSSwatchInformation> ToSave)
+void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<UUSSSwatchDesc*> ToSave)
 {
 	for (FUSSSwatchSaveInfo& currSaved : this->SavedSwatches)
 	{	// Print a warning for all remaining swatches that were not found
@@ -65,14 +65,14 @@ void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<FUSSSwatchInform
 
 	this->SavedSwatches.Empty();
 
-	for (FUSSSwatchInformation& Swatch : ToSave)
+	for (UUSSSwatchDesc* Swatch : ToSave)
 	{	// Browse all swatches to save
 
 		FUSSSwatchSaveInfo newInfo;
-		UUSSSwatchDesc* CDO = Swatch.mSwatch.GetDefaultObject();
+		UUSSSwatchDesc* CDO = (UUSSSwatchDesc*)Swatch->GetClass()->GetDefaultObject();
 
-		newInfo.PrimaryColour = Swatch.mPrimaryColour;
-		newInfo.SecondaryColour = Swatch.mSecondaryColour;
+		newInfo.PrimaryColour = Swatch->PrimaryColour;
+		newInfo.SecondaryColour = Swatch->SecondaryColour;
 		newInfo.SwatchSlotID = CDO->ID;
 		newInfo.SwatchDisplayName = CDO->mDisplayName;
 		newInfo.SwatchGeneratedName = CDO->HashName;
