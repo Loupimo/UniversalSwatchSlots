@@ -28,8 +28,6 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 {
 	GENERATED_BODY()
 
-	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	void RefreshColorSlots();
 
 	/**
 	 * Add new swatch color slots to the gamestate and buildable sub system using the desired swatch informations.
@@ -40,14 +38,12 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	void AddNewSwatchesColorSlots(TArray<UUSSSwatchDesc* > SwatchDescriptions);
 
 	/**
-	 * Updates the CDO ID of the given swatch descriptor.
+	 * Move the source class and its CDO to the target class and its CDO. Apply NewID to the target CDO and class.
 	 *
-	 * @param	Target			The class to update.
-	 * @param	NewID			The ID to give to the CDO.
+	 * @param	Target			The destination class.
+	 * @param	Source			The source class to move.
+	 * @param	NewID			The ID to give.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	void UpdateSwatchDescriptorIDCDO(UUSSSwatchDesc* Target, int32 NewID);
-
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	void MoveCDO(UUSSSwatchDesc* Target, UUSSSwatchDesc* Source, int32 NewID);
 
@@ -147,16 +143,10 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	/**
 	 * Initialize the USS game world module.
 	 *
-	 * @param	CleanUpBeforeInit			Tells if we should call the clean up previous session before starting to initialize the module.
+	 * @param	CleanSlotInit			Tells if we should clean color slot or not.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Config")
-	void InitUSSGameWorldModule(bool CleanUpBeforeInit = true);
-
-	/**
-	 * Clean up the slots and collection used by a previous session.
-	 */
-	UFUNCTION(BlueprintCallable, Category = "Config")
-	void CleanUpPreviousSession();
+	void InitUSSGameWorldModule(bool CleanSlotInit = true);
 
 public:
 
@@ -188,13 +178,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
 	TMap<int32, UUSSSwatchRecipe*> SwatchRecipeArray;
 
-
-
-	/* The image used as template to generate swatch icon for the awesome shop. */
-	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	UTexture2D* SwatchTemplate;*/
-
-
 	/* The colection where the swatch should be added. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	FString SessionName;
@@ -215,9 +198,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	bool IsUsingMoreSwatchSlots;
 
+	/* The subsystem used to load and store swatch data. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	AUniversalSwatchSlotsSubsystem* USSSubsystem = nullptr;
 
+	/* The game instance used to construct dynamic swatch descriptor and recipe. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	UUniversalSwatchSlotsGIModule* GameInstance;
 
@@ -231,6 +216,7 @@ protected:
 	UPROPERTY()
 	TArray<int32> ValidSlotIDs;
 
+	/* The list of all generated class. */
 	UPROPERTY()
 	TArray<UClass*> GeneratedClasses;
 	
@@ -248,6 +234,5 @@ protected:
 	bool ParseSwatch(int32 SwatchID, UConfigPropertySection* Swatch, int32 GroupID, FString GroupName, float GroupPriority, FUSSPalette* OutPalette);
 	FLinearColor HexToLinearColor(FString HexCode);
 	UTexture2D* GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColor SecondaryColor);
-	int32 FindUSSStartSlotID();
 	void RetrieveFreeColorSlotID();
 };
