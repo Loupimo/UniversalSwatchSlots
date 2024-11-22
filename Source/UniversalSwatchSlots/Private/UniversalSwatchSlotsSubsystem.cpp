@@ -69,13 +69,13 @@ void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<FUSSSwatchInform
 	{	// Browse all swatches to save
 
 		FUSSSwatchSaveInfo newInfo;
-		UFGFactoryCustomizationDescriptor_Swatch* CDO = Swatch.mSwatch.GetDefaultObject();
+		UUSSSwatchDesc* CDO = Swatch.mSwatch.GetDefaultObject();
 
 		newInfo.PrimaryColour = Swatch.mPrimaryColour;
 		newInfo.SecondaryColour = Swatch.mSecondaryColour;
 		newInfo.SwatchSlotID = CDO->ID;
 		newInfo.SwatchDisplayName = CDO->mDisplayName;
-		newInfo.SwatchGeneratedName = CDO->GetName().Replace(TEXT("Default__"), TEXT(""));
+		newInfo.SwatchGeneratedName = CDO->HashName;
 
 		this->SavedSwatches.Add(newInfo);
 	}

@@ -5,43 +5,10 @@
 #include "CoreMinimal.h"
 #include "Subsystem/ModSubsystem.h"
 #include "FGSaveInterface.h"
-#include "FGFactoryColoringTypes.h"
+
+#include "UniversalSwatchSlotsDefinitions.h"
+
 #include "UniversalSwatchSlotsSubsystem.generated.h"
-
-USTRUCT(BlueprintType)
-struct FUSSSwatchInformation {
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> mSwatch = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FLinearColor mPrimaryColour = FLinearColor(250, 149, 73, 255);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FLinearColor mSecondaryColour = FLinearColor(95, 102, 140, 255);
-};
-
-USTRUCT(BlueprintType)
-struct FUSSSwatchSaveInfo
-{
-	GENERATED_BODY()
-
-	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
-	int32 SwatchSlotID;
-
-	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
-	FText SwatchDisplayName;
-
-	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
-	FString SwatchGeneratedName;
-
-	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
-	FLinearColor PrimaryColour = FLinearColor(250, 149, 73, 255);
-
-	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
-	FLinearColor SecondaryColour = FLinearColor(95, 102, 140, 255);
-};
 
 /**
  * 

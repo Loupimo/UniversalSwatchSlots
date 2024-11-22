@@ -4,102 +4,26 @@
 
 #include "CoreMinimal.h"
 #include "Engine/Texture2D.h"
-#include "UObject/Package.h"
 
 #include "Module/GameWorldModule.h"
 #include "FGBuildableSubsystem.h"
 #include "FGGameState.h"
-#include "FGFactoryColoringTypes.h"
-#include "FGCustomizationRecipe.h"
-#include "FGCustomizerSubCategory.h"
 #include "FGBuildGun.h"
 
 #include "ModConfiguration.h"
 #include "ConfigPropertyArray.h"
 
 #include "UniversalSwatchSlotsSubsystem.h"
+#include "UniversalSwatchSlotsDefinitions.h"
+#include "UniversalSwatchSlotsGIModule.h"
 
 #include "UniversalSwatchSlotsWorldModule.generated.h"
-
-
-USTRUCT(BlueprintType)
-struct FUSSSwatch {
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 UniqueGroupID = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText GroupDisplayName;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float GroupPriority;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 SwatchUniqueID = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText SwatchDisplayName;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float SwatchPriority;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FLinearColor PrimaryColour = FLinearColor(250, 149, 73, 255);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FLinearColor SecondaryColour = FLinearColor(95, 102, 140, 255);
-};
-
-USTRUCT(BlueprintType)
-struct FUSSSession {
-	GENERATED_BODY()
-
-	/* The palette name. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString SessionName;
-
-	/* Tells if the primary colors should be added to the player clor preset or not. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool AddPrimaryColorsToPreset;
-
-	/* Tells if the secondary colors should be added to the player clor preset or not. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool AddSecondaryColorsToPreset;
-};
-
-USTRUCT(BlueprintType)
-struct FUSSPalette {
-	GENERATED_BODY()
-
-	/* The palette name. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString PaletteName;
-
-	/* The associated session to this palette. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray <FUSSSession> AssociatedSessions;
-
-	/* The swatches contained in this palette. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray <FUSSSwatch> Swatches;
-};
-
-
-/**
- *
- */
-UCLASS(Config = DynamicClasses)
-class UNIVERSALSWATCHSLOTS_API UUSSGroup : public UFGCustomizerSubCategory
-{
-	GENERATED_BODY()
-};
 
 
 /**
  * 
  */
-UCLASS(Config = DynamicClasses)
+UCLASS()
 class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWorldModule
 {
 	GENERATED_BODY()
@@ -122,7 +46,10 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @param	NewID			The ID to give to the CDO.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	void UpdateSwatchDescriptorIDCDO(UFGFactoryCustomizationDescriptor_Swatch* Target, int32 NewID);
+	void UpdateSwatchDescriptorIDCDO(UUSSSwatchDesc* Target, int32 NewID);
+
+	UFUNCTION(BlueprintCallable, Category = "Swatch")
+	void MoveCDO(UUSSSwatchDesc* Target, UUSSSwatchDesc* Source, int32 NewID);
 
 	/**
 	 * Create a new swatch group using the desired ID, name and priority.
@@ -138,7 +65,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @return The newly generated swatch descriptor, nullptr otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	UFGCustomizerSubCategory* GenerateDynamicSwatchGroup(int32 UniqueGroupID, FText DisplayName, float Priority);
+	UUSSSwatchGroup* GenerateDynamicSwatchGroup(int32 UniqueGroupID, FText DisplayName, float Priority);
 
 	/**
 	 * Create a new swatch descriptor using the desired swatch group, name and ID.
@@ -158,7 +85,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @return The newly generated swatch descriptor, nullptr otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	UFGFactoryCustomizationDescriptor_Swatch* GenerateDynamicSwatchDescriptor(int32 SlotID, int32 SwapID, FText DisplayName, FString GenName, float Priority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup, bool& HasSwapped);
+	UUSSSwatchDesc* GenerateDynamicSwatchDescriptor(int32 SlotID, int32 SwapID, FText DisplayName, FString GenName, float Priority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup, bool& HasSwapped);
 
 	/**
 	 * Create a new swatch recipe using the desired swatch descriptor.
@@ -170,7 +97,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @return The newly generated swatch recipe, nullptr otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	UFGCustomizationRecipe* GenerateDynamicSwatchRecipe(UFGFactoryCustomizationDescriptor_Swatch* SwatchDescriptor);
+	UUSSSwatchRecipe* GenerateDynamicSwatchRecipe(int32 UniqueID, UUSSSwatchDesc* SwatchDescriptor);
 
 	/**
 	 * Create a new swatch using the desired group ID and swatch name.
@@ -192,7 +119,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @return True if the swatch was created, false otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	bool GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SwatchUniqueID, FText SwatchDisplayName, float SwatchPriority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory*& SwatchGroup, UFGFactoryCustomizationDescriptor_Swatch*& SwatchDescriptor, UFGCustomizationRecipe*& SwatchRecipe);
+	bool GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SwatchUniqueID, FText SwatchDisplayName, float SwatchPriority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe);
 
 	/**
 	 * Create a new swatch using the desired group ID and swatch name.
@@ -207,7 +134,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @return True if the swatch was created, false otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	bool GenerateNewSwatchUsingInfo(FUSSSwatch SwatchInformation, UFGCustomizerSubCategory*& SwatchGroup, UFGFactoryCustomizationDescriptor_Swatch*& SwatchDescriptor, UFGCustomizationRecipe*& SwatchRecipe);
+	bool GenerateNewSwatchUsingInfo(FUSSSwatch SwatchInformation, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe);
 
 	/**
 	 * Parse the mod's configuration referenced by the variable ModConfig.
@@ -251,15 +178,15 @@ public:
 
 	/* The list of all available swatch groups. This array is modified when the GenerateDynamicSwatchGroup function is called. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	TMap<int32, UFGCustomizerSubCategory*> SwatchGroupArray;
+	TMap<int32, UUSSSwatchGroup*> SwatchGroupArray;
 
 	/* The list of all generated swatch descriptors. This array is modified when the GenerateDynamicSwatchDescriptor function is called.  */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	TMap<int32, UFGFactoryCustomizationDescriptor_Swatch*> SwatchDescriptorArray;
+	TMap<int32, UUSSSwatchDesc*> SwatchDescriptorArray;
 
 	/* The build gun blueprint class that will be used by the dynamically created swatch recipes. This array is modified when the GenerateDynamicSwatchRecipe function is called. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	TMap<int32, UFGCustomizationRecipe*> SwatchRecipeArray;
+	TMap<int32, UUSSSwatchRecipe*> SwatchRecipeArray;
 
 
 
@@ -291,6 +218,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	AUniversalSwatchSlotsSubsystem* USSSubsystem = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	UUniversalSwatchSlotsGIModule* GameInstance;
+
 protected:
 
 	/* This map contains the number of time a unique swatch name appears in the configuration. */
@@ -308,8 +238,6 @@ protected:
 	UPROPERTY()
 	FFactoryCustomizationColorSlot CustomColor;
 
-	UPROPERTY()
-	UPackage* PersistentPackage;
 
 	UClass* GenerateDynamicClass(UClass* TemplateClass, FName GeneratedClassName);
 
