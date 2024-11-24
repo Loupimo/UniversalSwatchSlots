@@ -3,6 +3,7 @@
 
 #include "UniversalSwatchSlotsSubsystem.h"
 
+#include "Net/UnrealNetwork.h"
 #include "Subsystem/SubsystemActorManager.h"
 
 
@@ -18,11 +19,29 @@ AUniversalSwatchSlotsSubsystem* AUniversalSwatchSlotsSubsystem::Get(UObject* wor
 		USubsystemActorManager* SubsystemActorManager = WorldObject->GetSubsystem<USubsystemActorManager>();
 		check(SubsystemActorManager);
 
-		for (auto Subsystem : SubsystemActorManager->SubsystemActors)
-		{
-			if (Subsystem.Key->IsChildOf(AUniversalSwatchSlotsSubsystem::StaticClass()))
+		if (SubsystemActorManager->SubsystemActors.IsEmpty())
+		{	// The subsytem is replicated
+
+			FLatentActionInfo dummy;
+			SubsystemActorManager->WaitForSubsystem(AUniversalSwatchSlotsSubsystem::StaticClass(), dummy);
+
+		/*	for (auto& Subsystem : SubsystemActorManager->RegisteredSubsystems)
 			{
-				return Cast<AUniversalSwatchSlotsSubsystem>(Subsystem.Value);
+				if (Subsystem->IsChildOf(AUniversalSwatchSlotsSubsystem::StaticClass()))
+				{
+					return (AUniversalSwatchSlotsSubsystem*)(&Subsystem);
+				}
+			}*/
+		}
+		//else
+		{	// The subsystem is spawned
+
+			for (auto Subsystem : SubsystemActorManager->SubsystemActors)
+			{
+				if (Subsystem.Key->IsChildOf(AUniversalSwatchSlotsSubsystem::StaticClass()))
+				{
+					return Cast<AUniversalSwatchSlotsSubsystem>(Subsystem.Value);
+				}
 			}
 		}
 	}
@@ -79,4 +98,11 @@ void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<UUSSSwatchDesc*>
 
 		this->SavedSwatches.Add(newInfo);
 	}
+}
+
+void AUniversalSwatchSlotsSubsystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AUniversalSwatchSlotsSubsystem, SavedSwatches);
 }

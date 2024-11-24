@@ -7,6 +7,7 @@
 #include "Math/Vector2D.h"
 #include "Unlocks/FGUnlockRecipe.h"
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 
 #include "FGSchematic.h"
 #include "Configuration/Properties/ConfigPropertyFloat.h"
@@ -1037,6 +1038,14 @@ void UUniversalSwatchSlotsWorldModule::InitUSSGameWorldModule(bool CleanUpBefore
 		}
 
 	}
-
+	this->USSSubsystem = AUniversalSwatchSlotsSubsystem::Get(this);
 	this->RetrieveFreeColorSlotID();
+}
+
+
+void UUniversalSwatchSlotsWorldModule::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UUniversalSwatchSlotsWorldModule, USSSubsystem);
 }

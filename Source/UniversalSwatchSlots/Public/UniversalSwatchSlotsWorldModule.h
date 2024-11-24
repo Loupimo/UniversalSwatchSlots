@@ -199,7 +199,7 @@ public:
 	bool IsUsingMoreSwatchSlots;
 
 	/* The subsystem used to load and store swatch data. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Config")
 	AUniversalSwatchSlotsSubsystem* USSSubsystem = nullptr;
 
 	/* The game instance used to construct dynamic swatch descriptor and recipe. */

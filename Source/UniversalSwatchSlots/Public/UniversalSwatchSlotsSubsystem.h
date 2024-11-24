@@ -63,6 +63,6 @@ public:
 public:
 
 	/* A detailed array that contains info about saved swatches. */
-	UPROPERTY(SaveGame, BlueprintReadWrite)
+	UPROPERTY(SaveGame, BlueprintReadWrite, Replicated)
 	TArray<FUSSSwatchSaveInfo> SavedSwatches;
 };
