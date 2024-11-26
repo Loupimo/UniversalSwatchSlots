@@ -429,7 +429,7 @@ bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatchUsingInfo(FUSSSwatch Swa
 	bool hasSwapped = false;
 
 	// Try to find if there is a saved swatch matching this swatch
-	if (this->USSSubsystem->FindSavedSwatch(genName, tmpSaved))
+	if (this->USSSubsystem && this->USSSubsystem->FindSavedSwatch(genName, tmpSaved))
 	{	// There is one
 
 		slotID = tmpSaved.SwatchSlotID;

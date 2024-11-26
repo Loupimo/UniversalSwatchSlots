@@ -60,9 +60,30 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	void UpdateSavedSwatches(TArray<UUSSSwatchDesc*> ToSave);
 
+
+	UFUNCTION(BlueprintCallable, Category = "Swatch")
+	void UpdateSwatchesArray(TMap<int32, UUSSSwatchGroup*> Groups, TMap<int32, UUSSSwatchDesc*> Descs, TMap<int32, UUSSSwatchRecipe*> Recipes);
+
 public:
 
 	/* A detailed array that contains info about saved swatches. */
-	UPROPERTY(SaveGame, BlueprintReadWrite, Replicated)
+	UPROPERTY(SaveGame, BlueprintReadWrite)
 	TArray<FUSSSwatchSaveInfo> SavedSwatches;
+
+	/* The list of all available swatch groups. This array is modified when the GenerateDynamicSwatchGroup function is called. */
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Swatch")
+	TArray<UUSSSwatchGroup*> SwatchGroupArray;
+
+	/* The list of all generated swatch descriptors. This array is modified when the GenerateDynamicSwatchDescriptor function is called.  */
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Swatch")
+	TArray<UUSSSwatchDesc*> SwatchDescriptorArray;
+
+	/* The build gun blueprint class that will be used by the dynamically created swatch recipes. This array is modified when the GenerateDynamicSwatchRecipe function is called. */
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Swatch")
+	TArray<UUSSSwatchRecipe*> SwatchRecipeArray;
+
+
+	/* The list of all available swatch groups. This array is modified when the GenerateDynamicSwatchGroup function is called. */
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Swatch")
+	FUSSPalette SwatchPalette;
 };

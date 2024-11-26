@@ -23,6 +23,8 @@ AUniversalSwatchSlotsSubsystem* AUniversalSwatchSlotsSubsystem::Get(UObject* wor
 		{	// The subsytem is replicated
 
 			FLatentActionInfo dummy;
+			dummy.CallbackTarget = AUniversalSwatchSlotsSubsystem::StaticClass();
+			dummy.UUID = 123456789;
 			SubsystemActorManager->WaitForSubsystem(AUniversalSwatchSlotsSubsystem::StaticClass(), dummy);
 
 		/*	for (auto& Subsystem : SubsystemActorManager->RegisteredSubsystems)
@@ -100,9 +102,37 @@ void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<UUSSSwatchDesc*>
 	}
 }
 
+void AUniversalSwatchSlotsSubsystem::UpdateSwatchesArray(TMap<int32, UUSSSwatchGroup*> Groups, TMap<int32, UUSSSwatchDesc*> Descs, TMap<int32, UUSSSwatchRecipe*> Recipes)
+{
+	TArray<int32> keys;
+	Groups.GetKeys(keys);
+
+	for (int32 currKey : keys)
+	{
+		this->SwatchGroupArray.Add(*Groups.Find(currKey));
+	}
+
+	Descs.GetKeys(keys);
+
+	for (int32 currKey : keys)
+	{
+		this->SwatchDescriptorArray.Add(*Descs.Find(currKey));
+	}
+
+	Recipes.GetKeys(keys);
+
+	for (int32 currKey : keys)
+	{
+		this->SwatchRecipeArray.Add(*Recipes.Find(currKey));
+	}
+}
+
 void AUniversalSwatchSlotsSubsystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AUniversalSwatchSlotsSubsystem, SavedSwatches);
+	DOREPLIFETIME(AUniversalSwatchSlotsSubsystem, SwatchGroupArray);
+	DOREPLIFETIME(AUniversalSwatchSlotsSubsystem, SwatchDescriptorArray);
+	DOREPLIFETIME(AUniversalSwatchSlotsSubsystem, SwatchRecipeArray);
+	DOREPLIFETIME(AUniversalSwatchSlotsSubsystem, SwatchPalette);
 }

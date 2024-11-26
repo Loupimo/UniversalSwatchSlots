@@ -234,5 +234,13 @@ protected:
 	bool ParseSwatch(int32 SwatchID, UConfigPropertySection* Swatch, int32 GroupID, FString GroupName, float GroupPriority, FUSSPalette* OutPalette);
 	FLinearColor HexToLinearColor(FString HexCode);
 	UTexture2D* GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColor SecondaryColor);
+	
+
+	/**
+	 * Initialize the USS game world module.
+	 *
+	 * @param	CleanSlotInit			Tells if we should clean color slot or not.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Config")
 	void RetrieveFreeColorSlotID();
 };
