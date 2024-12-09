@@ -16,70 +16,12 @@
 #include "Configuration/Properties/ConfigPropertyArray.h"
 #include "Configuration/Properties/ConfigPropertyBool.h"
 
+#include "USSBPLib.h"
+
 
 DECLARE_LOG_CATEGORY_EXTERN(LogUniversalSwatchSlots, Log, All)
 
 DEFINE_LOG_CATEGORY(LogUniversalSwatchSlots)
-
-void UUniversalSwatchSlotsWorldModule::AddNewSwatchesColorSlots(TArray<UUSSSwatchDesc*> SwatchDescriptions)
-{
-	AFGBuildableSubsystem* Subsystem = AFGBuildableSubsystem::Get(this);
-	AFGGameState* FGGameState = Cast<AFGGameState>(UGameplayStatics::GetGameState(this));
-
-	if (Subsystem && FGGameState)
-	{
-		int32 StartSwatchID = Subsystem->mColorSlots_Data.Num();
-
-		for (UUSSSwatchDesc* Swatch : SwatchDescriptions)
-		{	// Browse all the swatch descriptions
-
-			if (Swatch)
-			{
-				int32 ColourIndex = Swatch->ID;
-
-				FFactoryCustomizationColorSlot NewColourSlot = FFactoryCustomizationColorSlot(FLinearColor::Black, FLinearColor::Black);
-				NewColourSlot.PaintFinish = this->PaintFinish;
-
-				if (Subsystem->mColorSlots_Data.Num() <= ColourIndex)
-				{	// We need to create some default swatch slots
-
-					for (int32 i = Subsystem->mColorSlots_Data.Num(); i <= ColourIndex; ++i)
-					{
-						if (!Subsystem->mColorSlots_Data.IsValidIndex(i))
-						{	// We need to add a new slot
-							Subsystem->mColorSlots_Data.Add(NewColourSlot);
-							FGGameState->mBuildingColorSlots_Data.Add(NewColourSlot);
-							UE_LOG(LogUniversalSwatchSlots, Verbose, TEXT("New color slot added to subsystem and gamestate: %d"), i);
-						}
-					}
-				}
-
-				// Changes the colour to the desired one
-				NewColourSlot.PrimaryColor = Swatch->PrimaryColour;
-				NewColourSlot.SecondaryColor = Swatch->SecondaryColour;
-
-				// Update the subsystem and game state 
-				Subsystem->SetColorSlot_Data(ColourIndex, NewColourSlot);
-				FGGameState->mBuildingColorSlots_Data[ColourIndex] = NewColourSlot;
-
-				UE_LOG(LogUniversalSwatchSlots, Verbose, TEXT("Color slot updated: %d > %s (%d/%d)"), ColourIndex, *Swatch->GetClass()->GetDefaultObject()->GetName(), FGGameState->mBuildingColorSlots_Data.Num(), Subsystem->mColorSlots_Data.Num());
-			}
-		}
-
-		TArray<FFactoryCustomizationColorSlot> ColorSlots = Subsystem->mColorSlots_Data;
-		FGGameState->SetupColorSlots_Data(ColorSlots);
-		Subsystem->mColorSlotsAreDirty = true;
-
-		for (int32 i = 0; i < Subsystem->mColorSlots_Data.Num(); i++)
-		{
-
-			FFactoryCustomizationColorSlot ColorSlot = Subsystem->mColorSlots_Data[i];
-			FGGameState->Server_SetBuildingColorDataForSlot(i, ColorSlot);
-		}
-
-		return;
-	}
-}
 
 
 void UUniversalSwatchSlotsWorldModule::MoveCDO(UUSSSwatchDesc* Target, UUSSSwatchDesc* Source, int32 NewID)
@@ -153,7 +95,8 @@ UUSSSwatchGroup* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchGroup(in
 
 		// Create a dynamic derivated class
 		//UClass* NewClass = GenerateDynamicClass(UFGCustomizerSubCategory::StaticClass(), FName(*FString::Printf(TEXT("Gen_USS_SwatchGroup_%d"), UniqueGroupID)));
-		UClass* NewClass = GenerateDynamicClass(UUSSSwatchGroup::StaticClass(), FName(*genName));
+		//UClass* NewClass = GenerateDynamicClass(UUSSSwatchGroup::StaticClass(), FName(*genName));
+		UClass* NewClass = (UClass * )UUSSBPLib::FindOrCreateClass(genName, UUSSSwatchGroup::StaticClass());
 
 		if (NewClass)
 		{
@@ -170,9 +113,10 @@ UUSSSwatchGroup* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchGroup(in
 					CDO->HashName = genName;
 					CDO->mMenuPriority = Priority;
 				}
-
+				
 				// Create an instance to return
-				UUSSSwatchGroup* InstClass = NewObject<UUSSSwatchGroup>(GetTransientPackage(), NewClass, FName(*FString::Printf(TEXT("Inst_Gen_USS_SwatchGroup_%d"), UniqueGroupID)), RF_MarkAsRootSet | RF_Public);
+				UUSSSwatchGroup* InstClass = NewObject<UUSSSwatchGroup>(FindPackage(nullptr, TEXT("/UniversalSwatchSlots/")), NewClass, FName(*FString::Printf(TEXT("Inst_Gen_USS_SwatchGroup_%d"), UniqueGroupID)));
+				//UUSSSwatchGroup* InstClass = NewObject<UUSSSwatchGroup>(GetTransientPackage(), NewClass, FName(*FString::Printf(TEXT("Inst_Gen_USS_SwatchGroup_%d"), UniqueGroupID)), RF_MarkAsRootSet | RF_Public);
 
 				if (InstClass)
 				{	// For unknown reason this instance is not initialized using our modified CDO...
@@ -204,14 +148,16 @@ UUSSSwatchDesc* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescripto
 	if (tmpSD)
 	{	// The slot is already claime we need to use the swap ID
 
-		NewClass = *this->GameInstance->SwatchDescriptorArray.Find(SwapID);
+		//NewClass = *this->GameInstance->SwatchDescriptorArray.Find(SwapID);
 		genName = FString::Printf(TEXT("Gen_USS_SwatchDesc_%d"), SwapID);
+		NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(genName, UUSSSwatchDesc::StaticClass());
 	}
 	else
 	{	// The slot is available we can use it
 
-		NewClass = *this->GameInstance->SwatchDescriptorArray.Find(SlotID);
+		//NewClass = *this->GameInstance->SwatchDescriptorArray.Find(SlotID);
 		genName = FString::Printf(TEXT("Gen_USS_SwatchDesc_%d"), SlotID);
+		NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(genName, UUSSSwatchDesc::StaticClass());
 	}
 
 
@@ -224,6 +170,7 @@ UUSSSwatchDesc* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescripto
 		if (tCDO)
 		{
 			// Create an instance to return
+			//UUSSSwatchDesc * InstClass = NewObject<UUSSSwatchDesc>(FindPackage(nullptr, TEXT("/UniversalSwatchSlots/")), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)));
 			UUSSSwatchDesc* InstClass = NewObject<UUSSSwatchDesc>(GetTransientPackage(), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)), RF_MarkAsRootSet | RF_Public);
 
 			if (tmpSD)
@@ -346,8 +293,8 @@ UUSSSwatchRecipe* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchRecipe(
 	
 	// Create a dynamic derivated class
 	UClass* NewClass = *this->GameInstance->SwatchRecipeArray.Find(UniqueID);
-
 	FString genName = FString::Printf(TEXT("Gen_USS_SwatchRecipe_%d"), UniqueID);
+	//UClass* NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(genName, UUSSSwatchRecipe::StaticClass());
 
 	if (NewClass)
 	{
@@ -366,7 +313,9 @@ UUSSSwatchRecipe* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchRecipe(
 			}
 
 			// Create an instance to return
-			UUSSSwatchRecipe* InstClass = NewObject<UUSSSwatchRecipe>(GetTransientPackage(), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)), RF_MarkAsRootSet | RF_Public);
+			//UUSSSwatchRecipe* InstClass = NewObject<UUSSSwatchRecipe>(GetTransientPackage(), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)), RF_MarkAsRootSet | RF_Public);
+			UUSSSwatchRecipe* InstClass = NewObject<UUSSSwatchRecipe>(FindPackage(nullptr, TEXT("/UniversalSwatchSlots/")), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)));
+
 
 			if (InstClass)
 			{	// For unknown reason this instance is not initialized using our modified CDO...
@@ -392,7 +341,6 @@ UUSSSwatchRecipe* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchRecipe(
 
 
 bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatchUsingInfo(FUSSSwatch SwatchInformation, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe)
-
 {
 	int32 slotID = this->ValidSlotIDs[0];
 
@@ -411,7 +359,7 @@ bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatchUsingInfo(FUSSSwatch Swa
 	int32* tmpPtr = this->SwatchNameCount.Find(SwatchInformation.SwatchDisplayName.ToString());
 	
 	if (tmpPtr)
-	{	// The name already exist in the listwe need to generate a new one
+	{	// The name already exist in the list we need to generate a new one
 
 		nameCount = *tmpPtr;
 		*tmpPtr += 1;			// It is important to put this line after as the name count start at 1 if it already exist
@@ -1003,10 +951,16 @@ void UUniversalSwatchSlotsWorldModule::RetrieveFreeColorSlotID()
 
 void UUniversalSwatchSlotsWorldModule::InitUSSGameWorldModule(bool CleanUpBeforeInit)
 {
+	AFGGameState* FGGameState = Cast<AFGGameState>(UGameplayStatics::GetGameState(this));
+
+	if (FGGameState)
+	{
+		this->SessionName = FGGameState->mReplicatedSessionName;
+	}
+
 	if (CleanUpBeforeInit)
 	{
 		AFGBuildableSubsystem* Subsystem = AFGBuildableSubsystem::Get(this);
-		AFGGameState* FGGameState = Cast<AFGGameState>(UGameplayStatics::GetGameState(this));
 
 		if (Subsystem && FGGameState)
 		{

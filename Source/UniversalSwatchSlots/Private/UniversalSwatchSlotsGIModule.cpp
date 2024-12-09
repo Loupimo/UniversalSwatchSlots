@@ -2,6 +2,7 @@
 
 
 #include "UniversalSwatchSlotsGIModule.h"
+#include "USSBPLib.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogUniversalSwatchSlotsGI, Log, All)
 
@@ -12,7 +13,8 @@ UUSSSwatchDesc* UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchDescriptor(i
 	FString GenName = FString::Printf(TEXT("Gen_USS_SwatchDesc_%d"), UniqueID);
 
 	// Create a dynamic derivated class
-	UClass* NewClass = GenerateDynamicClass(UUSSSwatchDesc::StaticClass(), FName(*GenName));
+	//UClass* NewClass = GenerateDynamicClass(UUSSSwatchDesc::StaticClass(), FName(*GenName));
+	UClass* NewClass = (UClass * )UUSSBPLib::FindOrCreateClass(GenName, UUSSSwatchDesc::StaticClass());
 	
 	this->SwatchDescriptorArray.Add(UniqueID, NewClass);
 
@@ -24,7 +26,8 @@ UUSSSwatchRecipe* UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchRecipe(int
 {
 	// Create a dynamic derivated class
 	FString GenName = FString::Printf(TEXT("Gen_USS_SwatchRecipe_%d"), UniqueID);
-	UClass* NewClass = GenerateDynamicClass(UUSSSwatchRecipe::StaticClass(), FName(*GenName));
+	//UClass* NewClass = GenerateDynamicClass(UUSSSwatchRecipe::StaticClass(), FName(*GenName));
+	UClass* NewClass = (UClass *) UUSSBPLib::FindOrCreateClass(GenName, UUSSSwatchRecipe::StaticClass());
 	
 	this->SwatchRecipeArray.Add(UniqueID, NewClass);
 	

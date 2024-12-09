@@ -28,15 +28,6 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 {
 	GENERATED_BODY()
 
-
-	/**
-	 * Add new swatch color slots to the gamestate and buildable sub system using the desired swatch informations.
-	 *
-	 * @param	SwatchInformations		The swatch informations to use.
-	 */
-	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	void AddNewSwatchesColorSlots(TArray<UUSSSwatchDesc* > SwatchDescriptions);
-
 	/**
 	 * Move the source class and its CDO to the target class and its CDO. Apply NewID to the target CDO and class.
 	 *
@@ -205,6 +196,9 @@ public:
 	/* The game instance used to construct dynamic swatch descriptor and recipe. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	UUniversalSwatchSlotsGIModule* GameInstance;
+	// The value of the custom color if any
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	AFGBuildableSubsystem * BSubsystem;
 
 protected:
 
@@ -225,7 +219,10 @@ protected:
 	FFactoryCustomizationColorSlot CustomColor;
 
 
+
+
 	UClass* GenerateDynamicClass(UClass* TemplateClass, FName GeneratedClassName);
+	TSubclassOf<UObject> FindOrCreateClass(FString Name, UClass* ParentClass);
 
 	
 	void ParseAssociations(UConfigPropertyArray* Associations);

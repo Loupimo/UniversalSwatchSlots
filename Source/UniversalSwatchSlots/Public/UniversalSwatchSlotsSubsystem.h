@@ -18,6 +18,8 @@ class UNIVERSALSWATCHSLOTS_API AUniversalSwatchSlotsSubsystem : public AModSubsy
 {
 	GENERATED_BODY()
 	
+	//AUniversalSwatchSlotsSubsystem();
+
 public:
 
 	UFUNCTION(BlueprintPure, Category = "Subsystem", DisplayName = "GetAUniversalSwatchSlotsSubsystem", meta = (DefaultToSelf = "WorldContext"))
@@ -59,6 +61,9 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	void UpdateSavedSwatches(TArray<UUSSSwatchDesc*> ToSave);
+
+	UFUNCTION(BlueprintCallable, Category = "Swatch")
+	void AddNewSwatchesColorSlotsToGameState(TArray<UUSSSwatchDesc* > SwatchDescriptions);
 
 public:
 
