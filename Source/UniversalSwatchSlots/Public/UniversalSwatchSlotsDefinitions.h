@@ -9,6 +9,12 @@
 
 #include "UniversalSwatchSlotsDefinitions.generated.h"
 
+UENUM(BlueprintType)
+enum class EUSSVersion : uint8
+{
+	None  = 0	UMETA(DisplayName = "None"),		// Not set or before 1.0.4
+	V1_0_4 = 1	UMETA(DisplayName = "1.0.4")		// 1.0.4
+};
 
 USTRUCT(BlueprintType)
 struct FUSSSwatchSaveInfo

@@ -96,7 +96,7 @@ UUSSSwatchGroup* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchGroup(in
 		// Create a dynamic derivated class
 		//UClass* NewClass = GenerateDynamicClass(UFGCustomizerSubCategory::StaticClass(), FName(*FString::Printf(TEXT("Gen_USS_SwatchGroup_%d"), UniqueGroupID)));
 		//UClass* NewClass = GenerateDynamicClass(UUSSSwatchGroup::StaticClass(), FName(*genName));
-		UClass* NewClass = (UClass * )UUSSBPLib::FindOrCreateClass(genName, UUSSSwatchGroup::StaticClass());
+		UClass* NewClass = (UClass * )UUSSBPLib::FindOrCreateClass(*this->PackageName, genName, UUSSSwatchGroup::StaticClass());
 
 		if (NewClass)
 		{
@@ -115,7 +115,7 @@ UUSSSwatchGroup* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchGroup(in
 				}
 				
 				// Create an instance to return
-				UUSSSwatchGroup* InstClass = NewObject<UUSSSwatchGroup>(FindPackage(nullptr, TEXT("/UniversalSwatchSlots/")), NewClass, FName(*FString::Printf(TEXT("Inst_Gen_USS_SwatchGroup_%d"), UniqueGroupID)));
+				UUSSSwatchGroup* InstClass = NewObject<UUSSSwatchGroup>(FindPackage(nullptr, *this->PackageName), NewClass, FName(*FString::Printf(TEXT("Inst_Gen_USS_SwatchGroup_%d"), UniqueGroupID)));
 				//UUSSSwatchGroup* InstClass = NewObject<UUSSSwatchGroup>(GetTransientPackage(), NewClass, FName(*FString::Printf(TEXT("Inst_Gen_USS_SwatchGroup_%d"), UniqueGroupID)), RF_MarkAsRootSet | RF_Public);
 
 				if (InstClass)
@@ -150,14 +150,14 @@ UUSSSwatchDesc* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescripto
 
 		//NewClass = *this->GameInstance->SwatchDescriptorArray.Find(SwapID);
 		genName = FString::Printf(TEXT("Gen_USS_SwatchDesc_%d"), SwapID);
-		NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(genName, UUSSSwatchDesc::StaticClass());
+		NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(this->PackageName, genName, UUSSSwatchDesc::StaticClass());
 	}
 	else
 	{	// The slot is available we can use it
 
 		//NewClass = *this->GameInstance->SwatchDescriptorArray.Find(SlotID);
 		genName = FString::Printf(TEXT("Gen_USS_SwatchDesc_%d"), SlotID);
-		NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(genName, UUSSSwatchDesc::StaticClass());
+		NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(this->PackageName, genName, UUSSSwatchDesc::StaticClass());
 	}
 
 
@@ -170,8 +170,8 @@ UUSSSwatchDesc* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescripto
 		if (tCDO)
 		{
 			// Create an instance to return
-			//UUSSSwatchDesc * InstClass = NewObject<UUSSSwatchDesc>(FindPackage(nullptr, TEXT("/UniversalSwatchSlots/")), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)));
-			UUSSSwatchDesc* InstClass = NewObject<UUSSSwatchDesc>(GetTransientPackage(), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)), RF_MarkAsRootSet | RF_Public);
+			UUSSSwatchDesc * InstClass = NewObject<UUSSSwatchDesc>(FindPackage(nullptr, *this->PackageName), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)));
+			//UUSSSwatchDesc* InstClass = NewObject<UUSSSwatchDesc>(GetTransientPackage(), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)), RF_MarkAsRootSet | RF_Public);
 
 			if (tmpSD)
 			{	// If we are here it means that a previous swatch had no corresponding saved swatch and was created before this one. We need to update its CDO and instance class in order to keep the correct swatch slot IDs.
@@ -292,9 +292,9 @@ UUSSSwatchRecipe* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchRecipe(
 	UUSSSwatchDesc* SwatchDescCDO = (UUSSSwatchDesc*) SwatchDescriptor->GetClass()->GetDefaultObject();
 	
 	// Create a dynamic derivated class
-	UClass* NewClass = *this->GameInstance->SwatchRecipeArray.Find(UniqueID);
+	//UClass* NewClass = *this->GameInstance->SwatchRecipeArray.Find(UniqueID);
 	FString genName = FString::Printf(TEXT("Gen_USS_SwatchRecipe_%d"), UniqueID);
-	//UClass* NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(genName, UUSSSwatchRecipe::StaticClass());
+	UClass* NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(this->PackageName, genName, UUSSSwatchRecipe::StaticClass());
 
 	if (NewClass)
 	{
@@ -314,7 +314,7 @@ UUSSSwatchRecipe* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchRecipe(
 
 			// Create an instance to return
 			//UUSSSwatchRecipe* InstClass = NewObject<UUSSSwatchRecipe>(GetTransientPackage(), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)), RF_MarkAsRootSet | RF_Public);
-			UUSSSwatchRecipe* InstClass = NewObject<UUSSSwatchRecipe>(FindPackage(nullptr, TEXT("/UniversalSwatchSlots/")), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)));
+			UUSSSwatchRecipe* InstClass = NewObject<UUSSSwatchRecipe>(FindPackage(nullptr, *this->PackageName), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)));
 
 
 			if (InstClass)

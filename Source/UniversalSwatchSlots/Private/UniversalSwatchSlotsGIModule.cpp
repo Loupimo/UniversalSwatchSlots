@@ -13,11 +13,16 @@ UUSSSwatchDesc* UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchDescriptor(i
 	FString GenName = FString::Printf(TEXT("Gen_USS_SwatchDesc_%d"), UniqueID);
 
 	// Create a dynamic derivated class
-	//UClass* NewClass = GenerateDynamicClass(UUSSSwatchDesc::StaticClass(), FName(*GenName));
-	UClass* NewClass = (UClass * )UUSSBPLib::FindOrCreateClass(GenName, UUSSSwatchDesc::StaticClass());
-	
+	//UClass* NewClasse = GenerateDynamicClass(UUSSSwatchDesc::StaticClass(), FName(*GenName2));
+	//UClass* NewClasse2 = GenerateDynamicClass(UUSSSwatchDesc::StaticClass(), FName(*GenName3));
+	UClass* NewClass = (UClass * )UUSSBPLib::FindOrCreateClass(this->PackageName, GenName, UUSSSwatchDesc::StaticClass());
+	//UE_LOG(LogUniversalSwatchSlotsGI, Display, TEXT("%s"), *NewClass->GetPathName());
+	//UE_LOG(LogUniversalSwatchSlotsGI, Display, TEXT("%s"), *NewClasse->GetPathName());
 	this->SwatchDescriptorArray.Add(UniqueID, NewClass);
 
+	// This is needed until 1.0.5 as people may have this wrong package name for their swatches
+	NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(FString("/UniversalSwatchSlots/"), GenName, UUSSSwatchDesc::StaticClass());
+	this->tmpSwatchDescriptorArray.Add(UniqueID, NewClass);
 	return nullptr;
 }
 
@@ -27,7 +32,7 @@ UUSSSwatchRecipe* UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchRecipe(int
 	// Create a dynamic derivated class
 	FString GenName = FString::Printf(TEXT("Gen_USS_SwatchRecipe_%d"), UniqueID);
 	//UClass* NewClass = GenerateDynamicClass(UUSSSwatchRecipe::StaticClass(), FName(*GenName));
-	UClass* NewClass = (UClass *) UUSSBPLib::FindOrCreateClass(GenName, UUSSSwatchRecipe::StaticClass());
+	UClass* NewClass = (UClass *) UUSSBPLib::FindOrCreateClass(this->PackageName, GenName, UUSSSwatchRecipe::StaticClass());
 	
 	this->SwatchRecipeArray.Add(UniqueID, NewClass);
 	

@@ -8,6 +8,7 @@
 #include "FGGameState.h"
 #include "Kismet/GameplayStatics.h"
 
+const EUSSVersion CurrVersion = EUSSVersion::V1_0_4;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogUSS_Subsystem, Log, All)
 
@@ -87,6 +88,7 @@ bool AUniversalSwatchSlotsSubsystem::FindSavedSwatch(FString GeneratedName, FUSS
 		{	// We have found the swatch. We can remove it from the array to speed up the next find
 
 			this->SavedSwatches.RemoveAt(i);
+			this->InternalSwatchMatch.Add(i);
 			Out = currSaved;
 			return true;
 		}
@@ -180,4 +182,9 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 
 		return;
 	}
+}
+
+void AUniversalSwatchSlotsSubsystem::UpdateSavedVersion()
+{
+	this->SaveVersion = CurrVersion;
 }

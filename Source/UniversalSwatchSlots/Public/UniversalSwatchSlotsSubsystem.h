@@ -10,6 +10,8 @@
 
 #include "UniversalSwatchSlotsSubsystem.generated.h"
 
+
+
 /**
  * 
  */
@@ -62,12 +64,36 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	void UpdateSavedSwatches(TArray<UUSSSwatchDesc*> ToSave);
 
+	/**
+	 * Add new swatch color slots to the gamestate using the given swatch descriptors.
+	 *
+	 * @param	SwatchDescriptions		The swatch descriptors to use.
+	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	void AddNewSwatchesColorSlotsToGameState(TArray<UUSSSwatchDesc* > SwatchDescriptions);
+
+	/**
+	 * Update the USS version used for saving this file.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Subsystem")
+	void UpdateSavedVersion();
 
 public:
 
 	/* A detailed array that contains info about saved swatches. */
 	UPROPERTY(SaveGame, BlueprintReadWrite)
 	TArray<FUSSSwatchSaveInfo> SavedSwatches;
+
+	/* Gives the USS version used by the save file. */
+	UPROPERTY(SaveGame, BlueprintReadWrite)
+	EUSSVersion SaveVersion = EUSSVersion::None;
+
+	/* Tells is More swatch slots was installed when the game was saved. */
+	UPROPERTY(SaveGame, BlueprintReadWrite)
+	bool WasUsingMSS = false;
+
+protected:
+
+
+	TMap <int, int> InternalSwatchMatch;
 };

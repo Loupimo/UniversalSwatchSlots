@@ -219,6 +219,8 @@ protected:
 	FFactoryCustomizationColorSlot CustomColor;
 
 
+	FString PackageName = "/UniversalSwatchSlots";
+
 
 
 	UClass* GenerateDynamicClass(UClass* TemplateClass, FName GeneratedClassName);
