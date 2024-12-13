@@ -33,6 +33,7 @@ TSubclassOf<UObject> UUSSBPLib::FindOrCreateClass(FString PackageName, FString N
 	return FClassGenerator::GenerateSimpleClass(*PackageName, *Name, ParentClass);
 }
 
+
 UTexture2D* UUSSBPLib::GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColor SecondaryColor)
 {
 	int32 Width = 128;
@@ -111,4 +112,29 @@ UTexture2D* UUSSBPLib::GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColo
 	NewTexture->UpdateResource();
 
 	return NewTexture;
+}
+
+
+FLinearColor UUSSBPLib::HexToLinearColor(FString HexCode)
+{
+	if (HexCode.StartsWith("#"))
+	{
+		HexCode.RemoveAt(0); // Remove the '#' character
+	}
+
+	// Check for string validity
+	if (HexCode.IsEmpty() || (HexCode.Len() != 6 && HexCode.Len() != 8))
+	{
+		UE_LOG(LogUniversalSwatchSlotsLib, Warning, TEXT("Invalid Hex Color Format: %s"), *HexCode);
+		return FLinearColor::Black;
+	}
+
+	return FLinearColor::FromSRGBColor(FColor::FromHex(HexCode));
+}
+
+
+FString UUSSBPLib::BuildSwatchGenName(FString SwatchDisplayName, FString SwatchClassAcr, int32 SwatchID)
+{
+	FString tmp = FString::FromInt(GetTypeHash(SwatchDisplayName));
+	return FString("Gen_USS_") + SwatchClassAcr + FString("_") + tmp + FString("_") + FString::FromInt(SwatchID);
 }

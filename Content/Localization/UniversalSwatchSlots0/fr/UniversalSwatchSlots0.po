@@ -1,0 +1,274 @@
+﻿# UniversalSwatchSlots0 French translation.
+# Fill out your copyright notice in the Description page of Project Settings.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: UniversalSwatchSlots0\n"
+"POT-Creation-Date: 2024-12-13 01:38\n"
+"PO-Revision-Date: 2024-12-13 01:38\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. Key:	50D378F14D6504B0868435BAF4EC41E7
+#. SourceLocation:	/UniversalSwatchSlots/Config/Structs/ColorComposite.ColorComposite.DisplayNameMap(0 - Value).DisplayNameMap
+#: /UniversalSwatchSlots/Config/Structs/ColorComposite.ColorComposite.DisplayNameMap(0 - Value).DisplayNameMap
+msgctxt ",50D378F14D6504B0868435BAF4EC41E7"
+msgid "Red"
+msgstr "Rouge"
+
+#. Key:	F1045455433687285D1486B8DBF9F2FA
+#. SourceLocation:	/UniversalSwatchSlots/Config/Structs/ColorComposite.ColorComposite.DisplayNameMap(1 - Value).DisplayNameMap
+#: /UniversalSwatchSlots/Config/Structs/ColorComposite.ColorComposite.DisplayNameMap(1 - Value).DisplayNameMap
+msgctxt ",F1045455433687285D1486B8DBF9F2FA"
+msgid "Green"
+msgstr "Vert"
+
+#. Key:	3518BEE64EDE9F73F453A699961F8DF0
+#. SourceLocation:	/UniversalSwatchSlots/Config/Structs/ColorComposite.ColorComposite.DisplayNameMap(2 - Value).DisplayNameMap
+#: /UniversalSwatchSlots/Config/Structs/ColorComposite.ColorComposite.DisplayNameMap(2 - Value).DisplayNameMap
+msgctxt ",3518BEE64EDE9F73F453A699961F8DF0"
+msgid "Blue"
+msgstr "Bleu"
+
+#. Key:	F4BC0E1842F9841BF94231A80DE2E8A1
+#. SourceLocation:	/UniversalSwatchSlots/Config/Structs/ColorType.ColorType.DisplayNameMap(0 - Value).DisplayNameMap
+#: /UniversalSwatchSlots/Config/Structs/ColorType.ColorType.DisplayNameMap(0 - Value).DisplayNameMap
+msgctxt ",F4BC0E1842F9841BF94231A80DE2E8A1"
+msgid "Primary"
+msgstr "Primaire"
+
+#. Key:	7DDD6D3F43A1B58FFBC270AA6D69AD81
+#. SourceLocation:	/UniversalSwatchSlots/Config/Structs/ColorType.ColorType.DisplayNameMap(1 - Value).DisplayNameMap
+#: /UniversalSwatchSlots/Config/Structs/ColorType.ColorType.DisplayNameMap(1 - Value).DisplayNameMap
+msgctxt ",7DDD6D3F43A1B58FFBC270AA6D69AD81"
+msgid "Secondary"
+msgstr "Secondaire"
+
+#. Key:	C2C1F6C04670D96ED4D19B8A962778C1
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:CheckColorInput [Script Bytecode]
+#: /UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:CheckColorInput [Script Bytecode]
+msgctxt ",C2C1F6C04670D96ED4D19B8A962778C1"
+msgid "Please enter an interger between 0 and 255"
+msgstr "Veuillez entrer une valeur comprise entre 0 et 255"
+
+#. Key:	A39929954500C8D50FF5D0AFF45868AD
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:CheckHexInput [Script Bytecode]
+#: /UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:CheckHexInput [Script Bytecode]
+msgctxt ",A39929954500C8D50FF5D0AFF45868AD"
+msgid "Please enter a string containing only 0 to 9 or A to F characters"
+msgstr "Veuillez n'utilisez que les caractères 0 à 9 ou de A à Z"
+
+#. Key:	3D20AE8145AF52EB499C28822172D310
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Blue_Text.Text
+#: /UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Blue_Text.Text
+msgctxt ",3D20AE8145AF52EB499C28822172D310"
+msgid "Blue"
+msgstr "Bleu"
+
+#. Key:	879B94FC46376616E223958BCD8BE440
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Blue_Value.ToolTipText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Blue_Value.ToolTipText
+msgctxt ",879B94FC46376616E223958BCD8BE440"
+msgid "Enter the blue value (0 - 255)"
+msgstr "Entrez la valeur du bleu (0 - 255)"
+
+#. Key:	F2A86DFE4DC45EAECFF2B69DA6CF4DAD
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Green_Text.Text
+#: /UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Green_Text.Text
+msgctxt ",F2A86DFE4DC45EAECFF2B69DA6CF4DAD"
+msgid "Green"
+msgstr "Vert"
+
+#. Key:	C80E3F204289108E13C020A3D231133E
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Green_Value.ToolTipText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Green_Value.ToolTipText
+msgctxt ",C80E3F204289108E13C020A3D231133E"
+msgid "Enter the green value (0 - 255)"
+msgstr "Entrez la valeur du vert (0 - 255)"
+
+#. Key:	19A3C6EC4262C446657FE1850E428AA6
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Hex_Text.Text
+#: /UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Hex_Text.Text
+msgctxt ",19A3C6EC4262C446657FE1850E428AA6"
+msgid "Hex"
+msgstr "Hex"
+
+#. Key:	F7B2C29144D6A8AAA15880963950AE28
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Hex_Value.ToolTipText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Hex_Value.ToolTipText
+msgctxt ",F7B2C29144D6A8AAA15880963950AE28"
+msgid "Enter the hexadecimal value (000000 - FFFFFF)"
+msgstr "Entrez la valeur hexadécimale (000000 - FFFFFF)"
+
+#. Key:	D8E87717402266D5BF11259A55CDE77C
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Red_Text.Text
+#: /UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Red_Text.Text
+msgctxt ",D8E87717402266D5BF11259A55CDE77C"
+msgid "Red"
+msgstr "Rouge"
+
+#. Key:	C8578DC7441B636DD7ED9EBE8CB31409
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Red_Value.ToolTipText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Color_Field.USS_Color_Field_C:WidgetTree.Red_Value.ToolTipText
+msgctxt ",C8578DC7441B636DD7ED9EBE8CB31409"
+msgid "Enter the red value (0 - 255)"
+msgstr "Entrez la valeur rouge (0 - 255)"
+
+#. Key:	75C7C7B7461BE32F8EDE6EAEB0AB34F3
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_CustomConfigWidget.USS_CustomConfigWidget_C:WidgetTree.Add_Palette_Button.ToolTipText
+#: /UniversalSwatchSlots/Config/Widgets/USS_CustomConfigWidget.USS_CustomConfigWidget_C:WidgetTree.Add_Palette_Button.ToolTipText
+msgctxt ",75C7C7B7461BE32F8EDE6EAEB0AB34F3"
+msgid "Add a new palette"
+msgstr "Ajouter une nouvelle palette"
+
+#. Key:	A16CEB104F0CE950DAE5F38C8A0B1BE4
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_CustomConfigWidget.USS_CustomConfigWidget_C:WidgetTree.Palettes.Text
+#: /UniversalSwatchSlots/Config/Widgets/USS_CustomConfigWidget.USS_CustomConfigWidget_C:WidgetTree.Palettes.Text
+msgctxt ",A16CEB104F0CE950DAE5F38C8A0B1BE4"
+msgid "Palettes"
+msgstr "Palettes"
+
+#. Key:	0CBC1B2749ECED36A75A60AC5311E86D
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Group_List.USS_Group_List_C:WidgetTree.Add_Group_Button.ToolTipText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Group_List.USS_Group_List_C:WidgetTree.Add_Group_Button.ToolTipText
+msgctxt ",0CBC1B2749ECED36A75A60AC5311E86D"
+msgid "Add a new group"
+msgstr "Ajouter un nouveau groupe"
+
+#. Key:	B8A6C23745FA2A804EBEA2929F876DA5
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Group_List.USS_Group_List_C:WidgetTree.Add_Swatch_Button.ToolTipText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Group_List.USS_Group_List_C:WidgetTree.Add_Swatch_Button.ToolTipText
+msgctxt ",B8A6C23745FA2A804EBEA2929F876DA5"
+msgid "Add a new swatch"
+msgstr "Ajouter un nouveau nuacier"
+
+#. Key:	119ED02746D142C30D6F0AB998AED41E
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Group_List.USS_Group_List_C:WidgetTree.Group_Name.HintText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Group_List.USS_Group_List_C:WidgetTree.Group_Name.HintText
+msgctxt ",119ED02746D142C30D6F0AB998AED41E"
+msgid "Please enter the group name here"
+msgstr "Veuillez entrer le nom du groupe ici"
+
+#. Key:	DAD9B43F453FC309D70216931409EE18
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Group_List.USS_Group_List_C:WidgetTree.Group_Priority.Tool Tip
+#: /UniversalSwatchSlots/Config/Widgets/USS_Group_List.USS_Group_List_C:WidgetTree.Group_Priority.Tool Tip
+msgctxt ",DAD9B43F453FC309D70216931409EE18"
+msgid "Defines the group priority. Lower the number, sooner the group will appear in the customizer."
+msgstr "Définit la priorité du groupe. Plus le nombre est bas, plus le groupe apparaîtra tôt dans le personnalisateur."
+
+#. Key:	C45200CB4459690E76B39F83A090110B
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Group_List.USS_Group_List_C:WidgetTree.Remove_Group_Button.ToolTipText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Group_List.USS_Group_List_C:WidgetTree.Remove_Group_Button.ToolTipText
+msgctxt ",C45200CB4459690E76B39F83A090110B"
+msgid "Remove group"
+msgstr "Supprimer le groupe"
+
+#. Key:	656334854CB12CCA90C40BB932BCE289
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Palette_List.USS_Palette_List_C:WidgetTree.Add_Group_Button.ToolTipText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Palette_List.USS_Palette_List_C:WidgetTree.Add_Group_Button.ToolTipText
+msgctxt ",656334854CB12CCA90C40BB932BCE289"
+msgid "Add a new group"
+msgstr "Ajouter un nouveau groupe"
+
+#. Key:	71EB482945D1A5C45E10E3A0CAD09101
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Palette_List.USS_Palette_List_C:WidgetTree.Add_Palette_Button.ToolTipText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Palette_List.USS_Palette_List_C:WidgetTree.Add_Palette_Button.ToolTipText
+msgctxt ",71EB482945D1A5C45E10E3A0CAD09101"
+msgid "Add a new palette"
+msgstr "Ajouter une nouvelle palette"
+
+#. Key:	6835A7F3497AB44696AE608B47694474
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Palette_List.USS_Palette_List_C:WidgetTree.PaletteName.HintText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Palette_List.USS_Palette_List_C:WidgetTree.PaletteName.HintText
+msgctxt ",6835A7F3497AB44696AE608B47694474"
+msgid "Please enter the palette name here"
+msgstr "Veuillez entrer le nom de la palette ici"
+
+#. Key:	4394825E495E2D718655BEA11A871248
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Palette_List.USS_Palette_List_C:WidgetTree.Remove_Palette_Button.ToolTipText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Palette_List.USS_Palette_List_C:WidgetTree.Remove_Palette_Button.ToolTipText
+msgctxt ",4394825E495E2D718655BEA11A871248"
+msgid "Remove palette"
+msgstr "Supprimer la palette"
+
+#. Key:	C012D0574EB5DEB45AAD09B54D5A765D
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Priority_Field.USS_Priority_Field_C:CheckPriorityInput [Script Bytecode]
+#: /UniversalSwatchSlots/Config/Widgets/USS_Priority_Field.USS_Priority_Field_C:CheckPriorityInput [Script Bytecode]
+msgctxt ",C012D0574EB5DEB45AAD09B54D5A765D"
+msgid "Please enter an interger between -100 and 100"
+msgstr "Veuillez entrer une valeur comprise entre -100 et 100"
+
+#. Key:	0178058A41882D2C7D097DB9EDACF273
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Priority_Field.USS_Priority_Field_C:WidgetTree.Priority_Text.Text
+#: /UniversalSwatchSlots/Config/Widgets/USS_Priority_Field.USS_Priority_Field_C:WidgetTree.Priority_Text.Text
+msgctxt ",0178058A41882D2C7D097DB9EDACF273"
+msgid "Priority :"
+msgstr "Priorité :"
+
+#. Key:	CDD3BC204C57D38A62D47996055540E6
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Priority_Field.USS_Priority_Field_C:WidgetTree.Priority_Text_Value.ToolTipText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Priority_Field.USS_Priority_Field_C:WidgetTree.Priority_Text_Value.ToolTipText
+msgctxt ",CDD3BC204C57D38A62D47996055540E6"
+msgid "Defines the swatch priority. Lower the number, sooner the swatch appears in its swatch group's customizer."
+msgstr "Définit la priorité du nuancier. Plus le nombre est bas, plus le nuacier apparaîtra tôt son groupe."
+
+#. Key:	2416D61D4108544E60DD55AB79C950DF
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Swatch_List.USS_Swatch_List_C:WidgetTree.Add_Swatch_Button.ToolTipText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Swatch_List.USS_Swatch_List_C:WidgetTree.Add_Swatch_Button.ToolTipText
+msgctxt ",2416D61D4108544E60DD55AB79C950DF"
+msgid "Add a new swatch"
+msgstr "Ajouter un nouveau nuacier"
+
+#. Key:	F541A7034724E2849FB9B480FFF2D410
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Swatch_List.USS_Swatch_List_C:WidgetTree.P_Color.Color_Text_Var
+#: /UniversalSwatchSlots/Config/Widgets/USS_Swatch_List.USS_Swatch_List_C:WidgetTree.P_Color.Color_Text_Var
+msgctxt ",F541A7034724E2849FB9B480FFF2D410"
+msgid "Primary Color :"
+msgstr "Couleur Primaire :"
+
+#. Key:	517B67B04A2BFD2FFCD2CB81C9DC50DD
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Swatch_List.USS_Swatch_List_C:WidgetTree.Remove_Swatch_Button.ToolTipText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Swatch_List.USS_Swatch_List_C:WidgetTree.Remove_Swatch_Button.ToolTipText
+msgctxt ",517B67B04A2BFD2FFCD2CB81C9DC50DD"
+msgid "Remove swatch"
+msgstr "Supprimer le nuancier"
+
+#. Key:	1EA5E3514502B00C15B37BA5EA0A317A
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Swatch_List.USS_Swatch_List_C:WidgetTree.S_Color.Color_Text_Var
+#: /UniversalSwatchSlots/Config/Widgets/USS_Swatch_List.USS_Swatch_List_C:WidgetTree.S_Color.Color_Text_Var
+msgctxt ",1EA5E3514502B00C15B37BA5EA0A317A"
+msgid "Secondary Color :"
+msgstr "Couleur Secondaire :"
+
+#. Key:	B5826718421CE6D131282582FC271CAA
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Swatch_List.USS_Swatch_List_C:WidgetTree.Swatch_Name.HintText
+#: /UniversalSwatchSlots/Config/Widgets/USS_Swatch_List.USS_Swatch_List_C:WidgetTree.Swatch_Name.HintText
+msgctxt ",B5826718421CE6D131282582FC271CAA"
+msgid "Please enter the swatch name here"
+msgstr "Veuillez entrer le nom du nuancier ici"
+
+#. Key:	9FB6A7214CBC3AF1BBAF5BA2929D8703
+#. SourceLocation:	/UniversalSwatchSlots/Config/Widgets/USS_Swatch_List.USS_Swatch_List_C:WidgetTree.Swatch_Priority.Tool Tip
+#: /UniversalSwatchSlots/Config/Widgets/USS_Swatch_List.USS_Swatch_List_C:WidgetTree.Swatch_Priority.Tool Tip
+msgctxt ",9FB6A7214CBC3AF1BBAF5BA2929D8703"
+msgid "Defines the swatch priority. Lower the number, sooner the swatch will appear in its group's customizer."
+msgstr "Définit la priorité du nuancier. Plus le nombre est bas, plus le nuacier apparaîtra tôt son groupe."
+
+#. Key:	B96052904A76A7E38F5510BE994AE887
+#. SourceLocation:	/UniversalSwatchSlots/RootGameWorld_UniversalSwatchSlots.Default__RootGameWorld_UniversalSwatchSlots_C.SwatchDescription
+#: /UniversalSwatchSlots/RootGameWorld_UniversalSwatchSlots.Default__RootGameWorld_UniversalSwatchSlots_C.SwatchDescription
+msgctxt ",B96052904A76A7E38F5510BE994AE887"
+msgid "Give your factory a new paint job!\r\n\r\nWarning: Changing this Swatch will apply the change to all buildings currently using it."
+msgstr "Donnez un coup de pinceau à votre usine!\r\n\r\nAttention : changer ce nuancier appliquera le changement à tous les bâtiments qui l'utilisent."
+
+#. Key:	0FE1DC44453AC112DFA7E3A44A312198
+#. SourceLocation:	/UniversalSwatchSlots/Swatches/USS_Schematic.Default__USS_Schematic_C.mDescription
+#: /UniversalSwatchSlots/Swatches/USS_Schematic.Default__USS_Schematic_C.mDescription
+msgctxt ",0FE1DC44453AC112DFA7E3A44A312198"
+msgid "Adds a new customization category that includes all the swatches organized according to the palette scheme chosen in the configuration."
+msgstr "Ajoute une nouvelle catégorie de customisation qui comporte tous les nuanciers ogranisés selon le schéma de la palette choisi dans la configuration."
+

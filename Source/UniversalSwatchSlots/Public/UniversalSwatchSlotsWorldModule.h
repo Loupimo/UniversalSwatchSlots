@@ -72,7 +72,8 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * @return The newly generated swatch descriptor, nullptr otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	UUSSSwatchDesc* GenerateDynamicSwatchDescriptor(int32 SlotID, int32 SwapID, FText DisplayName, FString GenName, float Priority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup, bool& HasSwapped);
+	//UUSSSwatchDesc* GenerateDynamicSwatchDescriptor(int32 SlotID, int32 SwapID, FText DisplayName, FString GenName, float Priority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup, bool& HasSwapped);
+	UUSSSwatchDesc* GenerateDynamicSwatchDescriptor(int32 SlotID, FText DisplayName, FString GenName, float Priority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup);
 
 	/**
 	 * Create a new swatch recipe using the desired swatch descriptor.
@@ -196,9 +197,6 @@ public:
 	/* The game instance used to construct dynamic swatch descriptor and recipe. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	UUniversalSwatchSlotsGIModule* GameInstance;
-	// The value of the custom color if any
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
-	AFGBuildableSubsystem * BSubsystem;
 
 protected:
 
@@ -224,14 +222,11 @@ protected:
 
 
 	UClass* GenerateDynamicClass(UClass* TemplateClass, FName GeneratedClassName);
-	TSubclassOf<UObject> FindOrCreateClass(FString Name, UClass* ParentClass);
 
 	
 	void ParseAssociations(UConfigPropertyArray* Associations);
 	void ParsePalettes(UConfigPropertyArray* PalettesArr);
 	int32 ParseSwatchGroup(int32 StartValidSlotID, int32 GroupID, UConfigPropertySection* SwatchGroup, FUSSPalette* OutPalette);
 	bool ParseSwatch(int32 SwatchID, UConfigPropertySection* Swatch, int32 GroupID, FString GroupName, float GroupPriority, FUSSPalette* OutPalette);
-	FLinearColor HexToLinearColor(FString HexCode);
-	UTexture2D* GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColor SecondaryColor);
 	void RetrieveFreeColorSlotID();
 };

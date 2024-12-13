@@ -94,8 +94,6 @@ UUSSSwatchGroup* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchGroup(in
 		FString genName = FString::Printf(TEXT("Gen_USS_SwatchGroup_%d"), UniqueGroupID);
 
 		// Create a dynamic derivated class
-		//UClass* NewClass = GenerateDynamicClass(UFGCustomizerSubCategory::StaticClass(), FName(*FString::Printf(TEXT("Gen_USS_SwatchGroup_%d"), UniqueGroupID)));
-		//UClass* NewClass = GenerateDynamicClass(UUSSSwatchGroup::StaticClass(), FName(*genName));
 		UClass* NewClass = (UClass * )UUSSBPLib::FindOrCreateClass(*this->PackageName, genName, UUSSSwatchGroup::StaticClass());
 
 		if (NewClass)
@@ -116,8 +114,7 @@ UUSSSwatchGroup* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchGroup(in
 				
 				// Create an instance to return
 				UUSSSwatchGroup* InstClass = NewObject<UUSSSwatchGroup>(FindPackage(nullptr, *this->PackageName), NewClass, FName(*FString::Printf(TEXT("Inst_Gen_USS_SwatchGroup_%d"), UniqueGroupID)));
-				//UUSSSwatchGroup* InstClass = NewObject<UUSSSwatchGroup>(GetTransientPackage(), NewClass, FName(*FString::Printf(TEXT("Inst_Gen_USS_SwatchGroup_%d"), UniqueGroupID)), RF_MarkAsRootSet | RF_Public);
-
+				
 				if (InstClass)
 				{	// For unknown reason this instance is not initialized using our modified CDO...
 
@@ -137,7 +134,69 @@ UUSSSwatchGroup* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchGroup(in
 	return nullptr;
 }
 
+UUSSSwatchDesc* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescriptor(int32 SlotID, FText DisplayName, FString GenName, float Priority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup)
+{
+	FString genName = FString::Printf(TEXT("Gen_USS_SwatchDesc_%d"), SlotID);
+	UClass* NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(this->PackageName, genName, UUSSSwatchDesc::StaticClass());;
 
+	if (NewClass)
+	{
+		UObject* tCDO = NewClass->GetDefaultObject();
+
+		this->GeneratedClasses.Add(NewClass);
+
+		if (tCDO)
+		{
+			// Create an instance to return
+			UUSSSwatchDesc* InstClass = NewObject<UUSSSwatchDesc>(FindPackage(nullptr, *this->PackageName), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)));
+
+
+			// Modify CDO properties of the newly generated class
+			UUSSSwatchDesc* CDO = Cast<UUSSSwatchDesc>(tCDO);
+
+			if (CDO)
+			{	// Modify the CDO
+
+				CDO->ID = SlotID;
+				CDO->HashName = GenName;
+				CDO->PrimaryColour = PrimaryColor;
+				CDO->SecondaryColour = SecondaryColor;
+				CDO->mDisplayName = DisplayName;
+				CDO->mDescription = this->SwatchDescription;
+				CDO->mIcon = UUSSBPLib::GenerateSwatchIcon(PrimaryColor, SecondaryColor);
+				CDO->mPersistentBigIcon = CDO->mIcon.Get();
+				CDO->mSmallIcon = CDO->mIcon.Get();
+				CDO->mCategory = this->SwatchCategory;
+				CDO->mMenuPriority = Priority;
+				if (SwatchGroup != nullptr) CDO->mSubCategories.Add(SwatchGroup->GetClass());
+			}
+
+			if (InstClass)
+			{	// For unknown reason this instance is not initialized using our modified CDO...
+
+				InstClass->ID = SlotID;
+				InstClass->HashName = GenName;
+				InstClass->PrimaryColour = PrimaryColor;
+				InstClass->SecondaryColour = SecondaryColor;
+				InstClass->mDisplayName = DisplayName;
+				InstClass->mDescription = this->SwatchDescription;
+				InstClass->mIcon = CDO->mIcon;
+				InstClass->mPersistentBigIcon = CDO->mPersistentBigIcon;
+				InstClass->mSmallIcon = CDO->mSmallIcon;
+				InstClass->mCategory = this->SwatchCategory;
+				InstClass->mMenuPriority = Priority;
+				if (SwatchGroup != nullptr) InstClass->mSubCategories.Add(SwatchGroup->GetClass());
+			}
+
+			this->SwatchDescriptorArray.Add(SlotID, InstClass);
+			return InstClass;
+		}
+	}
+
+	return nullptr;
+}
+
+/*
 UUSSSwatchDesc* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescriptor(int32 SlotID, int32 SwapID, FText DisplayName, FString GenName, float Priority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup, bool& HasSwapped)
 {
 	UClass* NewClass = nullptr;
@@ -191,7 +250,7 @@ UUSSSwatchDesc* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescripto
 					CDO->mDescription = this->SwatchDescription;
 					CDO->PrimaryColour = PrimaryColor;
 					CDO->SecondaryColour = SecondaryColor;
-					CDO->mIcon = this->GenerateSwatchIcon(PrimaryColor, SecondaryColor);
+					CDO->mIcon = UUSSBPLib::GenerateSwatchIcon(PrimaryColor, SecondaryColor);
 					CDO->mPersistentBigIcon = CDO->mIcon.Get();
 					CDO->mSmallIcon = CDO->mIcon.Get();
 					CDO->mCategory = this->SwatchCategory;
@@ -247,7 +306,7 @@ UUSSSwatchDesc* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescripto
 					CDO->SecondaryColour = SecondaryColor;
 					CDO->mDisplayName = DisplayName;
 					CDO->mDescription = this->SwatchDescription;
-					CDO->mIcon = this->GenerateSwatchIcon(PrimaryColor, SecondaryColor);
+					CDO->mIcon = UUSSBPLib::GenerateSwatchIcon(PrimaryColor, SecondaryColor);
 					CDO->mPersistentBigIcon = CDO->mIcon.Get();
 					CDO->mSmallIcon = CDO->mIcon.Get();
 					CDO->mCategory = this->SwatchCategory;
@@ -280,7 +339,7 @@ UUSSSwatchDesc* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchDescripto
 
 	return nullptr;
 }
-
+*/
 
 UUSSSwatchRecipe* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchRecipe(int32 UniqueID, UUSSSwatchDesc* SwatchDescriptor)
 {
@@ -339,7 +398,56 @@ UUSSSwatchRecipe* UUniversalSwatchSlotsWorldModule::GenerateDynamicSwatchRecipe(
 	return nullptr;
 }
 
+bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatchUsingInfo(FUSSSwatch SwatchInformation, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe)
+{
+	int32 slotID = this->ValidSlotIDs[0];
 
+	if (this->SwatchDescriptorArray.Contains(slotID) || this->SwatchRecipeArray.Contains(slotID))
+	{	// We can't overwrite existing swatch. (Well we could but I don't want to in order to not mess up evrything)
+
+		SwatchGroup = nullptr;
+		SwatchDescriptor = nullptr;
+		SwatchRecipe = nullptr;
+		return false;
+	}
+
+	SwatchGroup = this->GenerateDynamicSwatchGroup(SwatchInformation.UniqueGroupID, SwatchInformation.GroupDisplayName, SwatchInformation.GroupPriority);
+
+	int32 nameCount = 0;
+	int32* tmpPtr = this->SwatchNameCount.Find(SwatchInformation.SwatchDisplayName.ToString());
+
+	if (tmpPtr)
+	{	// The name already exist in the list we need to generate a new one
+
+		nameCount = *tmpPtr;
+		*tmpPtr += 1;			// It is important to put this line after as the name count start at 1 if it already exist
+	}
+	else
+	{	// The name doesn't exist yet
+
+		this->SwatchNameCount.Add(SwatchInformation.SwatchDisplayName.ToString(), 1);
+	}
+
+	FString genName = UUSSBPLib::BuildSwatchGenName(SwatchInformation.SwatchDisplayName.ToString(), "SD", nameCount);
+
+	FUSSSwatchSaveInfo tmpSaved;
+
+	// Try to find if there is a saved swatch matching this swatch
+	if (this->USSSubsystem->FindSavedSwatch(genName, tmpSaved))
+	{	// There is one
+
+		UE_LOG(LogUniversalSwatchSlots, Verbose, TEXT("Found saved color \"%s\" at slot : %d"), *genName, tmpSaved.SwatchSlotID);
+	}
+
+	SwatchDescriptor = this->GenerateDynamicSwatchDescriptor(slotID, SwatchInformation.SwatchDisplayName, genName, SwatchInformation.SwatchPriority, SwatchInformation.PrimaryColour, SwatchInformation.SecondaryColour, SwatchGroup);
+
+	this->ValidSlotIDs.RemoveAt(0);
+	SwatchInformation.SwatchUniqueID = slotID;
+	SwatchRecipe = this->GenerateDynamicSwatchRecipe(slotID, SwatchDescriptor);
+
+	return true;
+}
+/*
 bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatchUsingInfo(FUSSSwatch SwatchInformation, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe)
 {
 	int32 slotID = this->ValidSlotIDs[0];
@@ -370,7 +478,7 @@ bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatchUsingInfo(FUSSSwatch Swa
 		this->SwatchNameCount.Add(SwatchInformation.SwatchDisplayName.ToString(), 1);
 	}
 
-	FString genName = AUniversalSwatchSlotsSubsystem::BuildSwatchGenName(SwatchInformation.SwatchDisplayName.ToString(), "SD", nameCount);
+	FString genName = UUSSBPLib::BuildSwatchGenName(SwatchInformation.SwatchDisplayName.ToString(), "SD", nameCount);
 
 	FUSSSwatchSaveInfo tmpSaved;
 	bool hasSwapped = false;
@@ -379,6 +487,8 @@ bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatchUsingInfo(FUSSSwatch Swa
 	if (this->USSSubsystem->FindSavedSwatch(genName, tmpSaved))
 	{	// There is one
 
+
+		this->USSSubsystem->InternalSwatchMatch.Add(tmpSaved.SwatchSlotID, slotID);
 		slotID = tmpSaved.SwatchSlotID;
 		UE_LOG(LogUniversalSwatchSlots, Verbose, TEXT("Found saved color \"%s\" at slot : %d"), *genName, slotID); 
 		SwatchDescriptor = this->GenerateDynamicSwatchDescriptor(slotID, this->ValidSlotIDs[0], SwatchInformation.SwatchDisplayName, genName, SwatchInformation.SwatchPriority, SwatchInformation.PrimaryColour, SwatchInformation.SecondaryColour, SwatchGroup, hasSwapped);
@@ -405,7 +515,7 @@ bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatchUsingInfo(FUSSSwatch Swa
 	SwatchRecipe = this->GenerateDynamicSwatchRecipe(slotID, SwatchDescriptor);
 
 	return true;
-}
+}*/
 
 bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SwatchUniqueID, FText SwatchDisplayName, float SwatchPriority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe)
 {
@@ -801,24 +911,24 @@ bool UUniversalSwatchSlotsWorldModule::ParseSwatch(int32 SwatchID, UConfigProper
 		if (Swatch->SectionProperties.Contains("Primary"))
 		{	// A primary color has been given
 
-			newSwatch.PrimaryColour = this->HexToLinearColor(((UConfigPropertyString*)*Swatch->SectionProperties.Find("Primary"))->Value);
+			newSwatch.PrimaryColour = UUSSBPLib::HexToLinearColor(((UConfigPropertyString*)*Swatch->SectionProperties.Find("Primary"))->Value);
 		}
 		else
 		{	// No primary color given, use default
 
-			newSwatch.PrimaryColour = this->HexToLinearColor(defaultColor);
+			newSwatch.PrimaryColour = UUSSBPLib::HexToLinearColor(defaultColor);
 			UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("No 'Primary' key found in 'Swatch' %s in palette %s in group %s. Default will be used : %s."), *swatchName, *OutPalette->PaletteName, *GroupName, *defaultColor);
 		}
 
 		if (Swatch->SectionProperties.Contains("Secondary"))
 		{	// A secondary color has been given
 
-			newSwatch.SecondaryColour = this->HexToLinearColor(((UConfigPropertyString*)*Swatch->SectionProperties.Find("Secondary"))->Value);
+			newSwatch.SecondaryColour = UUSSBPLib::HexToLinearColor(((UConfigPropertyString*)*Swatch->SectionProperties.Find("Secondary"))->Value);
 		}
 		else
 		{	// No secondary color given, use default
 			
-			newSwatch.SecondaryColour = this->HexToLinearColor(defaultColor);
+			newSwatch.SecondaryColour = UUSSBPLib::HexToLinearColor(defaultColor);
 			UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("No 'Secondary' key found in 'Swatch' %s in palette %s in group %s. Default will be used : %s."), *swatchName, *OutPalette->PaletteName, *GroupName, *defaultColor);
 		}
 
@@ -828,104 +938,6 @@ bool UUniversalSwatchSlotsWorldModule::ParseSwatch(int32 SwatchID, UConfigProper
 	}
 
 	return false;
-}
-
-
-FLinearColor UUniversalSwatchSlotsWorldModule::HexToLinearColor(FString HexCode)
-{
-	if (HexCode.StartsWith("#"))
-	{
-		HexCode.RemoveAt(0); // Remove the '#' character
-	}
-
-	// Check for string validity
-	if (HexCode.IsEmpty() || (HexCode.Len() != 6 && HexCode.Len() != 8))
-	{
-		UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("Invalid Hex Color Format: %s"), *HexCode);
-		return FLinearColor::Black;
-	}
-
-	return FLinearColor::FromSRGBColor(FColor::FromHex(HexCode));
-}
-
-UTexture2D* UUniversalSwatchSlotsWorldModule::GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColor SecondaryColor)
-{
-	int32 Width = 128;
-	int32 ArcThickness = 15;
-	FColor ArcColor = FColor(192, 192, 192, 255);
-	FColor prim = PrimaryColor.ToFColor(true);
-	FColor sec = SecondaryColor.ToFColor(true);
-
-	if (Width <= 0 || ArcThickness <= 0)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Invalid texture dimensions or arc thickness."));
-		return nullptr;
-	}
-
-	// Check that the width is a power a 2 to ensure optimal compatibility
-	if ((Width & (Width - 1)) != 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Width is not a power of 2. The texture might not behave optimally in some scenarios."));
-	}
-
-	// Circle radius and center
-	int32 Radius = Width / 2;
-	FVector2D Center(Radius, Radius);
-
-	// Create a transient texture
-	UTexture2D* NewTexture = UTexture2D::CreateTransient(Width, Width, PF_B8G8R8A8);
-	if (!NewTexture)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to create transient texture."));
-		return nullptr;
-	}
-
-	// Prevent garbage collector to delete the texture
-	NewTexture->AddToRoot();
-
-	// Initialiser texture data
-	FTexture2DMipMap& Mip = NewTexture->GetPlatformData()->Mips[0];
-	void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
-	FColor* Pixels = static_cast<FColor*>(Data);
-
-	// Fill the texture
-	for (int32 Y = 0; Y < Width; ++Y)
-	{
-		for (int32 X = 0; X < Width; ++X)
-		{
-			FVector2D Pixel(X, Y);
-			float DistanceToCenter = FVector2D::Distance(Pixel, Center);
-
-			if (DistanceToCenter > Radius - ArcThickness && DistanceToCenter <= Radius)
-			{
-				// Pixel dans l'arceau
-				Pixels[Y * Width + X] = ArcColor;
-			}
-			else if (DistanceToCenter <= Radius - ArcThickness)
-			{
-				// Pixel inside the circle
-				if (X >= Width - Y - 1) // Inverted diagonale 
-				{
-					Pixels[Y * Width + X] = sec;
-				}
-				else
-				{
-					Pixels[Y * Width + X] = prim;
-				}
-			}
-			else
-			{
-				// Pixel en dehors du cercle
-				Pixels[Y * Width + X] = FColor::Transparent; // Transparent color
-			}
-		}
-	}
-
-	// Unlock data and update texture
-	Mip.BulkData.Unlock();
-	NewTexture->UpdateResource();
-
-	return NewTexture;
 }
 
 
@@ -993,4 +1005,6 @@ void UUniversalSwatchSlotsWorldModule::InitUSSGameWorldModule(bool CleanUpBefore
 	}
 
 	this->RetrieveFreeColorSlotID();
+	
+	this->USSSubsystem->RetrieveFreeColorSlotID();
 }

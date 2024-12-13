@@ -7,8 +7,10 @@
 #include "FGBuildableSubsystem.h"
 #include "FGGameState.h"
 #include "Kismet/GameplayStatics.h"
+#include "USSBPLib.h"
 
 const EUSSVersion CurrVersion = EUSSVersion::V1_0_4;
+const FString USSSubPackageName = "/UniversalSwatchSlots";
 
 DECLARE_LOG_CATEGORY_EXTERN(LogUSS_Subsystem, Log, All)
 
@@ -71,64 +73,6 @@ AUniversalSwatchSlotsSubsystem* AUniversalSwatchSlotsSubsystem::Get(UObject* wor
 }
 
 
-FString AUniversalSwatchSlotsSubsystem::BuildSwatchGenName(FString SwatchDisplayName, FString SwatchClassAcr, int32 SwatchID)
-{
-	FString tmp = FString::FromInt(GetTypeHash(SwatchDisplayName));
-	return FString("Gen_USS_") + SwatchClassAcr + FString("_") + tmp + FString("_") + FString::FromInt(SwatchID);
-}
-
-
-bool AUniversalSwatchSlotsSubsystem::FindSavedSwatch(FString GeneratedName, FUSSSwatchSaveInfo& Out)
-{
-	FString tmpGenName = GeneratedName.Replace(TEXT("Default__"), TEXT(""));
-	for (int32 i = 0; i < this->SavedSwatches.Num(); i++)
-	{
-		FUSSSwatchSaveInfo currSaved = this->SavedSwatches[i];
-		if (currSaved.SwatchGeneratedName.Equals(tmpGenName))
-		{	// We have found the swatch. We can remove it from the array to speed up the next find
-
-			this->SavedSwatches.RemoveAt(i);
-			this->InternalSwatchMatch.Add(i);
-			Out = currSaved;
-			return true;
-		}
-	}
-
-	return false;
-}
-
-void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<UUSSSwatchDesc*> ToSave)
-{
-	for (FUSSSwatchSaveInfo& currSaved : this->SavedSwatches)
-	{	// Print a warning for all remaining swatches that were not found
-
-		if (ToSave.IsValidIndex(currSaved.SwatchSlotID))
-		{	// Update the new slot with the saved hash name in order to keep the buildings colored
-
-			UUSSSwatchDesc* CDO = (UUSSSwatchDesc*)ToSave[currSaved.SwatchSlotID]->GetClass()->GetDefaultObject();
-			CDO->HashName = currSaved.SwatchGeneratedName;
-			ToSave[currSaved.SwatchSlotID]->HashName = currSaved.SwatchGeneratedName;
-		}
-		UE_LOG(LogUSS_Subsystem, Warning, TEXT("Found existing color \"%s\" with slotID %d but no matching swatch in the given palette. WARNING: if you save your game this color will be removed or replaced with the new swatch that has the same slot ID if any."), *currSaved.SwatchDisplayName.ToString(), currSaved.SwatchSlotID);
-	}
-
-	this->SavedSwatches.Empty();
-
-	for (UUSSSwatchDesc* Swatch : ToSave)
-	{	// Browse all swatches to save
-
-		FUSSSwatchSaveInfo newInfo;
-		UUSSSwatchDesc* CDO = (UUSSSwatchDesc*)Swatch->GetClass()->GetDefaultObject();
-
-		newInfo.PrimaryColour = Swatch->PrimaryColour;
-		newInfo.SecondaryColour = Swatch->SecondaryColour;
-		newInfo.SwatchSlotID = CDO->ID;
-		newInfo.SwatchDisplayName = CDO->mDisplayName;
-		newInfo.SwatchGeneratedName = CDO->HashName;
-
-		this->SavedSwatches.Add(newInfo);
-	}
-}
 
 void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<UUSSSwatchDesc*> SwatchDescriptions)
 {
@@ -183,6 +127,408 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 		return;
 	}
 }
+
+
+UUSSSwatchGroup* AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchGroup(int32 UniqueGroupID, FText DisplayName, float Priority)
+{
+	if (this->SwatchGroupArray.Contains(UniqueGroupID))
+	{	// The group already exist
+
+		UUSSSwatchGroup* SGCDO = Cast<UUSSSwatchGroup>((*this->SwatchGroupArray.Find(UniqueGroupID))->GetClass()->GetDefaultObject());
+		if (SGCDO)
+		{	// Overwrite the group name and priority
+
+			SGCDO->mDisplayName = DisplayName;
+			SGCDO->mMenuPriority = Priority;
+		}
+
+		return *this->SwatchGroupArray.Find(UniqueGroupID);
+	}
+	else
+	{
+		FString genName = FString::Printf(TEXT("Gen_USS_SwatchGroup_%d"), UniqueGroupID);
+
+		// Create a dynamic derivated class
+		UClass* NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(*USSSubPackageName, genName, UUSSSwatchGroup::StaticClass());
+
+		if (NewClass)
+		{
+			UObject* tempCDO = NewClass->GetDefaultObject();
+
+			if (tempCDO)
+			{
+				// Modify CDO properties of the newly generated class
+				UUSSSwatchGroup* CDO = Cast<UUSSSwatchGroup>(tempCDO);
+
+				if (CDO)
+				{
+					CDO->mDisplayName = DisplayName;
+					CDO->HashName = genName;
+					CDO->mMenuPriority = Priority;
+				}
+
+				// Create an instance to return
+				UUSSSwatchGroup* InstClass = NewObject<UUSSSwatchGroup>(FindPackage(nullptr, *USSSubPackageName), NewClass, FName(*FString::Printf(TEXT("Inst_Gen_USS_SwatchGroup_%d"), UniqueGroupID)));
+
+				if (InstClass)
+				{	// For unknown reason this instance is not initialized using our modified CDO...
+
+					InstClass->mDisplayName = DisplayName;
+					InstClass->HashName = genName;
+					InstClass->mMenuPriority = Priority;
+
+					this->SwatchGroupArray.Add(UniqueGroupID, InstClass);
+				}
+
+				return InstClass;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+
+UUSSSwatchDesc* AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchDescriptor(int32 SlotID, FText DisplayName, FString GenName, float Priority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup)
+{
+	FString genName = FString::Printf(TEXT("Gen_USS_SwatchDesc_%d"), SlotID);
+	UClass* NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(USSSubPackageName, genName, UUSSSwatchDesc::StaticClass());;
+
+	if (NewClass)
+	{
+		UObject* tCDO = NewClass->GetDefaultObject();
+
+		if (tCDO)
+		{
+			// Create an instance to return
+			UUSSSwatchDesc* InstClass = NewObject<UUSSSwatchDesc>(FindPackage(nullptr, *USSSubPackageName), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)));
+
+
+			// Modify CDO properties of the newly generated class
+			UUSSSwatchDesc* CDO = Cast<UUSSSwatchDesc>(tCDO);
+
+			if (CDO)
+			{	// Modify the CDO
+
+				CDO->ID = SlotID;
+				CDO->HashName = GenName;
+				CDO->PrimaryColour = PrimaryColor;
+				CDO->SecondaryColour = SecondaryColor;
+				CDO->mDisplayName = DisplayName;
+				CDO->mDescription = this->SwatchDescription;
+				CDO->mIcon = UUSSBPLib::GenerateSwatchIcon(PrimaryColor, SecondaryColor);
+				CDO->mPersistentBigIcon = CDO->mIcon.Get();
+				CDO->mSmallIcon = CDO->mIcon.Get();
+				CDO->mCategory = this->SwatchCategory;
+				CDO->mMenuPriority = Priority;
+				if (SwatchGroup != nullptr) CDO->mSubCategories.Add(SwatchGroup->GetClass());
+			}
+
+			if (InstClass)
+			{	// For unknown reason this instance is not initialized using our modified CDO...
+
+				InstClass->ID = SlotID;
+				InstClass->HashName = GenName;
+				InstClass->PrimaryColour = PrimaryColor;
+				InstClass->SecondaryColour = SecondaryColor;
+				InstClass->mDisplayName = DisplayName;
+				InstClass->mDescription = this->SwatchDescription;
+				InstClass->mIcon = CDO->mIcon;
+				InstClass->mPersistentBigIcon = CDO->mPersistentBigIcon;
+				InstClass->mSmallIcon = CDO->mSmallIcon;
+				InstClass->mCategory = this->SwatchCategory;
+				InstClass->mMenuPriority = Priority;
+				if (SwatchGroup != nullptr) InstClass->mSubCategories.Add(SwatchGroup->GetClass());
+			}
+
+			this->SwatchDescriptorArray.Add(SlotID, InstClass);
+			return InstClass;
+		}
+	}
+
+	return nullptr;
+}
+
+
+UUSSSwatchRecipe* AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchRecipe(int32 UniqueID, UUSSSwatchDesc* SwatchDescriptor)
+{
+	if (SwatchDescriptor == nullptr)
+	{
+		return nullptr;
+	}
+
+	UUSSSwatchDesc* SwatchDescCDO = (UUSSSwatchDesc*)SwatchDescriptor->GetClass()->GetDefaultObject();
+
+	// Create a dynamic derivated class
+	FString genName = FString::Printf(TEXT("Gen_USS_SwatchRecipe_%d"), UniqueID);
+	UClass* NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(USSSubPackageName, genName, UUSSSwatchRecipe::StaticClass());
+
+	if (NewClass)
+	{
+		UObject* tempCDO = NewClass->GetDefaultObject();
+
+		if (tempCDO)
+		{
+			// Modify CDO properties of the newly generated class
+			UUSSSwatchRecipe* CDO = Cast<UUSSSwatchRecipe>(tempCDO);
+			if (CDO)
+			{
+				CDO->mDisplayName = SwatchDescCDO->mDisplayName;
+				CDO->HashName = genName;
+				CDO->mCustomizationDesc = SwatchDescCDO->GetClass();
+				CDO->mProducedIn.Add(this->BuildGunBPClass);
+			}
+
+			// Create an instance to return
+			UUSSSwatchRecipe* InstClass = NewObject<UUSSSwatchRecipe>(FindPackage(nullptr, *USSSubPackageName), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)));
+
+			if (InstClass)
+			{	// For unknown reason this instance is not initialized using our modified CDO...
+
+				InstClass->mDisplayName = SwatchDescCDO->mDisplayName;
+				InstClass->HashName = genName;
+				InstClass->mCustomizationDesc = SwatchDescCDO->GetClass();
+				InstClass->mProducedIn.Add(this->BuildGunBPClass);
+
+				if (!this->SwatchRecipeArray.Contains(SwatchDescCDO->ID))
+				{
+					this->SwatchRecipeArray.Add(SwatchDescCDO->ID, InstClass);
+				}
+			}
+
+			return InstClass;
+		}
+	}
+
+	return nullptr;
+}
+
+
+bool AUniversalSwatchSlotsSubsystem::GenerateNewSwatchUsingInfo(FUSSSwatch SwatchInformation, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe)
+{
+	int32 slotID = this->ValidSlotIDs[0];
+
+	if (this->SwatchDescriptorArray.Contains(slotID) || this->SwatchRecipeArray.Contains(slotID))
+	{	// We can't overwrite existing swatch. (Well we could but I don't want to in order to not mess up evrything)
+
+		SwatchGroup = nullptr;
+		SwatchDescriptor = nullptr;
+		SwatchRecipe = nullptr;
+		return false;
+	}
+
+	SwatchGroup = this->GenerateDynamicSwatchGroup(SwatchInformation.UniqueGroupID, SwatchInformation.GroupDisplayName, SwatchInformation.GroupPriority);
+
+	int32 nameCount = 0;
+	int32* tmpPtr = this->SwatchNameCount.Find(SwatchInformation.SwatchDisplayName.ToString());
+
+	if (tmpPtr)
+	{	// The name already exist in the list we need to generate a new one
+
+		nameCount = *tmpPtr;
+		*tmpPtr += 1;			// It is important to put this line after as the name count start at 1 if it already exist
+	}
+	else
+	{	// The name doesn't exist yet
+
+		this->SwatchNameCount.Add(SwatchInformation.SwatchDisplayName.ToString(), 1);
+	}
+
+	FString genName = UUSSBPLib::BuildSwatchGenName(SwatchInformation.SwatchDisplayName.ToString(), "SD", nameCount);
+
+	FUSSSwatchSaveInfo tmpSaved;
+
+	// Try to find if there is a saved swatch matching this swatch
+	if (this->FindSavedSwatch(genName, tmpSaved))
+	{	// There is one
+
+		this->InternalSwatchMatch.Add(tmpSaved.SwatchSlotID, slotID);
+		UE_LOG(LogUSS_Subsystem, Verbose, TEXT("Found saved color \"%s\" at slot : %d"), *genName, tmpSaved.SwatchSlotID);
+	}
+	else
+	{	// There is none
+
+		this->InternalSwatchMatch.Add(slotID, slotID);
+	}
+
+	SwatchDescriptor = this->GenerateDynamicSwatchDescriptor(slotID, SwatchInformation.SwatchDisplayName, genName, SwatchInformation.SwatchPriority, SwatchInformation.PrimaryColour, SwatchInformation.SecondaryColour, SwatchGroup);
+
+	this->ValidSlotIDs.RemoveAt(0);
+	SwatchInformation.SwatchUniqueID = slotID;
+	SwatchRecipe = this->GenerateDynamicSwatchRecipe(slotID, SwatchDescriptor);
+
+	return true;
+}
+
+
+void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
+{
+	TArray<AActor*> foundActors;
+	bool shouldPatch = false;
+
+	if (this->SaveVersion == EUSSVersion::None)
+	{	// We need to make a check anyway
+
+		shouldPatch = true;
+	}
+	else
+	{
+		for (auto Match : this->InternalSwatchMatch)
+		{
+			if (Match.Key != Match.Value)
+			{	// We need to update
+
+				shouldPatch = true;
+				break;
+			}
+		}
+	}
+
+	if (shouldPatch)
+	{	// We should patch buildings
+
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFGBuildable::StaticClass(), foundActors);
+
+		for (AActor* CurrBuilding : foundActors)
+		{	// Check all actors of type AFGBuildable
+
+			AFGBuildable* castBuild = (AFGBuildable*)CurrBuilding;
+
+			UUSSSwatchDesc* castDesc = (UUSSSwatchDesc*)(castBuild->mCustomizationData.SwatchDesc.Get());
+
+			//if (castBuild->mCustomizationData.SwatchDesc.Get())
+				//UE_LOG(LogUSS_Subsystem, Display, TEXT("\"%s\""), *castBuild->mCustomizationData.SwatchDesc.Get()->GetName());
+
+			if (castDesc)
+			{	// The descriptor is from USS mod
+
+				FString tmpStr;
+				castDesc->GetName(tmpStr);
+
+				tmpStr.RemoveFromStart("Gen_USS_SwatchDesc_");
+				tmpStr.RemoveFromEnd("_C");
+
+				int* matchID = this->InternalSwatchMatch.Find(FCString::Atoi(*tmpStr));
+
+				if (matchID)
+				{	// We have found a matching swatch descriptor 
+
+					UUSSSwatchDesc** newDesc = this->SwatchDescriptorArray.Find(*matchID);
+
+					if (newDesc)
+					{	// There is a valid swatch descriptor
+
+						castBuild->mCustomizationData.SwatchDesc = (*newDesc)->GetClass()->GetDefaultObject()->GetClass();
+						UE_LOG(LogUSS_Subsystem, Display, TEXT("Patching \"%s\" with \"%s\" for building \"%s\"."), *castDesc->GetPathName(), *(*newDesc)->GetPathName(), *castBuild->GetName());
+					}
+					else
+					{	// There is no valid descriptor
+
+						UE_LOG(LogUSS_Subsystem, Display, TEXT("Can't patch \"%s\" for building \"%s\". No matching descriptor found"), *castDesc->GetPathName(), *castBuild->GetName());
+					}
+				}
+			}
+		}
+	}
+}
+
+
+void AUniversalSwatchSlotsSubsystem::RetrieveFreeColorSlotID()
+{
+	int32 SFSlots = 28; // 0 - 17 swatches, 18 = concrete, 19 = carbon, 20 = caterium, 21 = chrome, 22 = copper, 23 = unpainted, 24 - 27 = project assembly
+
+	int32 StartID = SFSlots;
+
+	if (this->IsUsingMSS)
+	{	// At the moment MSS adds 20 pre-defined index for swatches (28 - 47)
+
+		StartID += 20;
+	}
+
+	// 255 = custom
+	for (int32 i = StartID; i < 255; i++)
+	{
+		this->ValidSlotIDs.Add(i);
+	}
+}
+
+
+bool AUniversalSwatchSlotsSubsystem::FindSavedSwatch(FString GeneratedName, FUSSSwatchSaveInfo& Out)
+{
+	for (int32 i = 0; i < this->SavedSwatches.Num(); i++)
+	{
+		FUSSSwatchSaveInfo currSaved = this->SavedSwatches[i];
+		if (currSaved.SwatchGeneratedName.Equals(GeneratedName))
+		{	// We have found the swatch. We can remove it from the array to speed up the next find
+
+			this->SavedSwatches.RemoveAt(i);
+			Out = currSaved;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<UUSSSwatchDesc*> ToSave)
+{
+	for (FUSSSwatchSaveInfo& currSaved : this->SavedSwatches)
+	{	// Print a warning for all remaining swatches that were not found
+		
+		uint32 matchingID = currSaved.SwatchSlotID;
+
+		if (this->WasUsingMSS)
+		{	// The save file was using MSS
+
+			if (!this->IsUsingMSS)
+			{	// MSS is not currently loaded 
+
+				matchingID -= 20;
+			}
+		}
+		else
+		{	// The save file was not using MSS
+
+			if (this->IsUsingMSS)
+			{ // MSS is loaded
+
+				matchingID += 20;
+			}
+		}
+
+		UUSSSwatchDesc** tmp = this->SwatchDescriptorArray.Find(matchingID);
+
+		if (tmp)
+		{	// We have found a match
+
+			this->InternalSwatchMatch.Add(currSaved.SwatchSlotID, (*tmp)->ID);
+		}
+		else
+		{	// We haven't found a match
+
+			UE_LOG(LogUSS_Subsystem, Warning, TEXT("Found existing color \"%s\" with slotID %d but no matching swatch in the given palette. WARNING: if you save your game this color will be removed or replaced with the new swatch that has the same slot ID if any."), *currSaved.SwatchDisplayName.ToString(), currSaved.SwatchSlotID);
+		}
+	}
+
+	this->SavedSwatches.Empty();
+
+	for (UUSSSwatchDesc* Swatch : ToSave)
+	{	// Browse all swatches to save
+
+		FUSSSwatchSaveInfo newInfo;
+		UUSSSwatchDesc* CDO = (UUSSSwatchDesc*)Swatch->GetClass()->GetDefaultObject();
+
+		newInfo.PrimaryColour = Swatch->PrimaryColour;
+		newInfo.SecondaryColour = Swatch->SecondaryColour;
+		newInfo.SwatchSlotID = CDO->ID;
+		newInfo.SwatchDisplayName = CDO->mDisplayName;
+		newInfo.SwatchGeneratedName = CDO->HashName;
+
+		this->SavedSwatches.Add(newInfo);
+	}
+}
+
 
 void AUniversalSwatchSlotsSubsystem::UpdateSavedVersion()
 {

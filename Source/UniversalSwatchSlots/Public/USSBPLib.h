@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Engine/Texture2D.h"
 #include "USSBPLib.generated.h"
 
 /**
@@ -30,13 +31,39 @@ public:
 	static TSubclassOf<UObject> FindOrCreateClass(FString PackageName, FString Name, UClass* ParentClass);
 
 	/**
-	  * generate a texture representing a swatch icon based on the given colors.
+	  * Generate a texture representing a swatch icon based on the given colors.
 	  *
 	  * @param	PrimaryColor		The primary color (top left) to use.
 	  * @param	SecondaryColor		The secondary color (bottom right) to use.
 	  *
-	  * @return The geenrated texture.
+	  * @return The generated texture.
 	  *
 	  */
-	UTexture2D* GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColor SecondaryColor);
+	UFUNCTION(BlueprintCallable)
+	static UTexture2D* GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColor SecondaryColor);
+
+	/**
+	  * Convert the given hexadecimal string to a FLinearColor for SF.
+	  *
+	  * @param	HexCode		The hexadecimal color (#RRGGBBAA, RRGGBBAA, #RRGGBB, RRGGBB).
+	  *
+	  * @return Matching linear color.
+	  *
+	  */
+	UFUNCTION(BlueprintCallable)
+	static FLinearColor HexToLinearColor(FString HexCode);
+
+	/**
+	 * Build the swatch name based on the given parameter.
+	 *
+	 *
+	 * @param	SwatchDisplayName		The swatch display name.
+	 * @param	SwatchClassAcr			The swatch class acronym.
+	 * @param	SwatchID				The swatch ID. It should match the occurrence number of the swatch display name you are trying to find (starting at index 0).
+	 *
+	 * @return The matching generated name.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Swatch")
+	static FString BuildSwatchGenName(FString SwatchDisplayName, FString SwatchClassAcr, int32 SwatchID);
+
 };
