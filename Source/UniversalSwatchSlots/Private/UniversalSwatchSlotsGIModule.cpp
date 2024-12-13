@@ -22,7 +22,9 @@ UUSSSwatchDesc* UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchDescriptor(i
 
 	// This is needed until 1.0.5 as people may have this wrong package name for their swatches
 	NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(FString("/UniversalSwatchSlots/"), GenName, UUSSSwatchDesc::StaticClass());
-	this->tmpSwatchDescriptorArray.Add(UniqueID, NewClass);
+	this->tmpSwatchDescriptorArray.Add(NewClass);
+	NewClass = (UClass*)GenerateDynamicClass(UUSSSwatchDesc::StaticClass(), FName(*GenName));
+	this->tmpSwatchDescriptorArray.Add(NewClass);
 	return nullptr;
 }
 

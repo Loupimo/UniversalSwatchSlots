@@ -79,7 +79,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
 	TMap<int32, UClass*> SwatchDescriptorArray;
 	UPROPERTY()
-	TMap<int32, UClass*> tmpSwatchDescriptorArray;
+	TArray<UClass*> tmpSwatchDescriptorArray;
 
 	/* The build gun blueprint class that will be used by the dynamically created swatch recipes. This array is modified when the GenerateDynamicSwatchRecipe function is called. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")

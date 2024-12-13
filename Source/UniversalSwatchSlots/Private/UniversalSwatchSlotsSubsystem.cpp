@@ -394,13 +394,17 @@ void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
 
 			AFGBuildable* castBuild = (AFGBuildable*)CurrBuilding;
 
-			UUSSSwatchDesc* castDesc = (UUSSSwatchDesc*)(castBuild->mCustomizationData.SwatchDesc.Get());
+			//UUSSSwatchDesc* castDesc = (UUSSSwatchDesc*)(castBuild->mCustomizationData.SwatchDesc.Get()->IsA(UUSSSwatchDesc::StaticClass());
 
 			//if (castBuild->mCustomizationData.SwatchDesc.Get())
 				//UE_LOG(LogUSS_Subsystem, Display, TEXT("\"%s\""), *castBuild->mCustomizationData.SwatchDesc.Get()->GetName());
 
-			if (castDesc)
+			UClass* tmpDesc = castBuild->mCustomizationData.SwatchDesc.Get();
+
+			if (tmpDesc && tmpDesc->IsChildOf(UUSSSwatchDesc::StaticClass()))
 			{	// The descriptor is from USS mod
+
+				UUSSSwatchDesc* castDesc = (UUSSSwatchDesc*)tmpDesc;
 
 				FString tmpStr;
 				castDesc->GetName(tmpStr);
@@ -419,7 +423,9 @@ void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
 					{	// There is a valid swatch descriptor
 
 						castBuild->mCustomizationData.SwatchDesc = (*newDesc)->GetClass()->GetDefaultObject()->GetClass();
-						UE_LOG(LogUSS_Subsystem, Display, TEXT("Patching \"%s\" with \"%s\" for building \"%s\"."), *castDesc->GetPathName(), *(*newDesc)->GetPathName(), *castBuild->GetName());
+						//const FString t1 = castDesc->mDisplayName.ToString();
+						const FString t2 = (*newDesc)->mDisplayName.ToString();
+						UE_LOG(LogUSS_Subsystem, Display, TEXT("Patching description \"%s\" with \"%s\" named \"%s\" for building \"%s\"."), *castDesc->GetPathName(), *((*newDesc)->GetClass()->GetDefaultObject()->GetClass()->GetPathName()), *t2, *castBuild->GetName());
 					}
 					else
 					{	// There is no valid descriptor
