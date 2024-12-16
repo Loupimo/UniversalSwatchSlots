@@ -21,9 +21,7 @@ Note: I recommand to directly edit the JSON configuration as the ingame menu can
 
 # Multiplayer
 
-This mod has been tested on windows dedicated server but should also work with linux server. To make it work, simply edit the UniversalSwatchSlots.cfg server file to match the session name you want to apply the mod to. Normally, no joining player doesn't need to set up any configuration on their side but if you're experiencing issue (like swatch slots don't appear) make sure to have to have the same configuration file on both sides.
-
-When playing in host / client mod make sure that all players share the same configuration file (or at least the same palette and palette association than the host has).
+This mod has been tested on windows dedicated server but should also work with linux server. To make it work, simply edit the UniversalSwatchSlots.cfg server file to match the session name you want to apply the mod to. Joining players need to have the same configuration except that they should add an empty session name under the association they wish to load.
 
 # Images
 
@@ -36,10 +34,7 @@ When playing in host / client mod make sure that all players share the same conf
 
 **Is this mod compatible with More Swatch Slots ?**
 
-More or less:
-- If More Swatch Slots was installed before then nothing terrible should happen. <span style="color:red">Please note that your MSS slots may turn black the first time but they will keep their color slot distinct from the newly added ones.</span>
-- If you've installed this mod first and decided to add More Swatch Slot (or other mods that add swatches at pre-defined index) then all your swatches will share colors slots (e.g. MSS slots will share the same 20 first slots of your palette meaning that one you change one you change the other).
-Custom slots added by More Swatch Slots are not concerned.
+Now it should be fully compatible with MSS and not overwrite slots anymore and this regardless when you install / uninstall MSS
 
 **I have deleted some swatches in the default configuration and want them back, how do I do ?**
 
@@ -47,13 +42,8 @@ Simply delete or move your configuration file to another location and launch the
 
 **What happen if I have applied a swatch to a building and remove it from the palette ?**
 
-It depends:
-- If you remove it without adding another swatch it will turn black or default.
-- If your remove it and add one or more swatches it will take the color of the first one.
-
-To revert it back, do not save, re-add a new swatch with the same name anywhere in your palette and reload your game.
-
- <span style="color:yellow">Note: if you removed one swatch without adding one, I strongly advise you to reaload your game as just reloading your save could let traces of previous swatch and lead to undifined behavior !</span>
+It will take the color of the next swatch in your palette.
+If your palette has no swatch or the swatch you removed was the last one, it wioll switch back to default.
 
 **What happen if I have applied swatches of a palette and want to switch to another ?**
 
@@ -62,16 +52,25 @@ Otherwise:
 - If your new palette has less swatches than your previous one only the buildings that uses the first swatches (as many as your new palette has) will be changed, all other extra slots of your old palette should turned to black or default.
 - If your new palette has more or equal number of swatches than your previous one all the swatches will be modified.
 
- <span style="color:yellow">Note: swatches are name dependent meaning that switching from English to French and vice versa palette will produce warnings. Even if the buildings keep their color they are not linked to a slot swatch anymore meaning that if you save it will be irrevisible. Unlinked buildings can turn back to default color at anytime.</span>
-
 **What happen if I have applied swatches of this mod to my building and uninstall the mod ?**
 
 They will turn black or back to their default color.
-Caution: If you save your game and reinstall the mod your building colors will be not restored!
-Note: If you have selected the "add color to player preset" these colors will remain in your game. You can delete them by clicking on the trash icon
 
-# Support
+Note: If you have selected the "add color to player preset" these colors will remain in your game. You can delete them by clicking on the trash icon.
+
+ <span style="color:yellow">Caution: If you save your game and reinstall the mod your building colors will be not restored!</span>
+
+
+ <span style="color:red">Big warning here: if you have selected one or more of the swatches as a default color group be sure to uncheck them before uninstalling otherwise you will not be able to load your save without the mod !</span>
+
+# Support & Translations
 For questions or support, contact:
 - **Issue Tracker:** [GitHub Issues](https://github.com/Loupimo/UniversalSwatchSlots/issues)
+
+If you wish to propose a translation of the default palette, please use this link:
+- **Tanslations:** [GitHub Translations](https://github.com/Loupimo/UniversalSwatchSlots/discussions/7)
+
+If you wish to share your own beautiful palette with other you can do it here:
+- **Share Your Palette**:  [GitHub Palettes](https://github.com/Loupimo/UniversalSwatchSlots/discussions/8)
 
 PS : This is my first mod so don't hesitate to report any issue

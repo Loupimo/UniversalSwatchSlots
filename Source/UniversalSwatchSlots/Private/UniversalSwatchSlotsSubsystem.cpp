@@ -16,43 +16,6 @@ DECLARE_LOG_CATEGORY_EXTERN(LogUSS_Subsystem, Log, All)
 
 DEFINE_LOG_CATEGORY(LogUSS_Subsystem)
 
-/*AUniversalSwatchSlotsSubsystem::AUniversalSwatchSlotsSubsystem()
-{
-	//this-> IsFirstLaunch = true;
-
-	// Default Satisfactory color slots
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.952941, 0.301961, 0.066667, 1.000000), FLinearColor(0.113725, 0.133333, 0.262745, 1.000000))); // Ficsit
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.000000, 0.144128, 0.386430, 1.000000), FLinearColor(0.904661, 0.456411, 0.015996, 1.000000))); // Swatch 1
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.015996, 0.016807, 0.018500, 1.000000), FLinearColor(0.496933, 0.000000, 0.000000, 1.000000))); // Swatch 2
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.309469, 0.304987, 0.291771, 1.000000), FLinearColor(0.090842, 0.107023, 0.070360, 1.000000))); // Swatch 3
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.026241, 0.450786, 0.603828, 1.000000), FLinearColor(0.590619, 0.040915, 0.679543, 1.000000))); // Swatch 4
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.074214, 0.086500, 0.033105, 1.000000), FLinearColor(0.141263, 0.122139, 0.114435, 1.000000))); // Swatch 5
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.964687, 0.921582, 0.768151, 1.000000), FLinearColor(0.955974, 0.300544, 0.066626, 1.000000))); // Swatch 6
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.234551, 0.132868, 0.456411, 1.000000), FLinearColor(0.135633, 0.381326, 0.074214, 1.000000))); // Swatch 7
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.947307, 0.737911, 0.000000, 1.000000), FLinearColor(0.033105, 0.407240, 0.332452, 1.000000))); // Swatch 8
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.187821, 0.006995, 0.006995, 1.000000), FLinearColor(0.904661, 0.456411, 0.015996, 1.000000))); // Swatch 9
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(1.000000, 0.462077, 0.686685, 1.000000), FLinearColor(0.921582, 0.043735, 0.371238, 1.000000))); // Swatch 10
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.806952, 0.439657, 0.051269, 1.000000), FLinearColor(0.057805, 0.097587, 0.102242, 1.000000))); // Swatch 11
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.730461, 0.434154, 0.168269, 1.000000), FLinearColor(0.219526, 0.114435, 0.045186, 1.000000))); // Swatch 12
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.198069, 0.070360, 0.015209, 1.000000), FLinearColor(0.564712, 0.266356, 0.054480, 1.000000))); // Swatch 13
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.737910, 1.000000, 0.215861, 1.000000), FLinearColor(0.366253, 0.130136, 0.046665, 1.000000))); // Swatch 14
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.114435, 0.132868, 0.262251, 1.000000), FLinearColor(0.955973, 0.300544, 0.066626, 1.000000))); // Swatch 15
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.109804, 0.109804, 0.109804, 1.000000), FLinearColor(0.952941, 0.301961, 0.066667, 1.000000))); // Fondation
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.952941, 0.301961, 0.066667, 1.000000), FLinearColor(0.113725, 0.133333, 0.262745, 1.000000))); // Assembly
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(1.000000, 1.000000, 1.000000, 1.000000), FLinearColor(0.952941, 0.301961, 0.066667, 1.000000))); // Concrete
-
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.000000, 0.000000, 0.000000, 1.000000), FLinearColor(0.000000, 0.000000, 0.000000, 1.000000))); // Carbon
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.000000, 0.000000, 0.000000, 1.000000), FLinearColor(0.000000, 0.000000, 0.000000, 1.000000))); // Caterium
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.000000, 0.000000, 0.000000, 1.000000), FLinearColor(0.000000, 0.000000, 0.000000, 1.000000))); // Chrome
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.000000, 0.000000, 0.000000, 1.000000), FLinearColor(0.000000, 0.000000, 0.000000, 1.000000))); // Copper
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.000000, 0.000000, 0.000000, 1.000000), FLinearColor(0.000000, 0.000000, 0.000000, 1.000000))); // Unpainted
-
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.351533, 0.061246, 0.023153, 1.000000), FLinearColor(0.665387, 0.423268, 0.114435, 1.000000))); // Swatch 16
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.130136, 0.230740, 0.386430, 1.000000), FLinearColor(0.291771, 0.508881, 0.423268, 1.000000))); // Swatch 17
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.031896, 0.445201, 0.514918, 1.000000), FLinearColor(0.955974, 0.938686, 0.887923, 1.000000))); // Swatch 18
-	this->DefaultSlots.Add(FFactoryCustomizationColorSlot(FLinearColor(0.952941, 0.301961, 0.066667, 1.000000), FLinearColor(0.113725, 0.133333, 0.262745, 1.000000))); // Swatch 19
-}*/
-
 AUniversalSwatchSlotsSubsystem* AUniversalSwatchSlotsSubsystem::Get(UObject* worldContext)
 {
 	if (worldContext)
@@ -73,11 +36,10 @@ AUniversalSwatchSlotsSubsystem* AUniversalSwatchSlotsSubsystem::Get(UObject* wor
 }
 
 
-
 void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<UUSSSwatchDesc*> SwatchDescriptions)
 {
 	AFGGameState* FGGameState = Cast<AFGGameState>(UGameplayStatics::GetGameState(this));
-	
+
 	if (FGGameState)
 	{
 
@@ -388,16 +350,12 @@ void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
 	{	// We should patch buildings
 
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFGBuildable::StaticClass(), foundActors);
+		UE_LOG(LogUSS_Subsystem, Display, TEXT("Version or palette mismatch. Patching buildings descriptor..."));
 
 		for (AActor* CurrBuilding : foundActors)
 		{	// Check all actors of type AFGBuildable
 
 			AFGBuildable* castBuild = (AFGBuildable*)CurrBuilding;
-
-			//UUSSSwatchDesc* castDesc = (UUSSSwatchDesc*)(castBuild->mCustomizationData.SwatchDesc.Get()->IsA(UUSSSwatchDesc::StaticClass());
-
-			//if (castBuild->mCustomizationData.SwatchDesc.Get())
-				//UE_LOG(LogUSS_Subsystem, Display, TEXT("\"%s\""), *castBuild->mCustomizationData.SwatchDesc.Get()->GetName());
 
 			UClass* tmpDesc = castBuild->mCustomizationData.SwatchDesc.Get();
 
@@ -423,9 +381,7 @@ void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
 					{	// There is a valid swatch descriptor
 
 						castBuild->mCustomizationData.SwatchDesc = (*newDesc)->GetClass()->GetDefaultObject()->GetClass();
-						//const FString t1 = castDesc->mDisplayName.ToString();
-						const FString t2 = (*newDesc)->mDisplayName.ToString();
-						UE_LOG(LogUSS_Subsystem, Display, TEXT("Patching description \"%s\" with \"%s\" named \"%s\" for building \"%s\"."), *castDesc->GetPathName(), *((*newDesc)->GetClass()->GetDefaultObject()->GetClass()->GetPathName()), *t2, *castBuild->GetName());
+						UE_LOG(LogUSS_Subsystem, Display, TEXT("Patching descriptor \"%s\" with \"%s\" named \"%s\" for building \"%s\"."), *castDesc->GetPathName(), *((*newDesc)->GetClass()->GetDefaultObject()->GetClass()->GetPathName()), *(*newDesc)->mDisplayName.ToString(), *castBuild->GetName());
 					}
 					else
 					{	// There is no valid descriptor
@@ -491,6 +447,8 @@ void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<UUSSSwatchDesc*>
 			{	// MSS is not currently loaded 
 
 				matchingID -= 20;
+
+				UE_LOG(LogUSS_Subsystem, Warning, TEXT("More swatch slot was used by the saved game but is not currently installed. Fixing index."));
 			}
 		}
 		else
@@ -500,6 +458,8 @@ void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<UUSSSwatchDesc*>
 			{ // MSS is loaded
 
 				matchingID += 20;
+
+				UE_LOG(LogUSS_Subsystem, Warning, TEXT("More swatch slot wasn't used by the saved game but is currently installed. Fixing index."));
 			}
 		}
 
@@ -509,6 +469,7 @@ void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<UUSSSwatchDesc*>
 		{	// We have found a match
 
 			this->InternalSwatchMatch.Add(currSaved.SwatchSlotID, (*tmp)->ID);
+			UE_LOG(LogUSS_Subsystem, Warning, TEXT("Found color \"%s\" with slotID %d in saved game but no matching palette name. Replacing with \"%s\""), *currSaved.SwatchDisplayName.ToString(), currSaved.SwatchSlotID, *(*tmp)->mDisplayName.ToString());
 		}
 		else
 		{	// We haven't found a match

@@ -99,9 +99,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	UUSSSwatchRecipe* GenerateDynamicSwatchRecipe(int32 UniqueID, UUSSSwatchDesc* SwatchDescriptor);
 
-
 	/**
-	 * Patch existing buildings.
+	 * Patch existing buildings descriptor.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Subsystem")
 	void PatchBuildingsSwatchDescriptor();
@@ -187,6 +186,8 @@ public:
 
 
 protected:
+
+	friend class UUniversalSwatchSlotsWorldModule;
 
 	/* This map contains the number of time a unique swatch name appears in the configuration. */
 	UPROPERTY()
