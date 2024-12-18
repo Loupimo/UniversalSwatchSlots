@@ -1,142 +1,142 @@
-﻿# UniversalSwatchSlots French translation.
+﻿# UniversalSwatchSlots Spanish translation.
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: UniversalSwatchSlots\n"
-"POT-Creation-Date: 2024-12-18 12:56\n"
-"PO-Revision-Date: 2024-12-18 12:56\n"
+"POT-Creation-Date: 2024-12-18 13:09\n"
+"PO-Revision-Date: 2024-12-18 13:09\n"
 "Language-Team: \n"
-"Language: fr\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. Key:	Enum_Blue
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Enum_Blue"
 msgid "Blue"
-msgstr "Bleu"
+msgstr "Azul"
 
 #. Key:	Enum_Green
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Enum_Green"
 msgid "Green"
-msgstr "Vert"
+msgstr "Verde"
 
 #. Key:	Enum_Primary
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Enum_Primary"
 msgid "Primary"
-msgstr "Primaire"
+msgstr "Primario"
 
 #. Key:	Enum_Red
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Enum_Red"
 msgid "Red"
-msgstr "Rouge"
+msgstr "Rojo"
 
 #. Key:	Enum_Secondary
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Enum_Secondary"
 msgid "Secondary"
-msgstr "Secondaire"
+msgstr "Secundario"
 
 #. Key:	Schema_Desc
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Schema_Desc"
 msgid "Adds a new customization category that includes all the swatches organized according to the palette scheme chosen in the configuration."
-msgstr "Ajoute une nouvelle catégorie de customisation qui comporte tous les nuanciers organisés selon le schéma de la palette choisie dans la configuration."
+msgstr "Agregar una nueva categoría de personalización que incluya todos los muestrarios organizados según el esquema de la paleta seleccionada en la configuración."
 
 #. Key:	Swatch_Paint_Info
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Swatch_Paint_Info"
 msgid "Give your factory a new paint job!\r\n\r\nWarning: Changing this Swatch will apply the change to all buildings currently using it."
-msgstr "Donnez un coup de pinceau à votre usine!\r\n\r\nAttention : changer ce nuancier appliquera le changement à tous les bâtiments qui l'utilisent."
+msgstr "¡Dale a tu fábrica una nueva mano de pintura!\r\n\r\nAdvertencia: Al cambiar esta paleta se aplicará el cambio a todas las estructuras que la estén usando actualmente."
 
 #. Key:	Widget_Add_Group
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Add_Group"
 msgid "Add a new group"
-msgstr "Ajouter un nouveau groupe"
+msgstr "Agregar un nuevo grupo"
 
 #. Key:	Widget_Add_Palette
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Add_Palette"
 msgid "Add a new palette"
-msgstr "Ajouter une nouvelle palette"
+msgstr "Agregar una nueva paleta"
 
 #. Key:	Widget_Add_Swatch
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Add_Swatch"
 msgid "Add a new swatch"
-msgstr "Ajouter un nouveau nuancier"
+msgstr "Agregar un nuevo muestrario"
 
 #. Key:	Widget_Blue_Color
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Blue_Color"
 msgid "Blue"
-msgstr "Bleu"
+msgstr "Azul"
 
 #. Key:	Widget_Blue_Color_ToolTip
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Blue_Color_ToolTip"
 msgid "Enter the blue value (0 - 255)"
-msgstr "Entrez la valeur du bleu (0 - 255)"
+msgstr "Introduzca el valor del azul (0 - 255)"
 
 #. Key:	Widget_Color_Error
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Color_Error"
 msgid "Please enter an interger between 0 and 255"
-msgstr "Veuillez entrer une valeur comprise entre 0 et 255"
+msgstr "Por favor, introduzca un valor entre 0 y 255"
 
 #. Key:	Widget_Green_Color
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Green_Color"
 msgid "Green"
-msgstr "Vert"
+msgstr "Verde"
 
 #. Key:	Widget_Green_Color_ToolTip
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Green_Color_ToolTip"
 msgid "Enter the green value (0 - 255)"
-msgstr "Entrez la valeur du vert (0 - 255)"
+msgstr "Introduzca el valor del verde (0 - 255)"
 
 #. Key:	Widget_Group_Name_Hint
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Group_Name_Hint"
 msgid "Please enter the group name here"
-msgstr "Veuillez entrer le nom du groupe ici"
+msgstr "Por favor, introduzca el nombre del grupo aquí"
 
 #. Key:	Widget_Group_Priority_ToolTip
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Group_Priority_ToolTip"
 msgid "Defines the group priority. Lower the number, sooner the group will appear in the customizer."
-msgstr "Définit la priorité du groupe. Plus le nombre est bas, plus le groupe apparaîtra tôt dans le personnalisateur."
+msgstr "Define la prioridad del grupo. Cuanto menor sea el número, antes aparecerá el grupo en el personalizador."
 
 #. Key:	Widget_Hex_Error
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Hex_Error"
 msgid "Please enter a string containing only 0 to 9 or A to F characters"
-msgstr "Veuillez n'utilisez que les caractères 0 à 9 ou de A à Z"
+msgstr "Por favor, use solo los caracteres del 0 al 9 o de la A a la Z"
 
 #. Key:	Widget_Hex_Field
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
@@ -150,595 +150,595 @@ msgstr "Hex"
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Hex_ToolTip"
 msgid "Enter the hexadecimal value (000000 - FFFFFF)"
-msgstr "Entrez la valeur hexadécimale (000000 - FFFFFF)"
+msgstr "Introduzca el valor hexadecimal (000000 - FFFFFF)"
 
 #. Key:	Widget_Palette_List
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Palette_List"
 msgid "Palettes"
-msgstr "Palettes"
+msgstr "Paletas"
 
 #. Key:	Widget_Palette_Name_Hint
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Palette_Name_Hint"
 msgid "Please enter the palette name here"
-msgstr "Veuillez entrer le nom de la palette ici"
+msgstr "Por favor, introduzca el nombre de la paleta aquí"
 
 #. Key:	Widget_Primary_Color
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Primary_Color"
 msgid "Primary Color :"
-msgstr "Couleur Primaire :"
+msgstr "Color Primario :"
 
 #. Key:	Widget_Priority_Error
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Priority_Error"
 msgid "Please enter an interger between -100 and 100"
-msgstr "Veuillez entrer une valeur comprise entre -100 et 100"
+msgstr "Por favor, introduzca un valor entre -100 y 100"
 
 #. Key:	Widget_Priority_Field
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Priority_Field"
 msgid "Priority :"
-msgstr "Priorité :"
+msgstr "Prioridad :"
 
 #. Key:	Widget_Red_Color
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Red_Color"
 msgid "Red"
-msgstr "Rouge"
+msgstr "Rojo"
 
 #. Key:	Widget_Red_Color_ToolTip
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Red_Color_ToolTip"
 msgid "Enter the red value (0 - 255)"
-msgstr "Entrez la valeur rouge (0 - 255)"
+msgstr "Introduzca el valor del rojo (0 - 255)"
 
 #. Key:	Widget_Remove_Group
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Remove_Group"
 msgid "Remove group"
-msgstr "Supprimer le groupe"
+msgstr "Eliminar el grupo"
 
 #. Key:	Widget_Remove_Palette
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Remove_Palette"
 msgid "Remove palette"
-msgstr "Supprimer la palette"
+msgstr "Eliminar la paleta"
 
 #. Key:	Widget_Remove_Swatch
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Remove_Swatch"
 msgid "Remove swatch"
-msgstr "Supprimer le nuancier"
+msgstr "Eliminar el muestrario"
 
 #. Key:	Widget_Secondary_Color
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Secondary_Color"
 msgid "Secondary Color :"
-msgstr "Couleur Secondaire :"
+msgstr "Color Secundario :"
 
 #. Key:	Widget_Swatch_Name_Hint
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Swatch_Name_Hint"
 msgid "Please enter the swatch name here"
-msgstr "Veuillez entrer le nom du nuancier ici"
+msgstr "Por favor, introduzca el nombre del muestrario aquí"
 
 #. Key:	Widget_Swatch_Priority_ToolTip
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_CommonString_ST.USS_CommonString_ST
 msgctxt "USS_CommonString_ST,Widget_Swatch_Priority_ToolTip"
 msgid "Defines the swatch priority. Lower the number, sooner the swatch will appear in its group's customizer."
-msgstr "Définit la priorité du nuancier. Plus le nombre est bas, plus le nuancier apparaîtra tôt son groupe."
+msgstr "Define la prioridad del muestrario. Cuanto menor sea el número, antes aparecerá el muestrario en su grupo."
 
 #. Key:	DefPal_Aluminium_Group_AlcladAluminumSheet_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Aluminium_Group_AlcladAluminumSheet_Swatch_Name"
 msgid "Alclad Aluminum Sheet"
-msgstr "Tôle d'aluminium en alliage Alclad"
+msgstr "Hoja de Aluminio Alclad"
 
 #. Key:	DefPal_Aluminium_Group_AluminaSolution_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Aluminium_Group_AluminaSolution_Swatch_Name"
 msgid "Alumina Solution"
-msgstr "Solution d'alumine"
+msgstr "Solución de Alúmina"
 
 #. Key:	DefPal_Aluminium_Group_AluminumCasing_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Aluminium_Group_AluminumCasing_Swatch_Name"
 msgid "Aluminum Casing"
-msgstr "Bidon en aluminium"
+msgstr "Carcasa de Aluminio"
 
 #. Key:	DefPal_Aluminium_Group_AluminumIngot_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Aluminium_Group_AluminumIngot_Swatch_Name"
 msgid "Aluminum Ingot"
-msgstr "Lingot d'aluminium"
+msgstr "Lingote de Aluminio"
 
 #. Key:	DefPal_Aluminium_Group_AluminumScrap_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Aluminium_Group_AluminumScrap_Swatch_Name"
 msgid "Aluminum Scrap"
-msgstr "Rebuts d'aluminium"
+msgstr "Chatarra de Aluminio"
 
 #. Key:	DefPal_Aluminium_Group_Bauxite_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Aluminium_Group_Bauxite_Swatch_Name"
 msgid "Bauxite"
-msgstr "Bauxite"
+msgstr "Bauxita"
 
 #. Key:	DefPal_Aluminium_Group_EmptyFluidTank_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Aluminium_Group_EmptyFluidTank_Swatch_Name"
 msgid "Empty Fluid Tank"
-msgstr "Réservoir vide"
+msgstr "Tanque de Fluido Vacío"
 
 #. Key:	DefPal_Aluminium_Group_HeatSink_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Aluminium_Group_HeatSink_Swatch_Name"
 msgid "Heat Sink"
-msgstr "Dissipateur de chaleur"
+msgstr "Disipador de Calor"
 
 #. Key:	DefPal_Aluminium_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Aluminium_Group_Name"
 msgid "Aluminium"
-msgstr "Aluminium"
+msgstr "Aluminio"
 
 #. Key:	DefPal_Aluminium_Group_PackagedAluminaSolution_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Aluminium_Group_PackagedAluminaSolution_Swatch_Name"
 msgid "Packaged Alumina Solution"
-msgstr "Solution d'aluminium conditionnée"
+msgstr "Solución de Alúmina Envasada"
 
 #. Key:	DefPal_AmmosAndExplosives_Group_ClusterNobelisk_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_AmmosAndExplosives_Group_ClusterNobelisk_Swatch_Name"
 msgid "Cluster Nobelisk"
-msgstr "Nobélisque à fragmentation"
+msgstr "Nobelisco de Racimo"
 
 #. Key:	DefPal_AmmosAndExplosives_Group_ExplosiveRebar_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_AmmosAndExplosives_Group_ExplosiveRebar_Swatch_Name"
 msgid "Explosive Rebar"
-msgstr "Barre d'armature explosive"
+msgstr "Barra Explosiva"
 
 #. Key:	DefPal_AmmosAndExplosives_Group_GasNobelisk_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_AmmosAndExplosives_Group_GasNobelisk_Swatch_Name"
 msgid "Gas Nobelisk"
-msgstr "Nobélisque à gaz"
+msgstr "Nobelisco de Gas"
 
 #. Key:	DefPal_AmmosAndExplosives_Group_HomingRifleAmmo_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_AmmosAndExplosives_Group_HomingRifleAmmo_Swatch_Name"
 msgid "Homing Rifle Ammo"
-msgstr "Munitions de fusil à têtes chercheuses"
+msgstr "Munición de Rifle Teledirigida"
 
 #. Key:	DefPal_AmmosAndExplosives_Group_IronRebar_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_AmmosAndExplosives_Group_IronRebar_Swatch_Name"
 msgid "Iron Rebar"
-msgstr "Barre d'armature en fer"
+msgstr "Barra de Hierro"
 
 #. Key:	DefPal_AmmosAndExplosives_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_AmmosAndExplosives_Group_Name"
 msgid "Ammos and Explosives"
-msgstr "Munitions et explosifs"
+msgstr "Municiones y Explosivos"
 
 #. Key:	DefPal_AmmosAndExplosives_Group_Nobelisk_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_AmmosAndExplosives_Group_Nobelisk_Swatch_Name"
 msgid "Nobelisk"
-msgstr "Nobélisque"
+msgstr "Nobelisco"
 
 #. Key:	DefPal_AmmosAndExplosives_Group_NukeNobelisk_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_AmmosAndExplosives_Group_NukeNobelisk_Swatch_Name"
 msgid "Nuke Nobelisk"
-msgstr "Nobélisque nucléaire"
+msgstr "Nobelisco Nuclear"
 
 #. Key:	DefPal_AmmosAndExplosives_Group_PulseNobelisk_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_AmmosAndExplosives_Group_PulseNobelisk_Swatch_Name"
 msgid "Pulse Nobelisk"
-msgstr "Nobélisque à impulsion"
+msgstr "Nobelisco de Pulso"
 
 #. Key:	DefPal_AmmosAndExplosives_Group_RifleAmmo_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_AmmosAndExplosives_Group_RifleAmmo_Swatch_Name"
 msgid "Rifle Ammo"
-msgstr "Munitions de fusil"
+msgstr "Munición de Rifle"
 
 #. Key:	DefPal_AmmosAndExplosives_Group_ShatterRebar_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_AmmosAndExplosives_Group_ShatterRebar_Swatch_Name"
 msgid "Shatter Rebar"
-msgstr "Barre d'armature à fragmentation"
+msgstr "Barra Fragmentadora"
 
 #. Key:	DefPal_AmmosAndExplosives_Group_StunRebar_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_AmmosAndExplosives_Group_StunRebar_Swatch_Name"
 msgid "Stun Rebar"
-msgstr "Barre d'armature paralysante"
+msgstr "Barra Aturdidora"
 
 #. Key:	DefPal_AmmosAndExplosives_Group_TurboRifleAmmo_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_AmmosAndExplosives_Group_TurboRifleAmmo_Swatch_Name"
 msgid "Turbo Rifle Ammo"
-msgstr "Munitions de fusil turbo"
+msgstr "Munición de Rifle Turbo"
 
 #. Key:	DefPal_Caterium_Group_CateriumIngot_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Caterium_Group_CateriumIngot_Swatch_Name"
 msgid "Caterium Ingot"
-msgstr "Lingot de caterium"
+msgstr "Lingote de Caterio"
 
 #. Key:	DefPal_Caterium_Group_CateriumOre_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Caterium_Group_CateriumOre_Swatch_Name"
 msgid "Caterium Ore"
-msgstr "Minerai de caterium"
+msgstr "Mineral de Caterio"
 
 #. Key:	DefPal_Caterium_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Caterium_Group_Name"
 msgid "Caterium"
-msgstr "Caterium"
+msgstr "Caterio"
 
 #. Key:	DefPal_Caterium_Group_Quickwire_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Caterium_Group_Quickwire_Swatch_Name"
 msgid "Quickwire"
-msgstr "Filactif"
+msgstr "Cable Rápido"
 
 #. Key:	DefPal_Copper_Group_Cable_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Copper_Group_Cable_Swatch_Name"
 msgid "Cable"
-msgstr "Câble"
+msgstr "Cableado"
 
 #. Key:	DefPal_Copper_Group_CopperIngot_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Copper_Group_CopperIngot_Swatch_Name"
 msgid "Copper Ingot"
-msgstr "Lingot de cuivre"
+msgstr "Lingote de Cobre"
 
 #. Key:	DefPal_Copper_Group_CopperOre_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Copper_Group_CopperOre_Swatch_Name"
 msgid "Copper Ore"
-msgstr "Minerai de cuivre"
+msgstr "Mineral de Cobre"
 
 #. Key:	DefPal_Copper_Group_CopperPowder_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Copper_Group_CopperPowder_Swatch_Name"
 msgid "Copper Powder"
-msgstr "Poudre de cuivre"
+msgstr "Polvo de Cobre"
 
 #. Key:	DefPal_Copper_Group_CopperSheet_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Copper_Group_CopperSheet_Swatch_Name"
 msgid "Copper Sheet"
-msgstr "Tôle de cuivre"
+msgstr "Hoja de Cobre"
 
 #. Key:	DefPal_Copper_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Copper_Group_Name"
 msgid "Copper"
-msgstr "Cuivre"
+msgstr "Cobre"
 
 #. Key:	DefPal_Copper_Group_Wire_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Copper_Group_Wire_Swatch_Name"
 msgid "Wire"
-msgstr "Fil électrique"
+msgstr "Cable"
 
 #. Key:	DefPal_Electronics_Group_AILimiter_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Electronics_Group_AILimiter_Swatch_Name"
 msgid "AI Limiter"
-msgstr "Contrôleur d'I.A."
+msgstr "Limitador de IA"
 
 #. Key:	DefPal_Electronics_Group_CircuitBoard_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Electronics_Group_CircuitBoard_Swatch_Name"
 msgid "Circuit Board"
-msgstr "Circuit imprimé"
+msgstr "Placa de Circuito"
 
 #. Key:	DefPal_Electronics_Group_Computer_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Electronics_Group_Computer_Swatch_Name"
 msgid "Computer"
-msgstr "Ordinateur"
+msgstr "Ordenador"
 
 #. Key:	DefPal_Electronics_Group_CrystalOscillator_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Electronics_Group_CrystalOscillator_Swatch_Name"
 msgid "Crystal Oscillator"
-msgstr "Oscillateur à cristal"
+msgstr "Oscilador de Cristal"
 
 #. Key:	DefPal_Electronics_Group_HighSpeedConnector_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Electronics_Group_HighSpeedConnector_Swatch_Name"
 msgid "High-Speed Connector"
-msgstr "Connecteur haute vitesse"
+msgstr "Conector de Alta Velocidad"
 
 #. Key:	DefPal_Electronics_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Electronics_Group_Name"
 msgid "Electronics"
-msgstr "Électronique"
+msgstr "Electrónica"
 
 #. Key:	DefPal_Electronics_Group_RadioControlUnit_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Electronics_Group_RadioControlUnit_Swatch_Name"
 msgid "Radio Control Unit"
-msgstr "Unité de contrôle radio"
+msgstr "Unidad de Control de Radio"
 
 #. Key:	DefPal_Electronics_Group_Supercomputer_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Electronics_Group_Supercomputer_Swatch_Name"
 msgid "Supercomputer"
-msgstr "Superordinateur"
+msgstr "Superordenador"
 
 #. Key:	DefPal_Electronics_Group_SuperpositionOscillator_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Electronics_Group_SuperpositionOscillator_Swatch_Name"
 msgid "Superposition Oscillator"
-msgstr "Oscillateur de superposition"
+msgstr "Oscilador de Superposición"
 
 #. Key:	DefPal_Electronics_Group_TurboMotor_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Electronics_Group_TurboMotor_Swatch_Name"
 msgid "Turbo Motor"
-msgstr "Turbomoteur"
+msgstr "Motor Turbo"
 
 #. Key:	DefPal_Equipements_Group_GasFilter_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Equipements_Group_GasFilter_Swatch_Name"
 msgid "Gas Filter"
-msgstr "Filtre à gaz"
+msgstr "Filtro de Gas"
 
 #. Key:	DefPal_Equipements_Group_IodineInfusedFilter_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Equipements_Group_IodineInfusedFilter_Swatch_Name"
 msgid "Iodine-Infused Filter"
-msgstr "Filtre à infusion d'iode"
+msgstr "Filtro de Yodo"
 
 #. Key:	DefPal_Equipements_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Equipements_Group_Name"
 msgid "Equipements"
-msgstr "Équipements"
+msgstr "Equipo"
 
 #. Key:	DefPal_Equipements_Group_PortableMiner_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Equipements_Group_PortableMiner_Swatch_Name"
 msgid "Portable Miner"
-msgstr "Foreuse portable"
+msgstr "Taladro Portátil"
 
 #. Key:	DefPal_FaunaAndFlora_Group_AlienDNACapsule_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_AlienDNACapsule_Swatch_Name"
 msgid "Alien DNA Capsule"
-msgstr "Capsule ADN"
+msgstr "Cápsula de ADN de Alienígena"
 
 #. Key:	DefPal_FaunaAndFlora_Group_AlienProtein_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_AlienProtein_Swatch_Name"
 msgid "Alien Protein"
-msgstr "Protéine extraterrestre"
+msgstr "Proteína Alienígena"
 
 #. Key:	DefPal_FaunaAndFlora_Group_Biomass_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_Biomass_Swatch_Name"
 msgid "Biomass"
-msgstr "Biomasse"
+msgstr "Biomasa"
 
 #. Key:	DefPal_FaunaAndFlora_Group_BluePowerSlug_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_BluePowerSlug_Swatch_Name"
 msgid "Blue Power Slug"
-msgstr "Électrolimace bleue"
+msgstr "Electrobabosa Azul"
 
 #. Key:	DefPal_FaunaAndFlora_Group_Leaves_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_Leaves_Swatch_Name"
 msgid "Leaves"
-msgstr "Feuilles"
+msgstr "Hojas"
 
 #. Key:	DefPal_FaunaAndFlora_Group_LiquidBiofuel_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_LiquidBiofuel_Swatch_Name"
 msgid "Liquid Biofuel"
-msgstr "Biocarburant liquide"
+msgstr "Biocombustible Líquido"
 
 #. Key:	DefPal_FaunaAndFlora_Group_Mycelia_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_Mycelia_Swatch_Name"
 msgid "Mycelia"
-msgstr "Mycélium"
+msgstr "Micelios"
 
 #. Key:	DefPal_FaunaAndFlora_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_Name"
 msgid "Fauna and Flora"
-msgstr "Faune et flore"
+msgstr "Fauna y Flora"
 
 #. Key:	DefPal_FaunaAndFlora_Group_PackagedLiquidBiofuel_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_PackagedLiquidBiofuel_Swatch_Name"
 msgid "Packaged Liquid Biofuel"
-msgstr "Biocarburant liquide conditionné"
+msgstr "Biocombustible Líquido Envasado"
 
 #. Key:	DefPal_FaunaAndFlora_Group_PackagedWater_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_PackagedWater_Swatch_Name"
 msgid "Packaged Water"
-msgstr "Eau conditionnée"
+msgstr "Agua Envasada"
 
 #. Key:	DefPal_FaunaAndFlora_Group_PowerShard_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_PowerShard_Swatch_Name"
 msgid "Power Shard"
-msgstr "Éclat de charge"
+msgstr "Esquirla de Energía"
 
 #. Key:	DefPal_FaunaAndFlora_Group_PurplePowerSlug_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_PurplePowerSlug_Swatch_Name"
 msgid "Purple Power Slug"
-msgstr "Électrolimace violette"
+msgstr "Electrobabosa Morada"
 
 #. Key:	DefPal_FaunaAndFlora_Group_SolidBiofuel_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_SolidBiofuel_Swatch_Name"
 msgid "Solid Biofuel"
-msgstr "Biocarburant solide"
+msgstr "Biocombustible Sólido"
 
 #. Key:	DefPal_FaunaAndFlora_Group_Water_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_Water_Swatch_Name"
 msgid "Water"
-msgstr "Eau"
+msgstr "Agua"
 
 #. Key:	DefPal_FaunaAndFlora_Group_Wood_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_Wood_Swatch_Name"
 msgid "Wood"
-msgstr "Bois"
+msgstr "Madera"
 
 #. Key:	DefPal_FaunaAndFlora_Group_YellowPowerSlug_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_FaunaAndFlora_Group_YellowPowerSlug_Swatch_Name"
 msgid "Yellow Power Slug"
-msgstr "Électrolimace jaune"
+msgstr "Electrobabosa Amarilla"
 
 #. Key:	DefPal_Iron_Group_IronIngot_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Iron_Group_IronIngot_Swatch_Name"
 msgid "Iron Ingot"
-msgstr "Lingot de fer"
+msgstr "Lingote de Hierro"
 
 #. Key:	DefPal_Iron_Group_IronOre_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Iron_Group_IronOre_Swatch_Name"
 msgid "Iron Ore"
-msgstr "Minerai de fer"
+msgstr "Mineral de Hierro"
 
 #. Key:	DefPal_Iron_Group_IronPlate_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Iron_Group_IronPlate_Swatch_Name"
 msgid "Iron Plate"
-msgstr "Plaque de fer"
+msgstr "Placa de Hierro"
 
 #. Key:	DefPal_Iron_Group_IronRod_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Iron_Group_IronRod_Swatch_Name"
 msgid "Iron Rod"
-msgstr "Barre de fer"
+msgstr "Barra de Hierro"
 
 #. Key:	DefPal_Iron_Group_ModularFrame_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Iron_Group_ModularFrame_Swatch_Name"
 msgid "Modular Frame"
-msgstr "Cadre modulaire"
+msgstr "Marco Modular"
 
 #. Key:	DefPal_Iron_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Iron_Group_Name"
 msgid "Iron"
-msgstr "Fer"
+msgstr "Hierro"
 
 #. Key:	DefPal_Iron_Group_ReinforcedIronPlate_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Iron_Group_ReinforcedIronPlate_Swatch_Name"
 msgid "Reinforced Iron Plate"
-msgstr "Plaque de fer renforcée"
+msgstr "Placa de Hierro Reforzada"
 
 #. Key:	DefPal_Iron_Group_Rotor_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
@@ -752,663 +752,663 @@ msgstr "Rotor"
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Iron_Group_Screw_Swatch_Name"
 msgid "Screw"
-msgstr "Vis"
+msgstr "Tornillo"
 
 #. Key:	DefPal_Limestone_Group_Concrete_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Limestone_Group_Concrete_Swatch_Name"
 msgid "Concrete"
-msgstr "Béton"
+msgstr "Hormigón"
 
 #. Key:	DefPal_Limestone_Group_Limestone_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Limestone_Group_Limestone_Swatch_Name"
 msgid "Limestone"
-msgstr "Calcaire"
+msgstr "Caliza"
 
 #. Key:	DefPal_Limestone_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Limestone_Group_Name"
 msgid "Limestone"
-msgstr "Calcaire"
+msgstr "Caliza"
 
 #. Key:	DefPal_Nitrogen_Group_CoolingSystem_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Nitrogen_Group_CoolingSystem_Swatch_Name"
 msgid "Cooling System"
-msgstr "Système de refroidissement"
+msgstr "Sistema de Refrigeración"
 
 #. Key:	DefPal_Nitrogen_Group_FusedModularFrame_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Nitrogen_Group_FusedModularFrame_Swatch_Name"
 msgid "Fused Modular Frame"
-msgstr "Cadre modulaire fusionné"
+msgstr "Marco Modular Fusionado"
 
 #. Key:	DefPal_Nitrogen_Group_IonizedFuel_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Nitrogen_Group_IonizedFuel_Swatch_Name"
 msgid "Ionized Fuel"
-msgstr "Carburant ionisé"
+msgstr "Combustible Ionizado"
 
 #. Key:	DefPal_Nitrogen_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Nitrogen_Group_Name"
 msgid "Nitrogen"
-msgstr "Azote"
+msgstr "Nitrógeno"
 
 #. Key:	DefPal_Nitrogen_Group_NitricAcid_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Nitrogen_Group_NitricAcid_Swatch_Name"
 msgid "Nitric Acid"
-msgstr "Acide nitrique"
+msgstr "Ácido Nítrico"
 
 #. Key:	DefPal_Nitrogen_Group_NitrogenGas_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Nitrogen_Group_NitrogenGas_Swatch_Name"
 msgid "Nitrogen Gas"
-msgstr "Azote"
+msgstr "Gas de Nitrógeno"
 
 #. Key:	DefPal_Nitrogen_Group_PackagedIonizedFuel_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Nitrogen_Group_PackagedIonizedFuel_Swatch_Name"
 msgid "Packaged Ionized Fuel"
-msgstr "Carburant ionisé conditionné"
+msgstr "Combustible Ionizado Envasado"
 
 #. Key:	DefPal_Nitrogen_Group_PackagedNitricAcid_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Nitrogen_Group_PackagedNitricAcid_Swatch_Name"
 msgid "Packaged Nitric Acid"
-msgstr "Acide nitrique conditionné"
+msgstr "Ácido Nítrico Envasado"
 
 #. Key:	DefPal_Nitrogen_Group_PackagedNitrogenGas_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Nitrogen_Group_PackagedNitrogenGas_Swatch_Name"
 msgid "Packaged Nitrogen Gas"
-msgstr "Azote gazeux conditionné"
+msgstr "Gas de Nitrógeno Envasado"
 
 #. Key:	DefPal_Nitrogen_Group_PackagedRocketFuel_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Nitrogen_Group_PackagedRocketFuel_Swatch_Name"
 msgid "Packaged Rocket Fuel"
-msgstr "Carburant de fusée conditionné"
+msgstr "Combustible para Cohetes Envasado"
 
 #. Key:	DefPal_Nitrogen_Group_PressureConversionCube_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Nitrogen_Group_PressureConversionCube_Swatch_Name"
 msgid "Pressure Conversion Cube"
-msgstr "Cube de conversion de pression"
+msgstr "Cubo de Conversión de Presión"
 
 #. Key:	DefPal_Nitrogen_Group_RocketFuel_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Nitrogen_Group_RocketFuel_Swatch_Name"
 msgid "Rocket Fuel"
-msgstr "Carburant de fusée"
+msgstr "Combustible para Cohetes"
 
 #. Key:	DefPal_Oil_Group_CrudeOil_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_CrudeOil_Swatch_Name"
 msgid "Crude Oil"
-msgstr "Pétrole brut"
+msgstr "Petróleo Crudo"
 
 #. Key:	DefPal_Oil_Group_EmptyCanister_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_EmptyCanister_Swatch_Name"
 msgid "Empty Canister"
-msgstr "Bidon vide"
+msgstr "Lata Vacía"
 
 #. Key:	DefPal_Oil_Group_Fabric_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_Fabric_Swatch_Name"
 msgid "Fabric"
-msgstr "Tissu"
+msgstr "Tela"
 
 #. Key:	DefPal_Oil_Group_Fuel_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_Fuel_Swatch_Name"
 msgid "Fuel"
-msgstr "Carburant"
+msgstr "Combustible"
 
 #. Key:	DefPal_Oil_Group_HeavyOilResidue_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_HeavyOilResidue_Swatch_Name"
 msgid "Heavy Oil Residue"
-msgstr "Résidus de pétrole lourd"
+msgstr "Residuo de Petróleo Pesado"
 
 #. Key:	DefPal_Oil_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_Name"
 msgid "Oil"
-msgstr "Pétrole"
+msgstr "Petróleo"
 
 #. Key:	DefPal_Oil_Group_PackagedFuel_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_PackagedFuel_Swatch_Name"
 msgid "Packaged Fuel"
-msgstr "Carburant conditionné"
+msgstr "Combustible Envasado"
 
 #. Key:	DefPal_Oil_Group_PackagedHeavyOilResidue_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_PackagedHeavyOilResidue_Swatch_Name"
 msgid "Packaged Heavy Oil Residue"
-msgstr "Résidus de pétrole lourd conditionnés"
+msgstr "Residuo de Petróleo Pesado Envasado"
 
 #. Key:	DefPal_Oil_Group_PackagedOil_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_PackagedOil_Swatch_Name"
 msgid "Packaged Oil"
-msgstr "Pétrole conditionné"
+msgstr "Petróleo Envasado"
 
 #. Key:	DefPal_Oil_Group_PackagedTurbofuel_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_PackagedTurbofuel_Swatch_Name"
 msgid "Packaged Turbofuel"
-msgstr "Turbocarburant conditionné"
+msgstr "Turbocombustible Envasado"
 
 #. Key:	DefPal_Oil_Group_PetroleumCoke_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_PetroleumCoke_Swatch_Name"
 msgid "Petroleum Coke"
-msgstr "Coke de pétrole"
+msgstr "Coque de Petróleo"
 
 #. Key:	DefPal_Oil_Group_Plastic_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_Plastic_Swatch_Name"
 msgid "Plastic"
-msgstr "Plastique"
+msgstr "Plástico"
 
 #. Key:	DefPal_Oil_Group_PolymerResin_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_PolymerResin_Swatch_Name"
 msgid "Polymer Resin"
-msgstr "Résine polymère"
+msgstr "Resina Polimérica"
 
 #. Key:	DefPal_Oil_Group_Rubber_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_Rubber_Swatch_Name"
 msgid "Rubber"
-msgstr "Caoutchouc"
+msgstr "Goma"
 
 #. Key:	DefPal_Oil_Group_Turbofuel_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Oil_Group_Turbofuel_Swatch_Name"
 msgid "Turbofuel"
-msgstr "Turbocarburant"
+msgstr "Turbocombustible"
 
 #. Key:	DefPal_PaletteName
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_PaletteName"
 msgid "USS Default - English"
-msgstr "USS Default - Français"
+msgstr "USS Default - Spanish"
 
 #. Key:	DefPal_QuantumTechnology_Group_AlienPowerMatrix_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_QuantumTechnology_Group_AlienPowerMatrix_Swatch_Name"
 msgid "Alien Power Matrix"
-msgstr "Matrice de charge extraterrestre"
+msgstr "Matriz de Energía Alienígena"
 
 #. Key:	DefPal_QuantumTechnology_Group_DarkMatterCrystal_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_QuantumTechnology_Group_DarkMatterCrystal_Swatch_Name"
 msgid "Dark Matter Crystal"
-msgstr "Cristal de matière noire"
+msgstr "Cristal de Materia Oscura"
 
 #. Key:	DefPal_QuantumTechnology_Group_DarkMatterResidue_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_QuantumTechnology_Group_DarkMatterResidue_Swatch_Name"
 msgid "Dark Matter Residue"
-msgstr "Résidus de matière noire"
+msgstr "Residuo de Materia Oscura"
 
 #. Key:	DefPal_QuantumTechnology_Group_Diamonds_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_QuantumTechnology_Group_Diamonds_Swatch_Name"
 msgid "Diamonds"
-msgstr "Diamants"
+msgstr "Diamantes"
 
 #. Key:	DefPal_QuantumTechnology_Group_ExcitedPhotonicMatter_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_QuantumTechnology_Group_ExcitedPhotonicMatter_Swatch_Name"
 msgid "Excited Photonic Matter"
-msgstr "Matière photonique agitée"
+msgstr "Materia Fotónica Excitada"
 
 #. Key:	DefPal_QuantumTechnology_Group_Ficsonium_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_QuantumTechnology_Group_Ficsonium_Swatch_Name"
 msgid "Ficsonium"
-msgstr "Ficsonium"
+msgstr "Ficsonio"
 
 #. Key:	DefPal_QuantumTechnology_Group_FicsoniumFuelRod_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_QuantumTechnology_Group_FicsoniumFuelRod_Swatch_Name"
 msgid "Ficsonium Fuel Rod"
-msgstr "Barre de ficsonium"
+msgstr "Barra de Combustible de Ficsonio"
 
 #. Key:	DefPal_QuantumTechnology_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_QuantumTechnology_Group_Name"
 msgid "Quantum Technology"
-msgstr "Technologie Quantique"
+msgstr "Tecnología Cuántica"
 
 #. Key:	DefPal_QuantumTechnology_Group_NeuralQuantumProcessor_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_QuantumTechnology_Group_NeuralQuantumProcessor_Swatch_Name"
 msgid "Neural-Quantum Processor"
-msgstr "Processeur neuro-quantique"
+msgstr "Procesador Neuro-Cuántico"
 
 #. Key:	DefPal_QuantumTechnology_Group_SingularityCell_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_QuantumTechnology_Group_SingularityCell_Swatch_Name"
 msgid "Singularity Cell"
-msgstr "Cellule de singularité"
+msgstr "Célula de Singularidad"
 
 #. Key:	DefPal_QuantumTechnology_Group_TimeCrystal_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_QuantumTechnology_Group_TimeCrystal_Swatch_Name"
 msgid "Time Crystal"
-msgstr "Cristal temporel"
+msgstr "Cristal de Tiempo"
 
 #. Key:	DefPal_Quartz_Group_DissolvedSilica_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Quartz_Group_DissolvedSilica_Swatch_Name"
 msgid "Dissolved Silica"
-msgstr "Silice dissoute"
+msgstr "Sílice Disuelta"
 
 #. Key:	DefPal_Quartz_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Quartz_Group_Name"
 msgid "Quartz"
-msgstr "Quartz"
+msgstr "Cuarzo"
 
 #. Key:	DefPal_Quartz_Group_QuartzCrystal_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Quartz_Group_QuartzCrystal_Swatch_Name"
 msgid "Quartz Crystal"
-msgstr "Cristal de quartz"
+msgstr "Cristal de Cuarzo"
 
 #. Key:	DefPal_Quartz_Group_RawQuartz_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Quartz_Group_RawQuartz_Swatch_Name"
 msgid "Raw Quartz"
-msgstr "Quartz brut"
+msgstr "Cuarzo Crudo"
 
 #. Key:	DefPal_Quartz_Group_Silica_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Quartz_Group_Silica_Swatch_Name"
 msgid "Silica"
-msgstr "Silice"
+msgstr "Sílice"
 
 #. Key:	DefPal_SAM_Group_FicsiteIngot_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SAM_Group_FicsiteIngot_Swatch_Name"
 msgid "Ficsite Ingot"
-msgstr "Lingot de ficsite"
+msgstr "Lingote de Ficsita"
 
 #. Key:	DefPal_SAM_Group_FicsiteTrigon_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SAM_Group_FicsiteTrigon_Swatch_Name"
 msgid "Ficsite Trigon"
-msgstr "Trigon en ficsite"
+msgstr "Trigón de Ficsita"
 
 #. Key:	DefPal_SAM_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SAM_Group_Name"
 msgid "SAM"
-msgstr "É.M.E."
+msgstr "MAR"
 
 #. Key:	DefPal_SAM_Group_ReanimatedSAM_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SAM_Group_ReanimatedSAM_Swatch_Name"
 msgid "Reanimated SAM"
-msgstr "É.M.E. réanimée"
+msgstr "MAR Reanimado"
 
 #. Key:	DefPal_SAM_Group_SAM_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SAM_Group_SAM_Swatch_Name"
 msgid "SAM"
-msgstr "É.M.E."
+msgstr "MAR"
 
 #. Key:	DefPal_SAM_Group_SAMFluctuator_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SAM_Group_SAMFluctuator_Swatch_Name"
 msgid "SAM Fluctuator"
-msgstr "Fluctuateur d'É.M.E."
+msgstr "Fluctuador de MAR"
 
 #. Key:	DefPal_SpaceElevator_Group_AdaptiveControlUnit_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SpaceElevator_Group_AdaptiveControlUnit_Swatch_Name"
 msgid "Adaptive Control Unit"
-msgstr "Unité de contrôle adaptative"
+msgstr "Unidad de Control Adaptativa"
 
 #. Key:	DefPal_SpaceElevator_Group_AIExpansionServer_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SpaceElevator_Group_AIExpansionServer_Swatch_Name"
 msgid "AI Expansion Server"
-msgstr "Serveur d'expansion d'I.A."
+msgstr "Servidor de Expansión de IA"
 
 #. Key:	DefPal_SpaceElevator_Group_AssemblyDirectorSystem_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SpaceElevator_Group_AssemblyDirectorSystem_Swatch_Name"
 msgid "Assembly Director System"
-msgstr "Système de directeur d'assemblage"
+msgstr "Sistema de Dirección de Ensamblaje"
 
 #. Key:	DefPal_SpaceElevator_Group_AutomatedWiring_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SpaceElevator_Group_AutomatedWiring_Swatch_Name"
 msgid "Automated Wiring"
-msgstr "Câblage automatisé"
+msgstr "Cableado Automatizado"
 
 #. Key:	DefPal_SpaceElevator_Group_BallisticWarpDrive_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SpaceElevator_Group_BallisticWarpDrive_Swatch_Name"
 msgid "Ballistic Warp Drive"
-msgstr "Moteur à distorsion balistique"
+msgstr "Motor de Distorsión Balística"
 
 #. Key:	DefPal_SpaceElevator_Group_BiochemicalSculptor_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SpaceElevator_Group_BiochemicalSculptor_Swatch_Name"
 msgid "Biochemical Sculptor"
-msgstr "Sculptrice biochimique"
+msgstr "Escultor Bioquímico"
 
 #. Key:	DefPal_SpaceElevator_Group_MagneticFieldGenerator_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SpaceElevator_Group_MagneticFieldGenerator_Swatch_Name"
 msgid "Magnetic Field Generator"
-msgstr "Générateur de champ magnétique"
+msgstr "Generador de Campo Magnético"
 
 #. Key:	DefPal_SpaceElevator_Group_ModularEngine_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SpaceElevator_Group_ModularEngine_Swatch_Name"
 msgid "Modular Engine"
-msgstr "Moteur modulaire"
+msgstr "Motor Modular"
 
 #. Key:	DefPal_SpaceElevator_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SpaceElevator_Group_Name"
 msgid "Space Elevator"
-msgstr "Ascenseur Orbital"
+msgstr "Ascensor Espacial"
 
 #. Key:	DefPal_SpaceElevator_Group_NuclearPasta_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SpaceElevator_Group_NuclearPasta_Swatch_Name"
 msgid "Nuclear Pasta"
-msgstr "Pâte nucléaire"
+msgstr "Pasta Nuclear"
 
 #. Key:	DefPal_SpaceElevator_Group_SmartPlating_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SpaceElevator_Group_SmartPlating_Swatch_Name"
 msgid "Smart Plating"
-msgstr "Placage intelligent"
+msgstr "Placa Inteligente"
 
 #. Key:	DefPal_SpaceElevator_Group_ThermalPropulsionRocket_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SpaceElevator_Group_ThermalPropulsionRocket_Swatch_Name"
 msgid "Thermal Propulsion Rocket"
-msgstr "Fusée à propulsion thermique"
+msgstr "Cohete de Propulsión Térmica"
 
 #. Key:	DefPal_SpaceElevator_Group_VersatileFramework_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_SpaceElevator_Group_VersatileFramework_Swatch_Name"
 msgid "Versatile Framework"
-msgstr "Structure polyvalente"
+msgstr "Estructura Versátil"
 
 #. Key:	DefPal_Steel_Group_Coal_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Steel_Group_Coal_Swatch_Name"
 msgid "Coal"
-msgstr "Charbon"
+msgstr "Carbón"
 
 #. Key:	DefPal_Steel_Group_EncasedIndustrialBeam_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Steel_Group_EncasedIndustrialBeam_Swatch_Name"
 msgid "Encased Industrial Beam"
-msgstr "Poutre en béton armé"
+msgstr "Viga Industrial Encapsulada"
 
 #. Key:	DefPal_Steel_Group_HeavyModularFrame_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Steel_Group_HeavyModularFrame_Swatch_Name"
 msgid "Heavy Modular Frame"
-msgstr "Cadre modulaire lourd"
+msgstr "Marco Modular Pesado"
 
 #. Key:	DefPal_Steel_Group_Motor_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Steel_Group_Motor_Swatch_Name"
 msgid "Motor"
-msgstr "Moteur"
+msgstr "Moto"
 
 #. Key:	DefPal_Steel_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Steel_Group_Name"
 msgid "Steel"
-msgstr "Acier"
+msgstr "Acero"
 
 #. Key:	DefPal_Steel_Group_Stator_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Steel_Group_Stator_Swatch_Name"
 msgid "Stator"
-msgstr "Stator"
+msgstr "Estator"
 
 #. Key:	DefPal_Steel_Group_SteelBeam_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Steel_Group_SteelBeam_Swatch_Name"
 msgid "Steel Beam"
-msgstr "Poutre en acier"
+msgstr "Viga de Acero"
 
 #. Key:	DefPal_Steel_Group_SteelIngot_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Steel_Group_SteelIngot_Swatch_Name"
 msgid "Steel Ingot"
-msgstr "Lingot d'acier"
+msgstr "Lingote de Acero"
 
 #. Key:	DefPal_Steel_Group_SteelPipe_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Steel_Group_SteelPipe_Swatch_Name"
 msgid "Steel Pipe"
-msgstr "Tuyau en acier"
+msgstr "Tubo de Acero"
 
 #. Key:	DefPal_Sulfur_Group_Battery_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Sulfur_Group_Battery_Swatch_Name"
 msgid "Battery"
-msgstr "Batterie"
+msgstr "Batería"
 
 #. Key:	DefPal_Sulfur_Group_BlackPowder_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Sulfur_Group_BlackPowder_Swatch_Name"
 msgid "Black Powder"
-msgstr "Poudre noire"
+msgstr "Pólvora Negra"
 
 #. Key:	DefPal_Sulfur_Group_CompactedCoal_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Sulfur_Group_CompactedCoal_Swatch_Name"
 msgid "Compacted Coal"
-msgstr "Charbon compacté"
+msgstr "Carbón Compactado"
 
 #. Key:	DefPal_Sulfur_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Sulfur_Group_Name"
 msgid "Sulfur"
-msgstr "Soufre"
+msgstr "Azufre"
 
 #. Key:	DefPal_Sulfur_Group_PackagedSulfuricAcid_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Sulfur_Group_PackagedSulfuricAcid_Swatch_Name"
 msgid "Packaged Sulfuric Acid"
-msgstr "Acide sulfurique conditionné"
+msgstr "Ácido Sulfúrico Envasado"
 
 #. Key:	DefPal_Sulfur_Group_SmokelessPowder_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Sulfur_Group_SmokelessPowder_Swatch_Name"
 msgid "Smokeless Powder"
-msgstr "Poudre sans fumée"
+msgstr "Pólvora Sin Humo"
 
 #. Key:	DefPal_Sulfur_Group_Sulfur_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Sulfur_Group_Sulfur_Swatch_Name"
 msgid "Sulfur"
-msgstr "Soufre"
+msgstr "Azufre"
 
 #. Key:	DefPal_Sulfur_Group_SulfuricAcid_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Sulfur_Group_SulfuricAcid_Swatch_Name"
 msgid "Sulfuric Acid"
-msgstr "Acide sulfurique"
+msgstr "Ácido Sulfúrico"
 
 #. Key:	DefPal_Uranium_Group_ElectromagneticControlRod_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Uranium_Group_ElectromagneticControlRod_Swatch_Name"
 msgid "Electromagnetic Control Rod"
-msgstr "Tige de contrôle électromagnétique"
+msgstr "Varilla de Control Electromagnética"
 
 #. Key:	DefPal_Uranium_Group_EncasedPlutoniumCell_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Uranium_Group_EncasedPlutoniumCell_Swatch_Name"
 msgid "Encased Plutonium Cell"
-msgstr "Cellule de plutonium encastré"
+msgstr "Célula de Plutonio Encapsulada"
 
 #. Key:	DefPal_Uranium_Group_EncasedUraniumCell_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Uranium_Group_EncasedUraniumCell_Swatch_Name"
 msgid "Encased Uranium Cell"
-msgstr "Cellule d'uranium"
+msgstr "Célula de Uranio Encapsulada"
 
 #. Key:	DefPal_Uranium_Group_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Uranium_Group_Name"
 msgid "Uranium"
-msgstr "Uranium"
+msgstr "Uranio"
 
 #. Key:	DefPal_Uranium_Group_NonFissileUranium_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Uranium_Group_NonFissileUranium_Swatch_Name"
 msgid "Non-fissile Uranium"
-msgstr "Uranium non fissile"
+msgstr "Uranio No Fisible"
 
 #. Key:	DefPal_Uranium_Group_PlutoniumFuelRod_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Uranium_Group_PlutoniumFuelRod_Swatch_Name"
 msgid "Plutonium Fuel Rod"
-msgstr "Barre de plutonium"
+msgstr "Varilla de Combustible de Plutonio"
 
 #. Key:	DefPal_Uranium_Group_PlutoniumPellet_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Uranium_Group_PlutoniumPellet_Swatch_Name"
 msgid "Plutonium Pellet"
-msgstr "Granulés de plutonium"
+msgstr "Pellet de Plutonio"
 
 #. Key:	DefPal_Uranium_Group_PlutoniumWaste_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Uranium_Group_PlutoniumWaste_Swatch_Name"
 msgid "Plutonium Waste"
-msgstr "Déchets de plutonium"
+msgstr "Residuos de Plutonio"
 
 #. Key:	DefPal_Uranium_Group_Uranium_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Uranium_Group_Uranium_Swatch_Name"
 msgid "Uranium"
-msgstr "Uranium"
+msgstr "Uranio"
 
 #. Key:	DefPal_Uranium_Group_UraniumFuelRod_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Uranium_Group_UraniumFuelRod_Swatch_Name"
 msgid "Uranium Fuel Rod"
-msgstr "Barre d'uranium"
+msgstr "Varilla de Combustible de Uranio"
 
 #. Key:	DefPal_Uranium_Group_UraniumWaste_Swatch_Name
 #. SourceLocation:	/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 #: /UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST
 msgctxt "USS_DefaultConf_ST,DefPal_Uranium_Group_UraniumWaste_Swatch_Name"
 msgid "Uranium Waste"
-msgstr "Déchets d'uranium"
+msgstr "Residuos de Uranio"
 

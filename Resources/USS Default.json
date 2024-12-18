@@ -2,7 +2,7 @@
 	{
 		"Name": "DefaultPalette",
 		"PaletteName": "LOCTABLE(\"/UniversalSwatchSlots/Config/Structs/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_PaletteName\")",
-		"IsActive": true,
+		"IsActive": false,
 		"AddPrimaryColorsToPreset": true,
 		"AddSecondaryColorsToPreset": true,
 		"SwatchGroups": [
