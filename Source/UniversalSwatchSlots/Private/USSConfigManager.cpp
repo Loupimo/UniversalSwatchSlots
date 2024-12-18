@@ -19,118 +19,230 @@
 #include "Serialization/JsonWriter.h"
 #include "Util/EngineUtil.h"
 #include "HAL/FileManagerGeneric.h"
+#include "JsonObjectConverter.h"
+
 
 DECLARE_LOG_CATEGORY_EXTERN(LogUSSConfigManager, Log, All)
 DEFINE_LOG_CATEGORY(LogUSSConfigManager)
 
-const TCHAR* SMLConfigModVersionField = TEXT("SML_ModVersion_DoNotChange");
-
-void UUSSConfigManager::SaveConfigurationInternal(const FConfigId& ConfigId) {
-    const FRegisteredConfigurationData& ConfigurationData = Configurations.FindChecked(ConfigId);
-
-    const URootConfigValueHolder* RootValue = ConfigurationData.RootValue;
-    URawFormatValue* RawFormatValue = nullptr;//RootValue->GetWrappedValue()->Serialize(GetTransientPackage());
-    checkf(RawFormatValue, TEXT("Root RawFormatValue returned NULL for config %s"), *ConfigId.ModReference);
-
-    //Root value should always be JsonObject, since root property is section property
-    const TSharedPtr<FJsonValue> JsonValue = FJsonRawFormatConverter::ConvertToJson(RawFormatValue);
-    check(JsonValue->Type == EJson::Object);
-    TSharedRef<FJsonObject> UnderlyingObject = JsonValue->AsObject().ToSharedRef();
-
-    //Record mod version so we can keep file system file schema up to date
-    FModInfo ModInfo;
-    UModLoadingLibrary* ModLoadingLibrary = GetGameInstance()->GetSubsystem<UModLoadingLibrary>();
-
-    if (ModLoadingLibrary->GetLoadedModInfo(ConfigId.ModReference, ModInfo)) {
-        const FString ModVersion = ModInfo.Version.ToString();
-        UnderlyingObject->SetStringField(SMLConfigModVersionField, ModVersion);
-    }
-
-    //Serialize resulting JSON to string
-    FString JsonOutputString;
-    const TSharedRef<TJsonWriter<>> JsonWriter = TJsonWriterFactory<>::Create(&JsonOutputString);
-    FJsonSerializer::Serialize(UnderlyingObject, JsonWriter);
-
-    //Write configuration into the file system now at the generated path
-    const FString ConfigurationFilePath = GetConfigurationFilePath(ConfigId);
-    //Make sure configuration directory exists
-    FPlatformFileManager::Get().GetPlatformFile().CreateDirectoryTree(*FPaths::GetPath(ConfigurationFilePath));
-
-    if (!FFileHelper::SaveStringToFile(JsonOutputString, *ConfigurationFilePath)) {
-        UE_LOG(LogUSSConfigManager, Error, TEXT("Failed to save configuration file to %s"), *ConfigurationFilePath);
-        return;
-    }
-    UE_LOG(LogUSSConfigManager, Display, TEXT("Saved configuration to %s"), *ConfigurationFilePath);
-}
-
-void UUSSConfigManager::LoadConfigurationInternal(const FConfigId& ConfigId, URootConfigValueHolder* RootConfigValueHolder, bool bSaveOnSchemaChange) {
+void UUSSConfigManager::FindConfigurationFiles(const FConfigId& ConfigurationId)
+{
     //Determine configuration path and try to read it to string if it exists
-    const FString ConfigurationFilePath = GetConfigurationFolderPath();//GetConfigurationFilePath(ConfigId);
-    const FString Co = ".cfg";
+    const FString ConfigurationFolderPath = GetConfigurationFolderPath(ConfigurationId);
+    FString ConfigurationFilePath = ConfigurationFolderPath;
     FJsonSerializableArray arr;
     FFileManagerGeneric fm = FFileManagerGeneric();
     fm.FindFiles(arr, *ConfigurationFilePath, nullptr);
 
-    //Check if configuration file exists, and if it doesn't, return early, optionally writing defaults
-    if (!IFileManager::Get().FileExists(*ConfigurationFilePath)) {
-        if (bSaveOnSchemaChange) {
-            SaveConfigurationInternal(ConfigId);
-        }
-        return;
-    }
+    for (FString filePath : arr)
+    {   // Check for all configurations
 
+        ConfigurationFilePath = ConfigurationFolderPath + filePath;
+
+        bool* res = this->DefaultConfName.Find(filePath);
+        if (res)
+        {   // We have found the default configuration
+
+            *res = true;
+        }
+        this->ConfPaths.Add(ConfigurationFilePath);
+    }
+}
+
+
+void UUSSConfigManager::CreatesDefaultConfigurations(UGameInstance* GameInstance, const FConfigId& ConfigurationId)
+{
+
+}
+
+
+TMap<FString, FUSSPalette> UUSSConfigManager::ReadPalettesFromConfiguration(FString FilePath)
+{
     //Load file contents into the string for parsing
     FString JsonTextString;
-    if (!FFileHelper::LoadFileToString(JsonTextString, *ConfigurationFilePath)) {
-        UE_LOG(LogUSSConfigManager, Error, TEXT("Failed to load configuration file from %s"), *ConfigurationFilePath);
-        return;
+    if (!FFileHelper::LoadFileToString(JsonTextString, *FilePath)) {
+        UE_LOG(LogUSSConfigManager, Error, TEXT("Failed to load configuration file from %s"), *FilePath);
+        return TMap<FString, FUSSPalette>();
+    }
+
+    // Create the data table
+    UDataTable* Table = NewObject<UDataTable>();
+    Table->RowStruct = FUSSPalette::StaticStruct();
+
+    // Populate the table
+    Table->CreateTableFromJSONString(JsonTextString);
+
+    // Retrieve rows
+    TArray<FName> RowNames = Table->GetRowNames();
+
+    // Populate the returned map
+    TMap<FString, FUSSPalette> palettes;
+
+    for (FName RowName : RowNames)
+    {
+        FUSSPalette* palette = Table->FindRow<FUSSPalette>(RowName, nullptr);
+
+        if (palette)
+        {   // The palette is valid
+
+            palettes.Add(RowName.ToString(), *palette);
+        }
+        else
+        {   // There was a problem with this palette
+
+            UE_LOG(LogUSSConfigManager, Error, TEXT("Failed to parse palette %s from configuration file %s"), RowName, *FilePath);
+        }
+    }
+
+    return palettes;
+}
+
+
+FUSSPalette UUSSConfigManager::ReadPaletteFromConfiguration(FString FilePath)
+{
+    TSharedPtr<FJsonObject> JsonObject = this->ReadConfiguration(FilePath);
+
+    if (JsonObject == nullptr)
+    {
+        return FUSSPalette();
+    }
+
+    FUSSPalette newPalette;
+
+    if (!FJsonObjectConverter::JsonObjectToUStruct<FUSSPalette>(JsonObject.ToSharedRef(), &newPalette))
+    {
+        UE_LOG(LogUSSConfigManager, Error, TEXT("Failed to parse configuration file %s"), *FilePath);
+        return FUSSPalette();
+    }
+
+    return newPalette;
+}
+
+
+bool UUSSConfigManager::SavePalettesToConfiguration(FString FilePath, TMap<FString, FUSSPalette> Palettes)
+{
+    // Retrieve rows
+    TArray<FString> RowNames;
+    Palettes.GetKeys(RowNames);
+
+    // Create the data table
+    UDataTable* Table = NewObject<UDataTable>();
+    Table->RowStruct = FUSSPalette::StaticStruct();
+
+    // Populate the returned map
+    TMap<FString, FUSSPalette> palettes;
+
+    for (FString RowName : RowNames)
+    {
+        Table->AddRow(FName(RowName), Palettes[RowName]);
+    }
+	
+	FString TableString = this->ExportDataTableToJson(Table);
+
+    // Make sure configuration directory exists
+    FPlatformFileManager::Get().GetPlatformFile().CreateDirectoryTree(*FPaths::GetPath(FilePath));
+
+    if (!FFileHelper::SaveStringToFile(TableString, *FilePath))
+    {
+        UE_LOG(LogUSSConfigManager, Error, TEXT("Failed to save configuration file to %s"), *FilePath);
+        return false;
+    }
+
+    return true;
+}
+
+
+bool UUSSConfigManager::WritePaletteConfiguration(FString FilePath, FUSSPalette ToWrite)
+{
+    TSharedPtr<FJsonObject> JsonObject = FJsonObjectConverter::UStructToJsonObject(ToWrite);
+    
+    if (JsonObject == nullptr)
+    {
+        UE_LOG(LogUSSConfigManager, Error, TEXT("Failed to save configuration file to %s"), *FilePath);
+        return false;
+    }
+
+    this->WriteConfiguration(FilePath, JsonObject);
+    return true;
+}
+
+
+TSharedPtr<FJsonObject> UUSSConfigManager::ReadConfiguration(FString FilePath)
+{
+    //Load file contents into the string for parsing
+    FString JsonTextString;
+    if (!FFileHelper::LoadFileToString(JsonTextString, *FilePath)) {
+        UE_LOG(LogUSSConfigManager, Error, TEXT("Failed to load configuration file from %s"), *FilePath);
+        return nullptr;
     }
 
     //Try to parse it as valid JSON now
     const TSharedRef<TJsonReader<>> JsonReader = TJsonReaderFactory<>::Create(JsonTextString);
     TSharedPtr<FJsonObject> JsonObject;
-    if (!FJsonSerializer::Deserialize(JsonReader, JsonObject)) {
-        UE_LOG(LogUSSConfigManager, Error, TEXT("Failed to parse configuration file %s"), *ConfigurationFilePath);
+    
+    if (!FJsonSerializer::Deserialize(JsonReader, JsonObject))
+    {
+        UE_LOG(LogUSSConfigManager, Error, TEXT("Failed to parse configuration file %s"), *FilePath);
         //TODO maybe rename it and write default values instead?
-        return;
+        return nullptr;
     }
 
-    //Convert JSON tree into the raw value tree and feed it to root section value
-    const TSharedRef<FJsonValue> RootValue = MakeShareable(new FJsonValueObject(JsonObject));
-    URawFormatValue* RawFormatValue = FJsonRawFormatConverter::ConvertToRawFormat(this, RootValue);
-    //RootConfigValueHolder->GetWrappedValue()->Deserialize(RawFormatValue);
-
-    UE_LOG(LogUSSConfigManager, Display, TEXT("Successfully loaded configuration from %s"), *ConfigurationFilePath);
-
-    //Check that mod version matches if we are allowed to overwrite files
-    FModInfo ModInfo;
-    UModLoadingLibrary* ModLoadingLibrary = GetGameInstance()->GetSubsystem<UModLoadingLibrary>();
-
-    if (ModLoadingLibrary->GetLoadedModInfo(ConfigId.ModReference, ModInfo)) {
-        const FString ModVersion = ModInfo.Version.ToString();
-        FString FileVersion;
-        if (JsonObject->HasTypedField<EJson::String>(SMLConfigModVersionField)) {
-            FileVersion = JsonObject->GetStringField(SMLConfigModVersionField);
-        }
-        //Overwrite file if schema version doesn't match loaded mod version
-        if (bSaveOnSchemaChange && FileVersion != ModVersion) {
-            UE_LOG(LogUSSConfigManager, Display, TEXT("Refreshing configuration file %s"), *ConfigurationFilePath);
-            SaveConfigurationInternal(ConfigId);
-        }
-    }
+    return JsonObject;
 }
 
 
-FString UUSSConfigManager::GetConfigurationFolderPath() {
-    return FPaths::ProjectDir() + TEXT("Configs/");
+bool UUSSConfigManager::WriteConfiguration(FString FilePath, TSharedPtr<FJsonObject> JsonObject)
+{
+    //Serialize resulting JSON to string
+    FString JsonOutputString;
+    const TSharedRef<TJsonWriter<>> JsonWriter2 = TJsonWriterFactory<>::Create(&JsonOutputString);
+    FJsonSerializer::Serialize(JsonObject.ToSharedRef(), JsonWriter2);
+
+    //Make sure configuration directory exists
+    FPlatformFileManager::Get().GetPlatformFile().CreateDirectoryTree(*FPaths::GetPath(FilePath));
+
+    if (!FFileHelper::SaveStringToFile(JsonOutputString, *FilePath)) {
+        UE_LOG(LogUSSConfigManager, Error, TEXT("Failed to save configuration file to %s"), *FilePath);
+        return false;
+    }
+    UE_LOG(LogUSSConfigManager, Display, TEXT("Saved configuration to %s"), *FilePath);
+
+    return true;
 }
 
-FString UUSSConfigManager::GetConfigurationFilePath(const FConfigId& ConfigId) {
-    const FString ConfigDirectory = GetConfigurationFolderPath();
-    if (ConfigId.ConfigCategory == TEXT("")) {
-        //Category is empty, that means mod has only one configuration file
-        return ConfigDirectory + FString::Printf(TEXT("%s.cfg"), *ConfigId.ModReference);
+
+FString UUSSConfigManager::GetConfigurationFolderPath(const FConfigId& ConfigurationId)
+{
+    return FPaths::ProjectDir() + TEXT("Configs/") + FString::Printf(TEXT("%s/"), *ConfigurationId.ModReference);
+}
+
+FString UUSSConfigManager::ExportDataTableToJson(UDataTable* DataTable)
+{
+    if (!DataTable) return TEXT("{}");
+
+    TArray<FName> RowNames = DataTable->GetRowNames();
+    TArray<TSharedPtr<FJsonValue>> JsonArray;
+
+    for (const FName& RowName : RowNames)
+    {
+        // Obtenir la structure correspondant à la ligne
+        uint8* RowData = DataTable->FindRowUnchecked(RowName);
+        if (RowData)
+        {
+            // Créer un objet JSON pour chaque ligne
+            TSharedPtr<FJsonObject> JsonObject = MakeShared<FJsonObject>();
+            FJsonObjectConverter::UStructToJsonObject(DataTable->RowStruct, RowData, JsonObject.ToSharedRef(), 0, 0);
+            JsonArray.Add(MakeShared<FJsonValueObject>(JsonObject));
+        }
     }
-    //We have a category, so mod reference is a folder and category is a file name
-    return ConfigDirectory + FString::Printf(TEXT("%s/%s.cfg"), *ConfigId.ModReference, *ConfigId.ConfigCategory);
+
+    // Convertir l'ensemble en chaîne JSON
+    TSharedPtr<FJsonObject> RootObject = MakeShared<FJsonObject>();
+    RootObject->SetArrayField("Rows", JsonArray);
+
+    FString OutputString;
+    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+    FJsonSerializer::Serialize(RootObject.ToSharedRef(), Writer);
+
+    return OutputString;
 }

@@ -103,5 +103,5 @@ protected:
 	void ParseAssociations(UConfigPropertyArray* Associations);
 	void ParsePalettes(UConfigPropertyArray* PalettesArr);
 	int32 ParseSwatchGroup(int32 StartValidSlotID, int32 GroupID, UConfigPropertySection* SwatchGroup, FUSSPalette* OutPalette);
-	bool ParseSwatch(int32 SwatchID, UConfigPropertySection* Swatch, int32 GroupID, FString GroupName, float GroupPriority, FUSSPalette* OutPalette);
+	bool ParseSwatch(int32 SwatchID, UConfigPropertySection* Swatch, int32 GroupID, FString GroupName, float GroupPriority, FUSSGroup* OutGroup);
 };

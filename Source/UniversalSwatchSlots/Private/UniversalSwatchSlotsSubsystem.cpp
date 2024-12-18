@@ -279,10 +279,10 @@ bool AUniversalSwatchSlotsSubsystem::GenerateNewSwatchUsingInfo(FUSSSwatch Swatc
 		return false;
 	}
 
-	SwatchGroup = this->GenerateDynamicSwatchGroup(SwatchInformation.UniqueGroupID, SwatchInformation.GroupDisplayName, SwatchInformation.GroupPriority);
+	//SwatchGroup = this->GenerateDynamicSwatchGroup(this->SwatchGroupArray.Num(), SwatchInformation.GroupDisplayName, SwatchInformation.GroupPriority);
 
 	int32 nameCount = 0;
-	int32* tmpPtr = this->SwatchNameCount.Find(SwatchInformation.SwatchDisplayName.ToString());
+	int32* tmpPtr = this->SwatchNameCount.Find(SwatchInformation.Name.ToString());
 
 	if (tmpPtr)
 	{	// The name already exist in the list we need to generate a new one
@@ -293,10 +293,10 @@ bool AUniversalSwatchSlotsSubsystem::GenerateNewSwatchUsingInfo(FUSSSwatch Swatc
 	else
 	{	// The name doesn't exist yet
 
-		this->SwatchNameCount.Add(SwatchInformation.SwatchDisplayName.ToString(), 1);
+		this->SwatchNameCount.Add(SwatchInformation.Name.ToString(), 1);
 	}
 
-	FString genName = UUSSBPLib::BuildSwatchGenName(SwatchInformation.SwatchDisplayName.ToString(), "SD", nameCount);
+	FString genName = UUSSBPLib::BuildSwatchGenName(SwatchInformation.Name.ToString(), "SD", nameCount);
 
 	FUSSSwatchSaveInfo tmpSaved;
 
@@ -313,10 +313,10 @@ bool AUniversalSwatchSlotsSubsystem::GenerateNewSwatchUsingInfo(FUSSSwatch Swatc
 		this->InternalSwatchMatch.Add(slotID, slotID);
 	}
 
-	SwatchDescriptor = this->GenerateDynamicSwatchDescriptor(slotID, SwatchInformation.SwatchDisplayName, genName, SwatchInformation.SwatchPriority, SwatchInformation.PrimaryColour, SwatchInformation.SecondaryColour, SwatchGroup);
+	//SwatchDescriptor = this->GenerateDynamicSwatchDescriptor(slotID, SwatchInformation.Name, genName, SwatchInformation.Priority, SwatchInformation.PrimaryColour, SwatchInformation.SecondaryColour, SwatchGroup);
 
 	this->ValidSlotIDs.RemoveAt(0);
-	SwatchInformation.SwatchUniqueID = slotID;
+	//SwatchInformation.SwatchUniqueID = slotID;
 	SwatchRecipe = this->GenerateDynamicSwatchRecipe(slotID, SwatchDescriptor);
 
 	return true;

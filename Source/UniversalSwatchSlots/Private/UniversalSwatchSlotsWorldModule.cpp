@@ -27,13 +27,13 @@ DEFINE_LOG_CATEGORY(LogUniversalSwatchSlots)
 bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SwatchUniqueID, FText SwatchDisplayName, float SwatchPriority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe)
 {
 	FUSSSwatch SwatchInformation;
-	SwatchInformation.UniqueGroupID = UniqueGroupID;
-	SwatchInformation.GroupDisplayName = GroupDisplayName;
-	SwatchInformation.GroupPriority = GroupPriority;
-	SwatchInformation.SwatchUniqueID = SwatchUniqueID;
-	SwatchInformation.SwatchDisplayName = SwatchDisplayName;
-	SwatchInformation.PrimaryColour = PrimaryColor;
-	SwatchInformation.SecondaryColour = SecondaryColor;
+	//SwatchInformation.UniqueGroupID = UniqueGroupID;
+	//SwatchInformation.GroupDisplayName = GroupDisplayName;
+	//SwatchInformation.GroupPriority = GroupPriority;
+	//SwatchInformation.SwatchUniqueID = SwatchUniqueID;
+	//SwatchInformation.SwatchDisplayName = SwatchDisplayName;
+	//SwatchInformation.PrimaryColour = PrimaryColor;
+	//SwatchInformation.SecondaryColour = SecondaryColor;
 	return this->USSSubsystem->GenerateNewSwatchUsingInfo(SwatchInformation, SwatchGroup, SwatchDescriptor, SwatchRecipe);
 }
 
@@ -104,9 +104,9 @@ void UUniversalSwatchSlotsWorldModule::ParseAssociations(UConfigPropertyArray* A
 
 				FUSSPalette newPalette;
 
-				newPalette.PaletteName = ((UConfigPropertyString*)*association->SectionProperties.Find("PaletteName"))->Value;
+				//newPalette.PaletteName = (((UConfigPropertyString*)*association->SectionProperties.Find("PaletteName"))->Value);
 
-				if (!this->Palettes.Contains(newPalette.PaletteName))
+				if (!this->Palettes.Contains(newPalette.PaletteName.ToString()))
 				{	// The association doesn't exit
 
 					UConfigPropertyArray* SessionArray = (UConfigPropertyArray*)*association->SectionProperties.Find("Sessions");
@@ -149,7 +149,7 @@ void UUniversalSwatchSlotsWorldModule::ParseAssociations(UConfigPropertyArray* A
 									UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("No 'AddPrim' key found in 'Sessions' number % in 'Associations' at index %d. The default value will be used : false."), sessionID, assoID);
 								}
 
-								newPalette.AssociatedSessions.Add(newSession);
+							//	newPalette.AssociatedSessions.Add(newSession);
 							}
 							else
 							{	// Ignore this session
@@ -161,7 +161,7 @@ void UUniversalSwatchSlotsWorldModule::ParseAssociations(UConfigPropertyArray* A
 						}
 					}
 
-					this->Palettes.Add(newPalette.PaletteName, newPalette);
+					//this->Palettes.Add(newPalette.PaletteName, newPalette);
 				}
 				else
 				{	// Ignore this association
@@ -212,13 +212,13 @@ void UUniversalSwatchSlotsWorldModule::ParsePalettes(UConfigPropertyArray* Palet
 
 				FUSSPalette* newPalette = this->Palettes.Find(palName);
 
-				for (FUSSSession AssociatedSession : newPalette->AssociatedSessions)
+				//for (FUSSSession AssociatedSession : newPalette->AssociatedSessions)
 				{	// Find if the desired session is in this palette session association
 
-					if (AssociatedSession.SessionName.Equals(this->SessionName))
+				//	if (AssociatedSession.SessionName.Equals(this->SessionName))
 					{	// Parse the palette as we need to apply it to the session
 
-						UE_LOG(LogUniversalSwatchSlots, Display, TEXT("Find matching session \"%s\" for palette \"%s\". Loading palette."), *AssociatedSession.SessionName, *palName, *this->SessionName);
+				//		UE_LOG(LogUniversalSwatchSlots, Display, TEXT("Find matching session \"%s\" for palette \"%s\". Loading palette."), *AssociatedSession.SessionName, *palName, *this->SessionName);
 
 						if (palette->SectionProperties.Contains("SwatchGroups"))
 						{	// SwatchGroups key found
@@ -242,10 +242,10 @@ void UUniversalSwatchSlotsWorldModule::ParsePalettes(UConfigPropertyArray* Palet
 						}
 						return;
 					}
-					else
+				//	else
 					{	// Ignore the palette
 						
-						UE_LOG(LogUniversalSwatchSlots, Display, TEXT("Find session \"%s\" for palette \"%s\" but does not match desired session \"%s\". Ignoring palette for now."), *AssociatedSession.SessionName, *palName, *this->SessionName);
+				//		UE_LOG(LogUniversalSwatchSlots, Display, TEXT("Find session \"%s\" for palette \"%s\" but does not match desired session \"%s\". Ignoring palette for now."), *AssociatedSession.SessionName, *palName, *this->SessionName);
 					}
 				}
 			}
@@ -284,7 +284,7 @@ int32 UUniversalSwatchSlotsWorldModule::ParseSwatchGroup(int32 StartValidSlotID,
 		else
 		{	// No name given, build default
 
-			UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("No 'Name' key found in 'SwatchGroup' number %d in palette %s. Default will be used : %s."), GroupID, *OutPalette->PaletteName, *groupName);
+			UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("No 'Name' key found in 'SwatchGroup' number %d in palette %s. Default will be used : %s."), GroupID, *OutPalette->PaletteName.ToString(), *groupName);
 		}
 
 		if (SwatchGroup->SectionProperties.Contains("Priority"))
@@ -295,7 +295,7 @@ int32 UUniversalSwatchSlotsWorldModule::ParseSwatchGroup(int32 StartValidSlotID,
 		else
 		{	// No priority given, use default
 
-			UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("No 'Name' key found in 'SwatchGroup' number %d in palette %s. Default will be used : %s."), GroupID, *OutPalette->PaletteName, *groupName);
+			UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("No 'Name' key found in 'SwatchGroup' number %d in palette %s. Default will be used : %s."), GroupID, *OutPalette->PaletteName.ToString(), *groupName);
 		}
 
 		if (SwatchGroup->SectionProperties.Contains("Swatches"))
@@ -320,12 +320,12 @@ int32 UUniversalSwatchSlotsWorldModule::ParseSwatchGroup(int32 StartValidSlotID,
 					return 255;
 				}
 
-				if (!this->ParseSwatch(swatchID, (UConfigPropertySection*)SwatchProp, GroupID, groupName, groupPriority, OutPalette))
+			//	if (!this->ParseSwatch(swatchID, (UConfigPropertySection*)SwatchProp, GroupID, groupName, groupPriority, OutPalette))
 				{	// A swatch has been parsed. We can increment the swatch ID
 
 					UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("There was a problem parsing swatch %d.Ignoring the rest."), swatchID);
 				}
-				else
+			//	else
 				{
 					finalValidSlotID++;
 				}
@@ -336,7 +336,7 @@ int32 UUniversalSwatchSlotsWorldModule::ParseSwatchGroup(int32 StartValidSlotID,
 		else
 		{	// The group has no swatches, we could ignore it 
 		
-			UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("No 'Swatches' key found in 'SwatchGroup' %s in palette %s. The group will be ignored."), *groupName, *OutPalette->PaletteName);
+			UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("No 'Swatches' key found in 'SwatchGroup' %s in palette %s. The group will be ignored."), *groupName, *OutPalette->PaletteName.ToString());
 		}
 	}
 
@@ -344,9 +344,9 @@ int32 UUniversalSwatchSlotsWorldModule::ParseSwatchGroup(int32 StartValidSlotID,
 }
 
 
-bool UUniversalSwatchSlotsWorldModule::ParseSwatch(int32 SwatchID, UConfigPropertySection* Swatch, int32 GroupID, FString GroupName, float GroupPriority, FUSSPalette* OutPalette)
+bool UUniversalSwatchSlotsWorldModule::ParseSwatch(int32 SwatchID, UConfigPropertySection* Swatch, int32 GroupID, FString GroupName, float GroupPriority, FUSSGroup* OutGroup)
 {
-	if (Swatch)
+	/*if (Swatch)
 	{	// The swatch is valid
 	
 		FUSSSwatch newSwatch;
@@ -369,17 +369,17 @@ bool UUniversalSwatchSlotsWorldModule::ParseSwatch(int32 SwatchID, UConfigProper
 			UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("No 'Name' key found in 'Swatch' number %d in palette %s in group %s. Default will be used : %s."), SwatchID, *OutPalette->PaletteName, *GroupName, *swatchName);
 		}
 
-		newSwatch.SwatchDisplayName = FText::FromString(swatchName);
+		newSwatch.Name = FText::FromString(swatchName);
 
 		if (Swatch->SectionProperties.Contains("Priority"))
 		{	// A name has been given
 
-			newSwatch.SwatchPriority = ((UConfigPropertyFloat*)*Swatch->SectionProperties.Find("Priority"))->Value;
+			newSwatch.Priority = ((UConfigPropertyFloat*)*Swatch->SectionProperties.Find("Priority"))->Value;
 		}
 		else
 		{	// No name given, build default
 
-			newSwatch.SwatchPriority = 0.0f;
+			newSwatch.Priority = 0.0f;
 			UE_LOG(LogUniversalSwatchSlots, Warning, TEXT("No 'Priority' key found in 'Swatch' number %d in palette %s in group %s. Default will be used : %f."), SwatchID, *OutPalette->PaletteName, *GroupName, 0.0f);
 		}
 
@@ -411,7 +411,7 @@ bool UUniversalSwatchSlotsWorldModule::ParseSwatch(int32 SwatchID, UConfigProper
 
 		return true;
 	}
-
+	*/
 	return false;
 }
 
