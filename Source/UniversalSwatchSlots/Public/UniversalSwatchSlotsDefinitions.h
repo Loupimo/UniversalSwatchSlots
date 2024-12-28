@@ -132,7 +132,7 @@ public:
 
 	/* The swatches contained in this palette. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray <FUSSGroup> SwatchGroups;
+	TArray <FUSSGroup> Groups;
 };
 
 
