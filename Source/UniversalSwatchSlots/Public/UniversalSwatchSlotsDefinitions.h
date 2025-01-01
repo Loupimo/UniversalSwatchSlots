@@ -13,7 +13,8 @@ UENUM(BlueprintType)
 enum class EUSSVersion : uint8
 {
 	None  = 0	UMETA(DisplayName = "None"),		// Not set or before 1.0.4
-	V1_0_4 = 1	UMETA(DisplayName = "1.0.4")		// 1.0.4
+	V1_0_4 = 1	UMETA(DisplayName = "1.0.4"),		// 1.0.4
+	V1_1_0 = 2	UMETA(DisplayName = "1.1.0")		// 1.1.0
 };
 
 UENUM(BlueprintType)
@@ -169,6 +170,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Color")
 	FLinearColor SecondaryColour;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Color")
+	EUSSSwatchMaterial Material;
 };
 
 

@@ -60,7 +60,7 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 
 
 	UFUNCTION(BlueprintCallable, Category = "Config")
-	bool ParseActivePalette(FUSSPalette ActivePalette);
+	void GenerateSwatchesFromPalette(FUSSPalette ActivePalette);
 
 	/**
 	 * Initialize the USS game world module.

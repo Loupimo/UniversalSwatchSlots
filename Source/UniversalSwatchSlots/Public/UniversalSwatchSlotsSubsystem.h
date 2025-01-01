@@ -35,6 +35,9 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	void AddNewSwatchesColorSlotsToGameState(TArray<UUSSSwatchDesc* > SwatchDescriptions);
+	
+	UFUNCTION(BlueprintCallable, Category = "Swatch")
+	void GeneratePalette(FUSSPalette Palette);
 
 	/**
 	 * Create a new swatch using the desired group ID and swatch name.
@@ -49,7 +52,8 @@ public:
 	 * @return True if the swatch was created, false otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	bool GenerateNewSwatchUsingInfo(FUSSSwatch SwatchInformation, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe);
+	bool GenerateNewSwatchUsingInfo(UUSSSwatchGroup * SwatchGroup, FUSSSwatch SwatchInfo);
+	//bool GenerateNewSwatchUsingInfo(FUSSSwatch SwatchInformation, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe);
 
 	/**
 	 * Create a new swatch group using the desired ID, name and priority.
@@ -65,7 +69,8 @@ public:
 	 * @return The newly generated swatch descriptor, nullptr otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	UUSSSwatchGroup* GenerateDynamicSwatchGroup(int32 UniqueGroupID, FText DisplayName, float Priority);
+	UUSSSwatchGroup* GenerateDynamicSwatchGroup(int32 UniqueGroupID, FUSSGroup GroupInfo);
+	//UUSSSwatchGroup* GenerateDynamicSwatchGroup(int32 UniqueGroupID, FText DisplayName, float Priority);
 
 	/**
 	 * Create a new swatch descriptor using the desired swatch group, name and ID.
@@ -85,7 +90,8 @@ public:
 	 * @return The newly generated swatch descriptor, nullptr otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	UUSSSwatchDesc* GenerateDynamicSwatchDescriptor(int32 SlotID, FText DisplayName, FString GenName, float Priority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup);
+	UUSSSwatchDesc* GenerateDynamicSwatchDescriptor(int32 SlotID, FString GenName, UFGCustomizerSubCategory* SwatchGroup, FUSSSwatch SwatchInfo);
+	//UUSSSwatchDesc* GenerateDynamicSwatchDescriptor(int32 SlotID, FText DisplayName, FString GenName, float Priority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UFGCustomizerSubCategory* SwatchGroup);
 
 	/**
 	 * Create a new swatch recipe using the desired swatch descriptor.
@@ -154,7 +160,7 @@ public:
 
 	/* The paint finish to apply to our swatches. */
 	UPROPERTY(EditDefaultsOnly, Category = "Swatch")
-	TSubclassOf<UFGFactoryCustomizationDescriptor_PaintFinish>PaintFinish;
+	TArray<TSubclassOf<UFGFactoryCustomizationDescriptor_PaintFinish>>PaintFinishes;
 
 	/* The description that should be added to all swatches. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")

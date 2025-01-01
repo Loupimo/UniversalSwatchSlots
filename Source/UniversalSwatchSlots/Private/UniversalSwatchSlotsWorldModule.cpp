@@ -34,7 +34,13 @@ bool UUniversalSwatchSlotsWorldModule::GenerateNewSwatch(int32 UniqueGroupID, FT
 	//SwatchInformation.SwatchDisplayName = SwatchDisplayName;
 	//SwatchInformation.PrimaryColour = PrimaryColor;
 	//SwatchInformation.SecondaryColour = SecondaryColor;
-	return this->USSSubsystem->GenerateNewSwatchUsingInfo(SwatchInformation, SwatchGroup, SwatchDescriptor, SwatchRecipe);
+	return true;// this->USSSubsystem->GenerateNewSwatchUsingInfo(SwatchInformation, SwatchGroup, SwatchDescriptor, SwatchRecipe);
+}
+
+
+void UUniversalSwatchSlotsWorldModule::GenerateSwatchesFromPalette(FUSSPalette Palette)
+{
+	this->USSSubsystem->GeneratePalette(Palette);
 }
 
 
