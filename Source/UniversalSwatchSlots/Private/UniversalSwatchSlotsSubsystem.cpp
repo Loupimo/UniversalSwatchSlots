@@ -16,11 +16,11 @@ DECLARE_LOG_CATEGORY_EXTERN(LogUSS_Subsystem, Log, All)
 
 DEFINE_LOG_CATEGORY(LogUSS_Subsystem)
 
-AUniversalSwatchSlotsSubsystem* AUniversalSwatchSlotsSubsystem::Get(UObject* worldContext)
+AUniversalSwatchSlotsSubsystem* AUniversalSwatchSlotsSubsystem::Get(UObject* WorldContext)
 {
-	if (worldContext)
+	if (WorldContext)
 	{
-		const UWorld* WorldObject = GEngine->GetWorldFromContextObjectChecked(worldContext);
+		const UWorld* WorldObject = GEngine->GetWorldFromContextObjectChecked(WorldContext);
 		USubsystemActorManager* SubsystemActorManager = WorldObject->GetSubsystem<USubsystemActorManager>();
 		check(SubsystemActorManager);
 
@@ -406,7 +406,7 @@ void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
 					else
 					{	// There is no valid descriptor
 
-						UE_LOG(LogUSS_Subsystem, Display, TEXT("Can't patch \"%s\" for building \"%s\". No matching descriptor found"), *castDesc->GetPathName(), *castBuild->GetName());
+						UE_LOG(LogUSS_Subsystem, Warning, TEXT("Can't patch \"%s\" for building \"%s\". No matching descriptor found"), *castDesc->GetPathName(), *castBuild->GetName());
 					}
 				}
 			}

@@ -3,19 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/Texture2D.h"
-
 #include "Module/GameWorldModule.h"
-#include "FGBuildableSubsystem.h"
-#include "FGGameState.h"
-#include "FGBuildGun.h"
-
-#include "ModConfiguration.h"
-#include "ConfigPropertyArray.h"
 
 #include "UniversalSwatchSlotsSubsystem.h"
-#include "UniversalSwatchSlotsDefinitions.h"
-#include "UniversalSwatchSlotsGIModule.h"
 
 #include "UniversalSwatchSlotsWorldModule.generated.h"
 
@@ -29,60 +19,22 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	GENERATED_BODY()
 
 	/**
-	 * Create a new swatch using the desired group ID and swatch name.
+	 * Generate the groups, swatches descriptors and receipe of the given palette.
 	 *
-	 * Note: This function will create a new swatch group if the given group ID doensn't exist in the SwatchGroupArray and call GenerateDynamicSwatchGroup -> GenerateDynamicSwatchDescriptor -> GenerateDynamicSwatchRecipe functions. This function does nothing if the swatch descriptor / recipe already exist.
-	 *
-	 * @param	UniqueGroupID				The swatch group ID to use. If the group doesn't exist it will be created.
-	 * @param	GroupDisplayName			The name to give to the swatch group. If the group already exist its name will be changed.
-	 * @param	GroupPriority				The priority to give to the swatch group. If the group already exist its priority will be changed.
-	 * @param	SwatchPriority				The priority to give to this swatch.
-	 * @param	SwatchUniqueID				The swatch descriptor ID to use. If the descriptor ID is already in use this function will exit without doing anything.
-	 * @param	SwatchDisplayName			The name to give to the swatch descriptor.
-	 * @param   PrimaryColor				The primary color of the swatch.
-	 * @param	SecondaryColor				The secondary color of the swatch.
-	 * @param	SwatchGroup					The used swatch group. NULL if the function was aborted.
-	 * @param	SwatchDescriptor			The generated swatch descriptor. NULL if the function was aborted.
-	 * @param	SwatchRecipe				The generated swatch recipe. NULL if the function was aborted.
-	 * 
-	 * @return True if the swatch was created, false otherwise.
+	 * @param	Palette				The palette to generate.
 	 */
-	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	bool GenerateNewSwatch(int32 UniqueGroupID, FText GroupDisplayName, float GroupPriority, int32 SwatchUniqueID, FText SwatchDisplayName, float SwatchPriority, FLinearColor PrimaryColor, FLinearColor SecondaryColor, UUSSSwatchGroup*& SwatchGroup, UUSSSwatchDesc*& SwatchDescriptor, UUSSSwatchRecipe*& SwatchRecipe);
+	UFUNCTION(BlueprintCallable, Category = "Swatches")
+	void GenerateSwatchesFromPalette(FUSSPalette Palette);
 
 	/**
-	 * Parse the mod's configuration referenced by the variable ModConfig.
+	 * Initialize the USS game world module using the given USS subsystem.
 	 * 
-	 * @return True if the has been correctly parsed, false otherwise.
+	 * @param	Subsystem			The USS subsytem to use.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Config")
-	bool ParseModConfig();
-
-
-	UFUNCTION(BlueprintCallable, Category = "Config")
-	void GenerateSwatchesFromPalette(FUSSPalette ActivePalette);
-
-	/**
-	 * Initialize the USS game world module.
-	 *
-	 * @param	CleanSlotInit			Tells if we should clean color slot or not.
-	 */
-	UFUNCTION(BlueprintCallable, Category = "Config")
-	void InitUSSGameWorldModule(bool CleanSlotInit = true);
+	void InitUSSGameWorldModule(AUniversalSwatchSlotsSubsystem * Subsystem);
 
 public:
-
-	/* The available palettes parsed from the configuration file. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	TMap<FString, FUSSPalette> Palettes;
-
-	/* The colection where the swatch should be added. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
-	FString SessionName;
-
-	/* The configuration that contains all the swatch to create. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
-	UConfigProperty* RootConfig;
 
 	/* Tells if More Swatch slots mod is loaded. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
@@ -91,21 +43,4 @@ public:
 	/* The subsystem used to load and store swatch data. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	AUniversalSwatchSlotsSubsystem* USSSubsystem = nullptr;
-
-	/* The game instance used to construct dynamic swatch descriptor and recipe. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
-	UUniversalSwatchSlotsGIModule* GameInstance;
-
-protected:
-
-	
-	/* This array contains all the free color slot IDs. */
-	UPROPERTY()
-	TArray<int32> ValidSlotIDs;
-
-	
-	void ParseAssociations(UConfigPropertyArray* Associations);
-	void ParsePalettes(UConfigPropertyArray* PalettesArr);
-	int32 ParseSwatchGroup(int32 StartValidSlotID, int32 GroupID, UConfigPropertySection* SwatchGroup, FUSSPalette* OutPalette);
-	bool ParseSwatch(int32 SwatchID, UConfigPropertySection* Swatch, int32 GroupID, FString GroupName, float GroupPriority, FUSSGroup* OutGroup);
 };
