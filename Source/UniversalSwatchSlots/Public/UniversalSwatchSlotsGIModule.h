@@ -12,7 +12,7 @@
 
 
 /**
- * 
+ *
  */
 UCLASS()
 class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsGIModule : public UGameInstanceModule
@@ -78,6 +78,8 @@ public:
 	/* The list of all generated swatch descriptors. This array is modified when the GenerateDynamicSwatchDescriptor function is called.  */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
 	TMap<int32, UClass*> SwatchDescriptorArray;
+	UPROPERTY()
+	TArray<UClass*> tmpSwatchDescriptorArray;
 
 	/* The build gun blueprint class that will be used by the dynamically created swatch recipes. This array is modified when the GenerateDynamicSwatchRecipe function is called. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
@@ -89,4 +91,6 @@ protected:
 	TArray<UClass*> GeneratedClasses;
 
 	UClass* GenerateDynamicClass(UClass* TemplateClass, FName GeneratedClassName);
+
+	FString PackageName = "/UniversalSwatchSlots";
 };

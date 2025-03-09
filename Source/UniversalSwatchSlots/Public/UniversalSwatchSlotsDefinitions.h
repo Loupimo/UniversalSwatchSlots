@@ -9,11 +9,28 @@
 
 #include "UniversalSwatchSlotsDefinitions.generated.h"
 
+UENUM(BlueprintType)
+enum class EUSSVersion : uint8
+{
+	None  = 0	UMETA(DisplayName = "None"),		// Not set or before 1.0.4
+	V1_0_4 = 1	UMETA(DisplayName = "1.0.4"),		// 1.0.4
+	V1_1_0 = 2	UMETA(DisplayName = "1.1.0")		// 1.1.0
+};
+
+UENUM(BlueprintType)
+enum class EUSSSwatchMaterial : uint8
+{
+	Default = 0	UMETA(DisplayName = "Default"),		// Default material
+	Matte = 1	UMETA(DisplayName = "Matte"),		// Matte material
+	Shiny = 2	UMETA(DisplayName = "Shiny"),		// Shiny material
+};
 
 USTRUCT(BlueprintType)
 struct FUSSSwatchSaveInfo
 {
 	GENERATED_BODY()
+
+public:
 
 	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
 	int32 SwatchSlotID;
@@ -36,35 +53,31 @@ USTRUCT(BlueprintType)
 struct FUSSSwatch {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 UniqueGroupID = 0;
+public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText GroupDisplayName;
+	FText Name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float GroupPriority;
+	float Priority;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 SwatchUniqueID = 0;
+	EUSSSwatchMaterial Material;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText SwatchDisplayName;
+	FString PrimaryColor;
+	//FLinearColor PrimaryColour;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float SwatchPriority;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FLinearColor PrimaryColour = FLinearColor(250, 149, 73, 255);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FLinearColor SecondaryColour = FLinearColor(95, 102, 140, 255);
+	FString SecondaryColor;
+	//FLinearColor SecondaryColour;
 };
 
 USTRUCT(BlueprintType)
 struct FUSSSession {
 	GENERATED_BODY()
 
+public:
 	/* The palette name. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString SessionName;
@@ -78,21 +91,49 @@ struct FUSSSession {
 	bool AddSecondaryColorsToPreset;
 };
 
+
 USTRUCT(BlueprintType)
-struct FUSSPalette {
+struct FUSSGroup {
 	GENERATED_BODY()
+
+public:
+	/* The palette name. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText Name;
 
 	/* The palette name. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString PaletteName;
-
-	/* The associated session to this palette. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray <FUSSSession> AssociatedSessions;
+	float Priority;
 
 	/* The swatches contained in this palette. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray <FUSSSwatch> Swatches;
+};
+
+USTRUCT(BlueprintType)
+struct FUSSPalette : public FTableRowBase {
+	GENERATED_BODY()
+
+public:
+	/* The palette name. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText PaletteName;
+
+	/* Tells if this palette is active and should be loaded. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsActive;
+
+	/* Tells if the primary colors should be added to the player color preset or not. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool AddPrimaryColorsToPreset;
+
+	/* Tells if the secondary colors should be added to the player color preset or not. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool AddSecondaryColorsToPreset;
+
+	/* The swatches contained in this palette. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray <FUSSGroup> Groups;
 };
 
 
@@ -129,6 +170,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Color")
 	FLinearColor SecondaryColour;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Color")
+	EUSSSwatchMaterial Material;
 };
 
 

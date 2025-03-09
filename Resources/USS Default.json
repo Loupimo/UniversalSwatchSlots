@@ -1,0 +1,1155 @@
+[
+	{
+		"Name": "DefaultPalette",
+		"PaletteName": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_PaletteName\")",
+		"IsActive": false,
+		"AddPrimaryColorsToPreset": true,
+		"AddSecondaryColorsToPreset": true,
+		"Groups": [
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Iron_Group_Name\")",
+				"Priority": 0,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Iron_Group_IronOre_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#656F8CFF",
+						"SecondaryColor": "#663633FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Iron_Group_IronIngot_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#797A7AFF",
+						"SecondaryColor": "#33312DFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Iron_Group_IronRod_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#595B63FF",
+						"SecondaryColor": "#1C1E22FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Iron_Group_IronPlate_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#8E9096FF",
+						"SecondaryColor": "#2A2827FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Iron_Group_Screw_Swatch_Name\")",
+						"Priority": 4,
+						"Material": "Default",
+						"PrimaryColor": "#3361B3FF",
+						"SecondaryColor": "#041484FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Iron_Group_ReinforcedIronPlate_Swatch_Name\")",
+						"Priority": 5,
+						"Material": "Default",
+						"PrimaryColor": "#8A92A9FF",
+						"SecondaryColor": "#464A5AFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Iron_Group_ModularFrame_Swatch_Name\")",
+						"Priority": 6,
+						"Material": "Default",
+						"PrimaryColor": "#838BAAFF",
+						"SecondaryColor": "#5D5D5DFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Iron_Group_Rotor_Swatch_Name\")",
+						"Priority": 7,
+						"Material": "Default",
+						"PrimaryColor": "#25252CFF",
+						"SecondaryColor": "#243C6CFF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Copper_Group_Name\")",
+				"Priority": 1,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Copper_Group_CopperOre_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#9D5A47FF",
+						"SecondaryColor": "#405A61FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Copper_Group_CopperIngot_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#835D54FF",
+						"SecondaryColor": "#301A12FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Copper_Group_Wire_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#AB6C47FF",
+						"SecondaryColor": "#846B4FFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Copper_Group_Cable_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#282A32FF",
+						"SecondaryColor": "#6B6862FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Copper_Group_CopperSheet_Swatch_Name\")",
+						"Priority": 4,
+						"Material": "Default",
+						"PrimaryColor": "#68493CFF",
+						"SecondaryColor": "#16151AFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Copper_Group_CopperPowder_Swatch_Name\")",
+						"Priority": 5,
+						"Material": "Default",
+						"PrimaryColor": "#7D5962FF",
+						"SecondaryColor": "#3D2A31FF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Limestone_Group_Name\")",
+				"Priority": 2,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Limestone_Group_Limestone_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#D7BF99FF",
+						"SecondaryColor": "#89765FFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Limestone_Group_Concrete_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#83755FFF",
+						"SecondaryColor": "#C7C3C8FF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Steel_Group_Name\")",
+				"Priority": 3,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Steel_Group_Coal_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#050807FF",
+						"SecondaryColor": "#0B0F15FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Steel_Group_SteelIngot_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#23272CFF",
+						"SecondaryColor": "#0F1011FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Steel_Group_SteelBeam_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#292426FF",
+						"SecondaryColor": "#40211CFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Steel_Group_SteelPipe_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#312D2CFF",
+						"SecondaryColor": "#3E1C14FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Steel_Group_EncasedIndustrialBeam_Swatch_Name\")",
+						"Priority": 4,
+						"Material": "Default",
+						"PrimaryColor": "#CEC3A9FF",
+						"SecondaryColor": "#322934FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Steel_Group_Stator_Swatch_Name\")",
+						"Priority": 5,
+						"Material": "Default",
+						"PrimaryColor": "#413E40FF",
+						"SecondaryColor": "#B07460FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Steel_Group_Motor_Swatch_Name\")",
+						"Priority": 6,
+						"Material": "Default",
+						"PrimaryColor": "#47526FFF",
+						"SecondaryColor": "#BF971FFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Steel_Group_HeavyModularFrame_Swatch_Name\")",
+						"Priority": 7,
+						"Material": "Default",
+						"PrimaryColor": "#818896FF",
+						"SecondaryColor": "#1B1B1BFF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Caterium_Group_Name\")",
+				"Priority": 4,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Caterium_Group_CateriumOre_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#E9D2A0FF",
+						"SecondaryColor": "#A27A40FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Caterium_Group_CateriumIngot_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#AE9C77FF",
+						"SecondaryColor": "#DDC89EFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Caterium_Group_Quickwire_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#C1B48AFF",
+						"SecondaryColor": "#272934FF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Quartz_Group_Name\")",
+				"Priority": 5,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Quartz_Group_RawQuartz_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#DAADC3FF",
+						"SecondaryColor": "#634E51FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Quartz_Group_QuartzCrystal_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#CB86C9FF",
+						"SecondaryColor": "#3150B4FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Quartz_Group_Silica_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#D0D3DDFF",
+						"SecondaryColor": "#6D738DFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Quartz_Group_DissolvedSilica_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#EACBE3FF",
+						"SecondaryColor": "#CF9CBCFF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_Name\")",
+				"Priority": 6,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_CrudeOil_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#211D1DFF",
+						"SecondaryColor": "#181517FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_PackagedOil_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#1A181CFF",
+						"SecondaryColor": "#50505CFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_Plastic_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#3B9EE8FF",
+						"SecondaryColor": "#044BAAFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_Rubber_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#1E1D1DFF",
+						"SecondaryColor": "#CFB65EFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_HeavyOilResidue_Swatch_Name\")",
+						"Priority": 4,
+						"Material": "Default",
+						"PrimaryColor": "#AE04BFFF",
+						"SecondaryColor": "#391E31FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_PackagedHeavyOilResidue_Swatch_Name\")",
+						"Priority": 5,
+						"Material": "Default",
+						"PrimaryColor": "#6B0586FF",
+						"SecondaryColor": "#34044CFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_PolymerResin_Swatch_Name\")",
+						"Priority": 6,
+						"Material": "Default",
+						"PrimaryColor": "#3339C4FF",
+						"SecondaryColor": "#120F32FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_Fuel_Swatch_Name\")",
+						"Priority": 7,
+						"Material": "Default",
+						"PrimaryColor": "#CD812BFF",
+						"SecondaryColor": "#0D0D0EFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_PackagedFuel_Swatch_Name\")",
+						"Priority": 8,
+						"Material": "Default",
+						"PrimaryColor": "#F9A320FF",
+						"SecondaryColor": "#10100EFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_Turbofuel_Swatch_Name\")",
+						"Priority": 9,
+						"Material": "Default",
+						"PrimaryColor": "#B40408FF",
+						"SecondaryColor": "#3D1D1AFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_PackagedTurbofuel_Swatch_Name\")",
+						"Priority": 10,
+						"Material": "Default",
+						"PrimaryColor": "#F0272DFF",
+						"SecondaryColor": "#151112FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_EmptyCanister_Swatch_Name\")",
+						"Priority": 11,
+						"Material": "Default",
+						"PrimaryColor": "#272628FF",
+						"SecondaryColor": "#121212FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_PetroleumCoke_Swatch_Name\")",
+						"Priority": 12,
+						"Material": "Default",
+						"PrimaryColor": "#2B2C34FF",
+						"SecondaryColor": "#060602FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Oil_Group_Fabric_Swatch_Name\")",
+						"Priority": 13,
+						"Material": "Default",
+						"PrimaryColor": "#C0B6AEFF",
+						"SecondaryColor": "#282328FF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Aluminium_Group_Name\")",
+				"Priority": 7,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Aluminium_Group_Bauxite_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#D29A80FF",
+						"SecondaryColor": "#9C5548FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Aluminium_Group_AluminaSolution_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#C7C3C8FF",
+						"SecondaryColor": "#62646BFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Aluminium_Group_PackagedAluminaSolution_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#B8B9C3FF",
+						"SecondaryColor": "#1C1D25FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Aluminium_Group_AluminumScrap_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#8A8A95FF",
+						"SecondaryColor": "#352922FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Aluminium_Group_AluminumIngot_Swatch_Name\")",
+						"Priority": 4,
+						"Material": "Default",
+						"PrimaryColor": "#B9BCC3FF",
+						"SecondaryColor": "#666A6CFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Aluminium_Group_AlcladAluminumSheet_Swatch_Name\")",
+						"Priority": 5,
+						"Material": "Default",
+						"PrimaryColor": "#A9ACAFFF",
+						"SecondaryColor": "#322E25FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Aluminium_Group_AluminumCasing_Swatch_Name\")",
+						"Priority": 6,
+						"Material": "Default",
+						"PrimaryColor": "#AAA9AEFF",
+						"SecondaryColor": "#1F2228FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Aluminium_Group_HeatSink_Swatch_Name\")",
+						"Priority": 7,
+						"Material": "Default",
+						"PrimaryColor": "#949796FF",
+						"SecondaryColor": "#A1663EFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Aluminium_Group_EmptyFluidTank_Swatch_Name\")",
+						"Priority": 8,
+						"Material": "Default",
+						"PrimaryColor": "#97959EFF",
+						"SecondaryColor": "#363946FF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Nitrogen_Group_Name\")",
+				"Priority": 8,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Nitrogen_Group_NitrogenGas_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#B0ACB4FF",
+						"SecondaryColor": "#0D0D0EFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Nitrogen_Group_PackagedNitrogenGas_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#B7B9C6FF",
+						"SecondaryColor": "#23273BFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Nitrogen_Group_FusedModularFrame_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#A5A5A6FF",
+						"SecondaryColor": "#F4AA53FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Nitrogen_Group_CoolingSystem_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#E0A470FF",
+						"SecondaryColor": "#414453FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Nitrogen_Group_NitricAcid_Swatch_Name\")",
+						"Priority": 4,
+						"Material": "Default",
+						"PrimaryColor": "#D8D8BCFF",
+						"SecondaryColor": "#0D0D0EFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Nitrogen_Group_PackagedNitricAcid_Swatch_Name\")",
+						"Priority": 5,
+						"Material": "Default",
+						"PrimaryColor": "#CFCFDBFF",
+						"SecondaryColor": "#454550FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Nitrogen_Group_RocketFuel_Swatch_Name\")",
+						"Priority": 6,
+						"Material": "Default",
+						"PrimaryColor": "#FF150CFF",
+						"SecondaryColor": "#FCFF0EFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Nitrogen_Group_PackagedRocketFuel_Swatch_Name\")",
+						"Priority": 7,
+						"Material": "Default",
+						"PrimaryColor": "#D10010FF",
+						"SecondaryColor": "#FFE700FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Nitrogen_Group_IonizedFuel_Swatch_Name\")",
+						"Priority": 8,
+						"Material": "Default",
+						"PrimaryColor": "#FFF2CBFF",
+						"SecondaryColor": "#FF6B36FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Nitrogen_Group_PackagedIonizedFuel_Swatch_Name\")",
+						"Priority": 9,
+						"Material": "Default",
+						"PrimaryColor": "#830004FF",
+						"SecondaryColor": "#E5CA00FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Nitrogen_Group_PressureConversionCube_Swatch_Name\")",
+						"Priority": 10,
+						"Material": "Default",
+						"PrimaryColor": "#D49058FF",
+						"SecondaryColor": "#1F2133FF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Sulfur_Group_Name\")",
+				"Priority": 9,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Sulfur_Group_Sulfur_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#B3A468FF",
+						"SecondaryColor": "#776D5FFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Sulfur_Group_CompactedCoal_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#171A24FF",
+						"SecondaryColor": "#0D0C09FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Sulfur_Group_BlackPowder_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#DC4B2DFF",
+						"SecondaryColor": "#222025FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Sulfur_Group_SmokelessPowder_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#272223FF",
+						"SecondaryColor": "#85939DFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Sulfur_Group_SulfuricAcid_Swatch_Name\")",
+						"Priority": 4,
+						"Material": "Default",
+						"PrimaryColor": "#D1C83AFF",
+						"SecondaryColor": "#0D0D0EFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Sulfur_Group_PackagedSulfuricAcid_Swatch_Name\")",
+						"Priority": 5,
+						"Material": "Default",
+						"PrimaryColor": "#B2AE4FFF",
+						"SecondaryColor": "#42434FFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Sulfur_Group_Battery_Swatch_Name\")",
+						"Priority": 6,
+						"Material": "Default",
+						"PrimaryColor": "#2D3146FF",
+						"SecondaryColor": "#ADADBCFF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Uranium_Group_Name\")",
+				"Priority": 10,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Uranium_Group_Uranium_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#567A49FF",
+						"SecondaryColor": "#122011FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Uranium_Group_EncasedUraniumCell_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#D8D11BFF",
+						"SecondaryColor": "#8BEAC3FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Uranium_Group_ElectromagneticControlRod_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#E5E264FF",
+						"SecondaryColor": "#3A3E46FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Uranium_Group_UraniumFuelRod_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#64C987FF",
+						"SecondaryColor": "#1E1E15FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Uranium_Group_UraniumWaste_Swatch_Name\")",
+						"Priority": 4,
+						"Material": "Default",
+						"PrimaryColor": "#1CB83BFF",
+						"SecondaryColor": "#D9D423FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Uranium_Group_NonFissileUranium_Swatch_Name\")",
+						"Priority": 5,
+						"Material": "Default",
+						"PrimaryColor": "#2E3B31FF",
+						"SecondaryColor": "#C0B61CFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Uranium_Group_PlutoniumPellet_Swatch_Name\")",
+						"Priority": 6,
+						"Material": "Default",
+						"PrimaryColor": "#72BACDFF",
+						"SecondaryColor": "#758B8FFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Uranium_Group_EncasedPlutoniumCell_Swatch_Name\")",
+						"Priority": 7,
+						"Material": "Default",
+						"PrimaryColor": "#2B3230FF",
+						"SecondaryColor": "#A8E5E9FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Uranium_Group_PlutoniumFuelRod_Swatch_Name\")",
+						"Priority": 8,
+						"Material": "Default",
+						"PrimaryColor": "#CEBE40FF",
+						"SecondaryColor": "#A8E5E9FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Uranium_Group_PlutoniumWaste_Swatch_Name\")",
+						"Priority": 9,
+						"Material": "Default",
+						"PrimaryColor": "#71CAE3FF",
+						"SecondaryColor": "#B6AC23FF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SAM_Group_Name\")",
+				"Priority": 11,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SAM_Group_SAM_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#783DBEFF",
+						"SecondaryColor": "#2E0B70FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SAM_Group_ReanimatedSAM_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#AC4CC6FF",
+						"SecondaryColor": "#DF803AFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SAM_Group_SAMFluctuator_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#7267D6FF",
+						"SecondaryColor": "#FFC36DFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SAM_Group_FicsiteIngot_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#E77B05FF",
+						"SecondaryColor": "#571E00FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SAM_Group_FicsiteTrigon_Swatch_Name\")",
+						"Priority": 4,
+						"Material": "Default",
+						"PrimaryColor": "#FFBC29FF",
+						"SecondaryColor": "#A01800FF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Electronics_Group_Name\")",
+				"Priority": 12,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Electronics_Group_AILimiter_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#1C1C1EFF",
+						"SecondaryColor": "#648D8CFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Electronics_Group_CircuitBoard_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#2B5533FF",
+						"SecondaryColor": "#FFB85FFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Electronics_Group_HighSpeedConnector_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#293D32FF",
+						"SecondaryColor": "#415355FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Electronics_Group_Computer_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#B5885AFF",
+						"SecondaryColor": "#232927FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Electronics_Group_Supercomputer_Swatch_Name\")",
+						"Priority": 4,
+						"Material": "Default",
+						"PrimaryColor": "#232123FF",
+						"SecondaryColor": "#D5B582FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Electronics_Group_RadioControlUnit_Swatch_Name\")",
+						"Priority": 5,
+						"Material": "Default",
+						"PrimaryColor": "#262524FF",
+						"SecondaryColor": "#DEBB36FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Electronics_Group_TurboMotor_Swatch_Name\")",
+						"Priority": 6,
+						"Material": "Default",
+						"PrimaryColor": "#C8A32FFF",
+						"SecondaryColor": "#0C0C0CFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Electronics_Group_CrystalOscillator_Swatch_Name\")",
+						"Priority": 7,
+						"Material": "Default",
+						"PrimaryColor": "#87848BFF",
+						"SecondaryColor": "#161818FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Electronics_Group_SuperpositionOscillator_Swatch_Name\")",
+						"Priority": 8,
+						"Material": "Default",
+						"PrimaryColor": "#8999A2FF",
+						"SecondaryColor": "#272827FF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_QuantumTechnology_Group_Name\")",
+				"Priority": 13,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_QuantumTechnology_Group_Diamonds_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#9E757FFF",
+						"SecondaryColor": "#F2BC7DFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_QuantumTechnology_Group_TimeCrystal_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#E1D6DDFF",
+						"SecondaryColor": "#FFCC7EFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_QuantumTechnology_Group_DarkMatterCrystal_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#5A00B9FF",
+						"SecondaryColor": "#FFE6FEFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_QuantumTechnology_Group_DarkMatterResidue_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#ECA8E3FF",
+						"SecondaryColor": "#FFF3FBFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_QuantumTechnology_Group_ExcitedPhotonicMatter_Swatch_Name\")",
+						"Priority": 4,
+						"Material": "Default",
+						"PrimaryColor": "#BFD6EFFF",
+						"SecondaryColor": "#387165FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_QuantumTechnology_Group_SingularityCell_Swatch_Name\")",
+						"Priority": 5,
+						"Material": "Default",
+						"PrimaryColor": "#B3B2C3FF",
+						"SecondaryColor": "#274883FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_QuantumTechnology_Group_NeuralQuantumProcessor_Swatch_Name\")",
+						"Priority": 6,
+						"Material": "Default",
+						"PrimaryColor": "#433675FF",
+						"SecondaryColor": "#EA8B20FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_QuantumTechnology_Group_AlienPowerMatrix_Swatch_Name\")",
+						"Priority": 7,
+						"Material": "Default",
+						"PrimaryColor": "#D99883FF",
+						"SecondaryColor": "#CFCBD0FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_QuantumTechnology_Group_Ficsonium_Swatch_Name\")",
+						"Priority": 8,
+						"Material": "Default",
+						"PrimaryColor": "#FFF540FF",
+						"SecondaryColor": "#D1C81CFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_QuantumTechnology_Group_FicsoniumFuelRod_Swatch_Name\")",
+						"Priority": 9,
+						"Material": "Default",
+						"PrimaryColor": "#E1D51AFF",
+						"SecondaryColor": "#858187FF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SpaceElevator_Group_Name\")",
+				"Priority": 14,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SpaceElevator_Group_SmartPlating_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#585A71FF",
+						"SecondaryColor": "#B86A53FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SpaceElevator_Group_VersatileFramework_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#1F1E1FFF",
+						"SecondaryColor": "#9C3E2EFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SpaceElevator_Group_AutomatedWiring_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#26292EFF",
+						"SecondaryColor": "#A34033FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SpaceElevator_Group_ModularEngine_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#252427FF",
+						"SecondaryColor": "#B83E27FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SpaceElevator_Group_AdaptiveControlUnit_Swatch_Name\")",
+						"Priority": 4,
+						"Material": "Default",
+						"PrimaryColor": "#D79450FF",
+						"SecondaryColor": "#312F31FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SpaceElevator_Group_AssemblyDirectorSystem_Swatch_Name\")",
+						"Priority": 5,
+						"Material": "Default",
+						"PrimaryColor": "#B0523EFF",
+						"SecondaryColor": "#2F2F34FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SpaceElevator_Group_MagneticFieldGenerator_Swatch_Name\")",
+						"Priority": 6,
+						"Material": "Default",
+						"PrimaryColor": "#9AD7B1FF",
+						"SecondaryColor": "#303032FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SpaceElevator_Group_ThermalPropulsionRocket_Swatch_Name\")",
+						"Priority": 7,
+						"Material": "Default",
+						"PrimaryColor": "#A34033FF",
+						"SecondaryColor": "#303032FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SpaceElevator_Group_NuclearPasta_Swatch_Name\")",
+						"Priority": 8,
+						"Material": "Default",
+						"PrimaryColor": "#70E4ECFF",
+						"SecondaryColor": "#C5B092FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SpaceElevator_Group_BiochemicalSculptor_Swatch_Name\")",
+						"Priority": 9,
+						"Material": "Default",
+						"PrimaryColor": "#9C3E52FF",
+						"SecondaryColor": "#766D80FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SpaceElevator_Group_BallisticWarpDrive_Swatch_Name\")",
+						"Priority": 10,
+						"Material": "Default",
+						"PrimaryColor": "#C73F1AFF",
+						"SecondaryColor": "#2E333CFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_SpaceElevator_Group_AIExpansionServer_Swatch_Name\")",
+						"Priority": 11,
+						"Material": "Default",
+						"PrimaryColor": "#912A17FF",
+						"SecondaryColor": "#DFD4D7FF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_AmmosAndExplosives_Group_Name\")",
+				"Priority": 15,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_AmmosAndExplosives_Group_IronRebar_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#D27E13FF",
+						"SecondaryColor": "#222025FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_AmmosAndExplosives_Group_StunRebar_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#017BB2FF",
+						"SecondaryColor": "#222025FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_AmmosAndExplosives_Group_ShatterRebar_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#772E6EFF",
+						"SecondaryColor": "#222025FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_AmmosAndExplosives_Group_ExplosiveRebar_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#A50810FF",
+						"SecondaryColor": "#222025FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_AmmosAndExplosives_Group_RifleAmmo_Swatch_Name\")",
+						"Priority": 4,
+						"Material": "Default",
+						"PrimaryColor": "#C1682CFF",
+						"SecondaryColor": "#6D371CFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_AmmosAndExplosives_Group_HomingRifleAmmo_Swatch_Name\")",
+						"Priority": 5,
+						"Material": "Default",
+						"PrimaryColor": "#282727FF",
+						"SecondaryColor": "#383C28FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_AmmosAndExplosives_Group_TurboRifleAmmo_Swatch_Name\")",
+						"Priority": 6,
+						"Material": "Default",
+						"PrimaryColor": "#C6383FFF",
+						"SecondaryColor": "#1B1415FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_AmmosAndExplosives_Group_Nobelisk_Swatch_Name\")",
+						"Priority": 7,
+						"Material": "Default",
+						"PrimaryColor": "#882E2BFF",
+						"SecondaryColor": "#E3D84BFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_AmmosAndExplosives_Group_GasNobelisk_Swatch_Name\")",
+						"Priority": 8,
+						"Material": "Default",
+						"PrimaryColor": "#4B583BFF",
+						"SecondaryColor": "#1C2D0CFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_AmmosAndExplosives_Group_PulseNobelisk_Swatch_Name\")",
+						"Priority": 9,
+						"Material": "Default",
+						"PrimaryColor": "#4E5659FF",
+						"SecondaryColor": "#323231FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_AmmosAndExplosives_Group_ClusterNobelisk_Swatch_Name\")",
+						"Priority": 10,
+						"Material": "Default",
+						"PrimaryColor": "#5A3B3DFF",
+						"SecondaryColor": "#211819FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_AmmosAndExplosives_Group_NukeNobelisk_Swatch_Name\")",
+						"Priority": 11,
+						"Material": "Default",
+						"PrimaryColor": "#598566FF",
+						"SecondaryColor": "#404842FF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Equipements_Group_Name\")",
+				"Priority": 16,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Equipements_Group_PortableMiner_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#D48439FF",
+						"SecondaryColor": "#81776DFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Equipements_Group_GasFilter_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#251F1FFF",
+						"SecondaryColor": "#4A403FFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Equipements_Group_IodineInfusedFilter_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#C69F3BFF",
+						"SecondaryColor": "#1D1C19FF"
+					}
+				]
+			},
+			{
+				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_Name\")",
+				"Priority": 17,
+				"Swatches": [
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_Water_Swatch_Name\")",
+						"Priority": 0,
+						"Material": "Default",
+						"PrimaryColor": "#1F7CA1FF",
+						"SecondaryColor": "#0D0D0EFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_PackagedWater_Swatch_Name\")",
+						"Priority": 1,
+						"Material": "Default",
+						"PrimaryColor": "#66A5C6FF",
+						"SecondaryColor": "#0251B8FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_Wood_Swatch_Name\")",
+						"Priority": 2,
+						"Material": "Default",
+						"PrimaryColor": "#735E43FF",
+						"SecondaryColor": "#2A1E14FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_Leaves_Swatch_Name\")",
+						"Priority": 3,
+						"Material": "Default",
+						"PrimaryColor": "#4D6F43FF",
+						"SecondaryColor": "#142C12FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_Mycelia_Swatch_Name\")",
+						"Priority": 4,
+						"Material": "Default",
+						"PrimaryColor": "#676569FF",
+						"SecondaryColor": "#292D36FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_Biomass_Swatch_Name\")",
+						"Priority": 5,
+						"Material": "Default",
+						"PrimaryColor": "#655F35FF",
+						"SecondaryColor": "#3E3118FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_SolidBiofuel_Swatch_Name\")",
+						"Priority": 6,
+						"Material": "Default",
+						"PrimaryColor": "#847161FF",
+						"SecondaryColor": "#3C2F25FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_LiquidBiofuel_Swatch_Name\")",
+						"Priority": 7,
+						"Material": "Default",
+						"PrimaryColor": "#263E1AFF",
+						"SecondaryColor": "#0D0D0EFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_PackagedLiquidBiofuel_Swatch_Name\")",
+						"Priority": 8,
+						"Material": "Default",
+						"PrimaryColor": "#195200FF",
+						"SecondaryColor": "#10100EFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_BluePowerSlug_Swatch_Name\")",
+						"Priority": 9,
+						"Material": "Default",
+						"PrimaryColor": "#7BBFDDFF",
+						"SecondaryColor": "#6B74ADFF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_YellowPowerSlug_Swatch_Name\")",
+						"Priority": 10,
+						"Material": "Default",
+						"PrimaryColor": "#DEB678FF",
+						"SecondaryColor": "#E79763FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_PurplePowerSlug_Swatch_Name\")",
+						"Priority": 11,
+						"Material": "Default",
+						"PrimaryColor": "#C883D7FF",
+						"SecondaryColor": "#A150C2FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_PowerShard_Swatch_Name\")",
+						"Priority": 12,
+						"Material": "Default",
+						"PrimaryColor": "#C6712FFF",
+						"SecondaryColor": "#86C0E9FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_AlienProtein_Swatch_Name\")",
+						"Priority": 13,
+						"Material": "Default",
+						"PrimaryColor": "#563A5EFF",
+						"SecondaryColor": "#CECDD1FF"
+					},
+					{
+						"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_FaunaAndFlora_Group_AlienDNACapsule_Swatch_Name\")",
+						"Priority": 14,
+						"Material": "Default",
+						"PrimaryColor": "#96949DFF",
+						"SecondaryColor": "#49343CFF"
+					}
+				]
+			}
+		]
+	}
+]
