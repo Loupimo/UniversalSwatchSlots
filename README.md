@@ -1,3 +1,6 @@
+# <span style="color:red">1.1.0 Notes</span>
+<span style="color:red">If you have made changes to your palette prior this release please back it up before updating !</span>
+
 # Overview
 Tired of re-doing your color preset between each game or being limited by the low number of swatch slots? Well, this mod is made for you!
 
@@ -11,9 +14,9 @@ This JSON configuration gives you a lot of options to customize your palette as 
 Two default palettes come with this mod. Each contains the same dinstinct swatches for each craftable item in the game, only the language change (one in english, one in french).
 
 # How to Use
-In order to make the swatch slots appear in your game you need to configure the mod directly via the ingame menu or by editing the JSON file located at "YourStatifactoryGameFolder/FactoryGame/Configs/UniversalSwatchSlots.cfg"
+In order to make the swatch slots appear in your game you need to configure the mod directly via the ingame menu or by editing the JSON file located at "YourStatifactoryGameFolder/FactoryGame/Configs/UniversalSwatchSlots/YourPaletteName"
 - **Step 1:** The first array represent the palette / session associations. This is where you tell the mod which palette to apply to which session game (be sure to use the session name and not the save game name). You can also configure the "add color swatches to player preset" behavior. 
-- **Step 2:** The second array represent your available palettes. You can add / edit / delete up to <span style="color:red">255 slots (including default + custom : 29, More Swatch Slots : 20 and other mod that could add more swatches)</span> but keep in mind that the more you have the longer it takes for the ingame menu to display. The fields are self explenatory and have tooltip to help you understand their purpose.
+- **Step 2:** The second array represent your available palettes. You can add / edit / delete up to <span style="color:red">255 slots (including default + custom : 29, More Swatch Slots : 20 and other mod that could add more swatches)</span> but keep in mind that the more you have the longer it takes for the ingame menu to display. The fields are self explanatory and have tooltip to help you understand their purpose.
 - **Step 3:** Launch a save game that belongs to session your entered.
 - **Step 4:** Go to your nearest Awesome Shop, customization tab, and buy the Universal Swatch Slots upgrade for only 1 coupon !!!
 
@@ -21,7 +24,7 @@ Note: I recommand to directly edit the JSON configuration as the ingame menu can
 
 # Multiplayer
 
-This mod has been tested on windows dedicated server but should also work with linux server. To make it work, simply edit the UniversalSwatchSlots.cfg server file to match the session name you want to apply the mod to. Joining players need to have the same configuration except that they should add an empty session name under the association they wish to load.
+This mod has been tested on windows dedicated server but should also work with linux server. To make it work, simply copy the UniversalSwatchSlots located at "YourStatifactoryGameFolder/FactoryGame/Configs/" to your server configs folder. It is highly recommanded that joining share the same configuration. They may have a different naming as long as the number of swatches and structures remains the same. You may be able to use different colors as well without affecting other players / server colors (not tested).
 
 # Images
 
