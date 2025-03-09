@@ -12,7 +12,7 @@
 
 
 /**
- * 
+ *
  */
 UCLASS()
 class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsGIModule : public UGameInstanceModule

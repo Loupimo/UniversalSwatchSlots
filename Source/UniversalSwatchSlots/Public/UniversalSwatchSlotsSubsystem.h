@@ -13,7 +13,7 @@
 
 
 /**
- * 
+ *
  */
 UCLASS()
 class UNIVERSALSWATCHSLOTS_API AUniversalSwatchSlotsSubsystem : public AModSubsystem, public IFGSaveInterface
@@ -38,7 +38,7 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	void AddNewSwatchesColorSlotsToGameState(TArray<UUSSSwatchDesc*> SwatchDescriptions);
-	
+
 	/**
 	 * Generate all the groups, swatches descriptor and receipes of the given palette.
 	 *
@@ -60,8 +60,8 @@ public:
 	 * @return True if the swatch was created, false otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	bool GenerateNewSwatchUsingInfo(UUSSSwatchGroup * SwatchGroup, FUSSSwatch SwatchInfo);
-	
+	bool GenerateNewSwatchUsingInfo(UUSSSwatchGroup* SwatchGroup, FUSSSwatch SwatchInfo);
+
 	/**
 	 * Create a new swatch group using the desired ID, name and priority.
 	 *
@@ -91,7 +91,7 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	UUSSSwatchDesc* GenerateDynamicSwatchDescriptor(int32 SlotID, FString GenName, UFGCustomizerSubCategory* SwatchGroup, FUSSSwatch SwatchInfo);
-	
+
 	/**
 	 * Create a new swatch recipe using the desired swatch descriptor.
 	 *

@@ -60,7 +60,7 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 					{
 						if (!FGGameState->mBuildingColorSlots_Data.IsValidIndex(i))
 						{	// We need to add a new slot
-							
+
 							FGGameState->mBuildingColorSlots_Data.Add(NewColourSlot);
 							UE_LOG(LogUSS_Subsystem, Verbose, TEXT("New color slot added to gamestate: %d"), i);
 						}
@@ -333,11 +333,11 @@ bool AUniversalSwatchSlotsSubsystem::GenerateNewSwatchUsingInfo(UUSSSwatchGroup*
 		this->InternalSwatchMatch.Add(slotID, slotID);
 	}
 
-	UUSSSwatchDesc * SwatchDescriptor = this->GenerateDynamicSwatchDescriptor(slotID, genName, SwatchGroup, SwatchInfo);
+	UUSSSwatchDesc* SwatchDescriptor = this->GenerateDynamicSwatchDescriptor(slotID, genName, SwatchGroup, SwatchInfo);
 
 	this->ValidSlotIDs.RemoveAt(0);
 
-	UUSSSwatchRecipe * SwatchRecipe = this->GenerateDynamicSwatchRecipe(slotID, SwatchDescriptor);
+	UUSSSwatchRecipe* SwatchRecipe = this->GenerateDynamicSwatchRecipe(slotID, SwatchDescriptor);
 
 	return true;
 }
@@ -457,7 +457,7 @@ void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<UUSSSwatchDesc*>
 {
 	for (FUSSSwatchSaveInfo& currSaved : this->SavedSwatches)
 	{	// Print a warning for all remaining swatches that were not found
-		
+
 		uint32 matchingID = currSaved.SwatchSlotID;
 
 		if (this->WasUsingMSS)

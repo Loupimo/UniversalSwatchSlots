@@ -11,7 +11,7 @@
 
 
 /**
- * 
+ *
  */
 UCLASS()
 class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWorldModule
@@ -28,11 +28,11 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 
 	/**
 	 * Initialize the USS game world module using the given USS subsystem.
-	 * 
+	 *
 	 * @param	Subsystem			The USS subsytem to use.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Config")
-	void InitUSSGameWorldModule(AUniversalSwatchSlotsSubsystem * Subsystem);
+	void InitUSSGameWorldModule(AUniversalSwatchSlotsSubsystem* Subsystem);
 
 public:
 
