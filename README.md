@@ -1,6 +1,3 @@
-# <span style="color:red">1.1.0 Notes</span>
-<span style="color:red">If you have made changes to your palette prior this release please back it up before updating !</span>
-
 # Overview
 Tired of re-doing your color preset between each game or being limited by the low number of swatch slots? Well, this mod is made for you!
 
@@ -24,11 +21,8 @@ Note: I recommand to directly edit the JSON configuration as the ingame menu can
 
 # Multiplayer
 
-This mod has been tested on windows dedicated server but should also work with linux server. To make it work, simply copy the UniversalSwatchSlots located at "YourStatifactoryGameFolder/FactoryGame/Configs/" to your server configs folder. It is highly recommanded that joining share the same configuration. They may have a different naming as long as the number of swatches and structures remains the same. You may be able to use different colors as well without affecting other players / server colors (not tested).
+This mod has been tested on windows dedicated server but should also work with linux server. To make it work, simply copy the UniversalSwatchSlots located at "YourStatifactoryGameFolder/FactoryGame/Configs/" to your server configs folder. It is highly recommanded that joining players share the same configuration. They may have a different naming as long as the number of swatches and structures remain the same.
 
-# Images
-
-![Configuration](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Config.png?raw=true)
 ![Awesome Shop](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/AS_Buy.png?raw=true)
 ![Swatches](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Swatches.png?raw=true)
 ![Color preset](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Color_preset.png?raw=true)

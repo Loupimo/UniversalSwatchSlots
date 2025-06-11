@@ -5,6 +5,7 @@
 
 #include "Subsystem/SubsystemActorManager.h"
 #include "FGBuildableSubsystem.h"
+#include "FGBuildable.h"
 #include "FGGameState.h"
 #include "Kismet/GameplayStatics.h"
 #include "USSBPLib.h"
