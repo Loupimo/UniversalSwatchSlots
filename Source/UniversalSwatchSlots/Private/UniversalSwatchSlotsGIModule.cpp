@@ -45,7 +45,7 @@ void UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchClasses()
 	for (int32 i = startID; i < maxSlots; i++)
 	{
 		this->GenerateDynamicSwatchDescriptor(i);
-		this->GenerateDynamicSwatchRecipe(i);
+		// Skip recipe generation to prevent ReliableBufferOverflow replication bloat; descriptors alone are sufficient for save compatibility.
 	}
 }
 
