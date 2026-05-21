@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Subsystem/ModSubsystem.h"
 #include "FGSaveInterface.h"
+#include "UniversalSwatchSlotsGIModule.h"
 
 #include "UniversalSwatchSlotsDefinitions.h"
 
@@ -90,7 +91,8 @@ public:
 	 * @return The newly generated swatch descriptor, nullptr otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	UUSSSwatchDesc* GenerateDynamicSwatchDescriptor(int32 SlotID, FString GenName, UFGCustomizerSubCategory* SwatchGroup, FUSSSwatch SwatchInfo);
+	FUSSSwatchDescGenInfo& GenerateDynamicSwatchDescriptor(int32 SlotID, FString GenName, UFGCustomizerSubCategory* SwatchGroup, FUSSSwatch SwatchInfo);
+	//UUSSSwatchDesc* GenerateDynamicSwatchDescriptor(int32 SlotID, FString GenName, UFGCustomizerSubCategory* SwatchGroup, FUSSSwatch SwatchInfo);
 
 	/**
 	 * Create a new swatch recipe using the desired swatch descriptor.
@@ -103,7 +105,8 @@ public:
 	 * @return The newly generated swatch recipe, nullptr otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	UUSSSwatchRecipe* GenerateDynamicSwatchRecipe(int32 UniqueID, UUSSSwatchDesc* SwatchDescriptor);
+	UUSSSwatchRecipe* GenerateDynamicSwatchRecipe(int32 UniqueID, FUSSSwatchDescGenInfo& SwatchDescriptor);
+	//UUSSSwatchRecipe* GenerateDynamicSwatchRecipe(int32 UniqueID, UUSSSwatchDesc* SwatchDescriptor);
 
 	/**
 	 * Patch existing buildings descriptor.
@@ -144,6 +147,8 @@ public:
 	 * Update The available valid swatche slots ID.
 	 */
 	void RetrieveFreeColorSlotID();
+
+	void ResetSubSystem();
 
 public:
 
@@ -191,6 +196,8 @@ public:
 	UPROPERTY(SaveGame, BlueprintReadWrite, Category = "Saving")
 	bool WasUsingMSS = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	UUniversalSwatchSlotsGIModule* USSInst;
 
 protected:
 

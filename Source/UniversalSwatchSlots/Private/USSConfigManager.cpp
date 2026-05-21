@@ -17,6 +17,7 @@
 #include "Util/EngineUtil.h"
 #include "HAL/FileManagerGeneric.h"
 #include "Configuration/Properties/ConfigPropertyString.h"
+#include "Configuration/Properties/ConfigPropertyBool.h"
 
 
 DECLARE_LOG_CATEGORY_EXTERN(LogUSSConfigManager, Log, All)
@@ -56,8 +57,9 @@ void UUSSConfigManager::InitConfigManager()
     {
         if (this->RootSection->SectionProperties.Contains("UserDefined"))
         {
-            FString userDefined = ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("UserDefined"))->Value;
-            this->ShouldActivateDefault = userDefined == FString("No") ? true : false;
+            //FString userDefined = ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("UserDefined"))->Value;
+            //this->ShouldActivateDefault = userDefined == FString("No") ? true : false;
+            this->ShouldActivateDefault = !((UConfigPropertyBool*)*this->RootSection->SectionProperties.Find("UserDefined"))->Value;
         }
         else
         {

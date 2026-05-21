@@ -13,6 +13,7 @@ void UUniversalSwatchSlotsWorldModule::GenerateSwatchesFromPalette(FUSSPalette P
 void UUniversalSwatchSlotsWorldModule::InitUSSGameWorldModule(AUniversalSwatchSlotsSubsystem* Subsystem)
 {
 	this->USSSubsystem = Subsystem;
+	this->USSSubsystem->ResetSubSystem();
 	this->USSSubsystem->IsUsingMSS = this->IsUsingMoreSwatchSlots;
 	this->USSSubsystem->RetrieveFreeColorSlotID();
 }

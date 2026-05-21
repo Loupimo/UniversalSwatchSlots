@@ -2,6 +2,7 @@
 
 
 #include "UniversalSwatchSlotsGIModule.h"
+#include "Reflection/ClassGenerator.h"
 #include "USSBPLib.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogUniversalSwatchSlotsGI, Log, All)
@@ -12,15 +13,36 @@ UUSSSwatchDesc* UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchDescriptor(i
 {
 	FString GenName = FString::Printf(TEXT("Gen_USS_SwatchDesc_%d"), UniqueID);
 
+	if (this->SwatchDescriptorArray.Contains(UniqueID))
+	{
+		return nullptr;
+	}
+
+	UE_LOG(LogUniversalSwatchSlotsGI, Display, TEXT("Creating new class : %s"), *GenName);
+
+	FUSSSwatchDescGenInfo newSwatchDesc = { 0 };
+
+	newSwatchDesc.SwatchClass = UUSSBPLib::CreateClass(this->PackageName, GenName, UUSSSwatchDesc::StaticClass());
+	newSwatchDesc.SwatchCDO = Cast<UUSSSwatchDesc>(newSwatchDesc.SwatchClass->GetDefaultObject());
+	newSwatchDesc.SwatchInst = nullptr;
+
+	this->SwatchDescriptorArray.Add(UniqueID, newSwatchDesc);
+
+	// 1.1.0 - 1.2.1 backward compatibility
+	UClass* NewClass = (UClass*)UUSSBPLib::CreateClass(this->PackageName, GenName.Append("_C"), UUSSSwatchDesc::StaticClass());
+	this->tmpSwatchDescriptorArray.Add(NewClass);
+
+	/*
+
 	// Create a dynamic derivated class
 	UClass* NewClass = (UClass * )UUSSBPLib::FindOrCreateClass(this->PackageName, GenName, UUSSSwatchDesc::StaticClass());
-	this->SwatchDescriptorArray.Add(UniqueID, NewClass);
+	this->SwatchDescriptorArray.Add(UniqueID, NewClass);*/
 
 	// This is needed until 1.0.5 as people may have this wrong package name for their swatches
-	NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(FString("/UniversalSwatchSlots/"), GenName, UUSSSwatchDesc::StaticClass());
+	/*NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(FString("/UniversalSwatchSlots/"), GenName, UUSSSwatchDesc::StaticClass());
 	this->tmpSwatchDescriptorArray.Add(NewClass);
 	NewClass = (UClass*)GenerateDynamicClass(UUSSSwatchDesc::StaticClass(), FName(*GenName));
-	this->tmpSwatchDescriptorArray.Add(NewClass);
+	this->tmpSwatchDescriptorArray.Add(NewClass);*/
 	return nullptr;
 }
 
@@ -31,7 +53,7 @@ UUSSSwatchRecipe* UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchRecipe(int
 	FString GenName = FString::Printf(TEXT("Gen_USS_SwatchRecipe_%d"), UniqueID);
 	UClass* NewClass = (UClass *) UUSSBPLib::FindOrCreateClass(this->PackageName, GenName, UUSSSwatchRecipe::StaticClass());
 	
-	this->SwatchRecipeArray.Add(UniqueID, NewClass);
+	//this->SwatchRecipeArray.Add(UniqueID, NewClass);
 	
 	return nullptr;
 }

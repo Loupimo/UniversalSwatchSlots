@@ -20,16 +20,22 @@ TSubclassOf<UObject> UUSSBPLib::FindOrCreateClass(FString PackageName, FString N
 		return nullptr;
 	}
 	if (found) {
-		UE_LOG(LogUniversalSwatchSlotsLib, Verbose, TEXT("Class already existed so returning that instead of creating new"));
+		UE_LOG(LogUniversalSwatchSlotsLib, Display, TEXT("Class already existed so returning that instead of creating new"));
 		return found;
 	}
 	auto found_C = FindObject<UClass>(FindPackage(nullptr, *PackageName), *Name.Append("_C"), false);
 	if (found_C) {
-		UE_LOG(LogUniversalSwatchSlotsLib, Verbose, TEXT("Class already existed with _C suffix so returning that instead of creating new"));
+		UE_LOG(LogUniversalSwatchSlotsLib, Display, TEXT("Class already existed with _C suffix so returning that instead of creating new"));
 		return found_C;
 	}
-	UE_LOG(LogUniversalSwatchSlotsLib, Verbose, TEXT("Creating new class : %s"), *Name);
+	UE_LOG(LogUniversalSwatchSlotsLib, Display, TEXT("Creating new class : %s"), *Name);
 
+	return UUSSBPLib::CreateClass(PackageName, Name, ParentClass);
+}
+
+
+UClass* UUSSBPLib::CreateClass(FString PackageName, FString Name, UClass* ParentClass)
+{
 	return FClassGenerator::GenerateSimpleClass(*PackageName, *Name, ParentClass);
 }
 

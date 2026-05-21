@@ -29,6 +29,7 @@ public:
 	  */
 	UFUNCTION(BlueprintCallable)
 	static TSubclassOf<UObject> FindOrCreateClass(FString PackageName, FString Name, UClass* ParentClass);
+	static UClass* CreateClass(FString PackageName, FString Name, UClass* ParentClass);
 
 	/**
 	  * Generate a texture representing a swatch icon based on the given colors.

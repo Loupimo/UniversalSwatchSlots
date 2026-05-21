@@ -9,7 +9,60 @@
 
 #include "UniversalSwatchSlotsGIModule.generated.h"
 
+USTRUCT(BlueprintType)
+struct FUSSSwatchGenInfo
+{
+	GENERATED_BODY()
 
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
+	UClass* SwatchClass;
+};
+
+
+USTRUCT(BlueprintType)
+struct FUSSSwatchGroupGenInfo : public FUSSSwatchGenInfo
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
+	UUSSSwatchGroup* SwatchCDO;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
+	UUSSSwatchGroup* SwatchInst;
+};
+
+
+USTRUCT(BlueprintType)
+struct FUSSSwatchDescGenInfo : public FUSSSwatchGenInfo
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
+	UUSSSwatchDesc* SwatchCDO;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
+	UUSSSwatchDesc* SwatchInst;
+};
+
+USTRUCT(BlueprintType)
+struct FUSSSwatchRecipeGenInfo : public FUSSSwatchGenInfo
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
+	UUSSSwatchRecipe* SwatchCDO;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
+	UUSSSwatchRecipe* SwatchInst;
+};
 
 /**
  *
@@ -75,15 +128,21 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsGIModule : public UGameInsta
 
 public:
 
-	/* The list of all generated swatch descriptors. This array is modified when the GenerateDynamicSwatchDescriptor function is called.  */
+	/* The list of all generated swatch descriptors. This array is modified when the GenerateDynamicSwatchDescriptor function is called. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	TMap<int32, UClass*> SwatchDescriptorArray;
+	TMap<int32, FUSSSwatchDescGenInfo> SwatchDescriptorArray;
+
+	/* The list of all generated swatch group. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
+	TMap<int32, FUSSSwatchGroupGenInfo> SwatchGroupArray;
+
+	/* The list of all generated swatch recipe. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
+	TMap<int32, FUSSSwatchRecipeGenInfo> SwatchRecipeArray;
+
+	/* Store the descriptors of previous version in order to correctly patch buildings. */
 	UPROPERTY()
 	TArray<UClass*> tmpSwatchDescriptorArray;
-
-	/* The build gun blueprint class that will be used by the dynamically created swatch recipes. This array is modified when the GenerateDynamicSwatchRecipe function is called. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	TMap<int32, UClass*> SwatchRecipeArray;
 
 protected:
 

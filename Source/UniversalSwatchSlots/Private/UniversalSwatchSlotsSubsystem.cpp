@@ -10,7 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "USSBPLib.h"
 
-const EUSSVersion CurrVersion = EUSSVersion::V1_1_0;
+const EUSSVersion CurrVersion = EUSSVersion::V1_2_2;
 const FString USSSubPackageName = "/UniversalSwatchSlots";
 
 DECLARE_LOG_CATEGORY_EXTERN(LogUSS_Subsystem, Log, All)
@@ -54,6 +54,51 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 	}
 
 	bool bAnyChanged = false;
+	/*
+	TArray<FFactoryCustomizationColorSlot> newArray;
+
+	int32 ColorToCopy = 28;	// SF default slots
+
+	if (this->IsUsingMSS)
+	{
+		ColorToCopy += 20;
+	}
+
+	for (int32 i = 0; i < ColorToCopy; i++)
+	{	// Add the default colors to the array
+
+		newArray.Add(FGGameState->mBuildingColorSlots_Data[i]);
+	}
+
+	for (UUSSSwatchDesc* Swatch : SwatchDescriptions)
+	{	// Browse all the swatch descriptions
+		if (!Swatch)
+		{
+			continue;
+		}
+
+		const int32 ColourIndex = Swatch->ID;
+
+		UE_LOG(LogUSS_Subsystem, Display, TEXT("Added New color slot : %s"), *Swatch->mDisplayName.ToString());
+		FFactoryCustomizationColorSlot NewColourSlot = FFactoryCustomizationColorSlot(FLinearColor::Black, FLinearColor::Black);
+		NewColourSlot.PaintFinish = this->PaintFinishes[(uint8)Swatch->Material];
+
+		for (int32 i = newArray.Num(); i <= ColourIndex; ++i)
+		{
+			newArray.Add(NewColourSlot);
+			bAnyChanged = true;
+		}
+		
+		// Apply desired colors
+		NewColourSlot.PrimaryColor = Swatch->PrimaryColour;
+		NewColourSlot.SecondaryColor = Swatch->SecondaryColour;
+		newArray[ColourIndex] = NewColourSlot;
+
+		//FGGameState->Server_SetBuildingColorDataForSlot(ColourIndex, NewColourSlot);
+	}
+
+	FGGameState->SetupColorSlots_Data(newArray);
+	FGGameState->OnRep_BuildingColorSlot_Data();*/
 
 	for (UUSSSwatchDesc* Swatch : SwatchDescriptions)
 	{	// Browse all the swatch descriptions
@@ -72,7 +117,7 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 			for (int32 i = FGGameState->mBuildingColorSlots_Data.Num(); i <= ColourIndex; ++i)
 			{
 				FGGameState->mBuildingColorSlots_Data.Add(NewColourSlot);
-				UE_LOG(LogUSS_Subsystem, Verbose, TEXT("New color slot added to gamestate: %d"), i);
+				UE_LOG(LogUSS_Subsystem, Display, TEXT("New color slot added to gamestate: %d"), i);
 				bAnyChanged = true;
 			}
 		}
@@ -86,6 +131,8 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 			const FFactoryCustomizationColorSlot& Existing = FGGameState->mBuildingColorSlots_Data[ColourIndex];
 			if (Existing.PrimaryColor != NewColourSlot.PrimaryColor || Existing.SecondaryColor != NewColourSlot.SecondaryColor || Existing.PaintFinish != NewColourSlot.PaintFinish)
 			{
+				UE_LOG(LogUSS_Subsystem, Display, TEXT("Index %d, Existing.P = %f, %f, %f, S = %f, %f, %f "), ColourIndex, Existing.PrimaryColor.R, Existing.PrimaryColor.B, Existing.PrimaryColor.G, Existing.SecondaryColor.R, Existing.SecondaryColor.B, Existing.SecondaryColor.G);
+				UE_LOG(LogUSS_Subsystem, Display, TEXT("Index %d, New.P      = %f, %f, %f, S = %f, %f, %f "), ColourIndex, NewColourSlot.PrimaryColor.R, Existing.PrimaryColor.B, NewColourSlot.PrimaryColor.G, NewColourSlot.SecondaryColor.R, NewColourSlot.SecondaryColor.B, NewColourSlot.SecondaryColor.G);
 				FGGameState->mBuildingColorSlots_Data[ColourIndex] = NewColourSlot;
 				bAnyChanged = true;
 			}
@@ -104,8 +151,19 @@ void AUniversalSwatchSlotsSubsystem::GeneratePalette(FUSSPalette Palette)
 {
 	UE_LOG(LogUSS_Subsystem, Display, TEXT("Generating Palette : %s"), *Palette.PaletteName.ToString());
 
+	if (Palette.Groups.Num() <= 0)
+	{	// The palette is empty
+
+		return;
+	}
+
 	for (FUSSGroup currGroup : Palette.Groups)
 	{	// Browse all groups
+
+		if (currGroup.Swatches.Num() <= 0)
+		{
+			continue;
+		}
 
 		UE_LOG(LogUSS_Subsystem, Display, TEXT("Generating Group : %s"), *currGroup.Name.ToString());
 
@@ -140,41 +198,41 @@ UUSSSwatchGroup* AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchGroup(int3
 	else
 	{
 		FString genName = FString::Printf(TEXT("Gen_USS_SwatchGroup_%d"), UniqueGroupID);
+		FUSSSwatchGroupGenInfo* SwatchGroup = nullptr;
+		FUSSSwatchGroupGenInfo newSwatchGroup = { 0 };
 
-		// Create a dynamic derivated class
-		UClass* NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(*USSSubPackageName, genName, UUSSSwatchGroup::StaticClass());
+		if ((SwatchGroup = this->USSInst->SwatchGroupArray.Find(UniqueGroupID)) == nullptr)
+		{	// The group does not exist yet, we need to create it
 
-		if (NewClass)
+			newSwatchGroup.SwatchClass = UUSSBPLib::CreateClass(*USSSubPackageName, genName + FString("_Class"), UUSSSwatchGroup::StaticClass());
+			newSwatchGroup.SwatchCDO = Cast<UUSSSwatchGroup>(newSwatchGroup.SwatchClass->GetDefaultObject());
+			this->USSInst->SwatchGroupArray.Add(UniqueGroupID, newSwatchGroup);
+			SwatchGroup = &newSwatchGroup;
+		}
+
+		if (SwatchGroup->SwatchInst == nullptr)
+		{	// The group instance does not exist yet or is not valid anymore
+
+			SwatchGroup->SwatchInst = NewObject<UUSSSwatchGroup>(FindPackage(nullptr, *USSSubPackageName), SwatchGroup->SwatchClass, *FString::Printf(TEXT("%s_Inst"), *genName));
+		}
+
+		// Modify CDO properties of the generated class
+		if (SwatchGroup->SwatchCDO)
 		{
-			UObject* tempCDO = NewClass->GetDefaultObject();
+			SwatchGroup->SwatchCDO->mDisplayName = GroupInfo.Name;
+			SwatchGroup->SwatchCDO->HashName = genName;
+			SwatchGroup->SwatchCDO->mMenuPriority = GroupInfo.Priority;
+		}
 
-			if (tempCDO)
-			{
-				// Modify CDO properties of the newly generated class
-				UUSSSwatchGroup* CDO = Cast<UUSSSwatchGroup>(tempCDO);
+		// Modify instance properties of the generated class
+		if (SwatchGroup->SwatchInst)
+		{
+			SwatchGroup->SwatchInst->mDisplayName = GroupInfo.Name;
+			SwatchGroup->SwatchInst->HashName = genName;
+			SwatchGroup->SwatchInst->mMenuPriority = GroupInfo.Priority;
 
-				if (CDO)
-				{
-					CDO->mDisplayName = GroupInfo.Name;
-					CDO->HashName = genName;
-					CDO->mMenuPriority = GroupInfo.Priority;
-				}
-
-				// Create an instance to return
-				UUSSSwatchGroup* InstClass = NewObject<UUSSSwatchGroup>(FindPackage(nullptr, *USSSubPackageName), NewClass, FName(*FString::Printf(TEXT("Inst_Gen_USS_SwatchGroup_%d"), UniqueGroupID)));
-
-				if (InstClass)
-				{	// For unknown reason this instance is not initialized using our modified CDO...
-
-					InstClass->mDisplayName = GroupInfo.Name;
-					InstClass->HashName = genName;
-					InstClass->mMenuPriority = GroupInfo.Priority;
-
-					this->SwatchGroupArray.Add(UniqueGroupID, InstClass);
-				}
-
-				return InstClass;
-			}
+			this->SwatchGroupArray.Add(UniqueGroupID, SwatchGroup->SwatchInst);
+			return SwatchGroup->SwatchInst;
 		}
 	}
 
@@ -182,121 +240,129 @@ UUSSSwatchGroup* AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchGroup(int3
 }
 
 
-UUSSSwatchDesc* AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchDescriptor(int32 SlotID, FString GenName, UFGCustomizerSubCategory* SwatchGroup, FUSSSwatch SwatchInfo)
+FUSSSwatchDescGenInfo& AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchDescriptor(int32 SlotID, FString GenName, UFGCustomizerSubCategory* SwatchGroup, FUSSSwatch SwatchInfo)
 {
 	FString genName = FString::Printf(TEXT("Gen_USS_SwatchDesc_%d"), SlotID);
-	UClass* NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(USSSubPackageName, genName, UUSSSwatchDesc::StaticClass());;
 
-	if (NewClass)
+	FUSSSwatchDescGenInfo* SwatchDesc = nullptr;
+	FUSSSwatchDescGenInfo newSwatchDesc = { 0 };
+
+	if ((SwatchDesc = this->USSInst->SwatchDescriptorArray.Find(SlotID)) == nullptr)
+	{	// The descriptor does not exist yet, we need to create it
+
+		newSwatchDesc.SwatchClass = UUSSBPLib::CreateClass(*USSSubPackageName, genName + FString("_Class"), UUSSSwatchDesc::StaticClass());
+		newSwatchDesc.SwatchCDO = Cast<UUSSSwatchDesc>(newSwatchDesc.SwatchClass->GetDefaultObject());
+		this->USSInst->SwatchDescriptorArray.Add(SlotID, newSwatchDesc);
+		SwatchDesc = &newSwatchDesc;
+	}
+
+	if (SwatchDesc->SwatchInst == nullptr)
+	{	// The descriptor instance does not exist yet or is not valid anymore
+
+		SwatchDesc->SwatchInst = NewObject<UUSSSwatchDesc>(FindPackage(nullptr, *USSSubPackageName), SwatchDesc->SwatchClass, *FString::Printf(TEXT("%s_Inst"), *genName));
+	}
+
+	FLinearColor PrimaryColor = UUSSBPLib::HexToLinearColor(SwatchInfo.PrimaryColor);
+	FLinearColor SecondaryColor = UUSSBPLib::HexToLinearColor(SwatchInfo.SecondaryColor);
+
+	// Modify CDO properties of the generated class
+	if (SwatchDesc->SwatchCDO)
 	{
-		UObject* tCDO = NewClass->GetDefaultObject();
-		FLinearColor PrimaryColor = UUSSBPLib::HexToLinearColor(SwatchInfo.PrimaryColor);
-		FLinearColor SecondaryColor = UUSSBPLib::HexToLinearColor(SwatchInfo.SecondaryColor);
-
-		if (tCDO)
+		SwatchDesc->SwatchCDO->ID = SlotID;
+		SwatchDesc->SwatchCDO->HashName = GenName;
+		SwatchDesc->SwatchCDO->PrimaryColour = PrimaryColor;
+		SwatchDesc->SwatchCDO->SecondaryColour = SecondaryColor;
+		SwatchDesc->SwatchCDO->Material = SwatchInfo.Material;
+		SwatchDesc->SwatchCDO->mDisplayName = SwatchInfo.Name;
+		SwatchDesc->SwatchCDO->mDescription = this->SwatchDescription;
+		SwatchDesc->SwatchCDO->mIcon = UUSSBPLib::GenerateSwatchIcon(PrimaryColor, SecondaryColor);
+		SwatchDesc->SwatchCDO->mPersistentBigIcon = SwatchDesc->SwatchCDO->mIcon.Get();
+		SwatchDesc->SwatchCDO->mSmallIcon = SwatchDesc->SwatchCDO->mIcon.Get();
+		SwatchDesc->SwatchCDO->mCategory = this->SwatchCategory;
+		SwatchDesc->SwatchCDO->mMenuPriority = SwatchInfo.Priority;
+		if (SwatchGroup != nullptr)
 		{
-			// Create an instance to return
-			UUSSSwatchDesc* InstClass = NewObject<UUSSSwatchDesc>(FindPackage(nullptr, *USSSubPackageName), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)));
-
-
-			// Modify CDO properties of the newly generated class
-			UUSSSwatchDesc* CDO = Cast<UUSSSwatchDesc>(tCDO);
-
-			if (CDO)
-			{	// Modify the CDO
-
-				CDO->ID = SlotID;
-				CDO->HashName = GenName;
-				CDO->PrimaryColour = PrimaryColor;
-				CDO->SecondaryColour = SecondaryColor;
-				CDO->Material = SwatchInfo.Material;
-				CDO->mDisplayName = SwatchInfo.Name;
-				CDO->mDescription = this->SwatchDescription;
-				CDO->mIcon = UUSSBPLib::GenerateSwatchIcon(PrimaryColor, SecondaryColor);
-				CDO->mPersistentBigIcon = CDO->mIcon.Get();
-				CDO->mSmallIcon = CDO->mIcon.Get();
-				CDO->mCategory = this->SwatchCategory;
-				CDO->mMenuPriority = SwatchInfo.Priority;
-				if (SwatchGroup != nullptr) CDO->mSubCategories.Add(SwatchGroup->GetClass());
-			}
-
-			if (InstClass)
-			{	// For unknown reason this instance is not initialized using our modified CDO...
-
-				InstClass->ID = SlotID;
-				InstClass->HashName = GenName;
-				InstClass->PrimaryColour = PrimaryColor;
-				InstClass->SecondaryColour = SecondaryColor;
-				InstClass->Material = SwatchInfo.Material;
-				InstClass->mDisplayName = SwatchInfo.Name;
-				InstClass->mDescription = this->SwatchDescription;
-				InstClass->mIcon = CDO->mIcon;
-				InstClass->mPersistentBigIcon = CDO->mPersistentBigIcon;
-				InstClass->mSmallIcon = CDO->mSmallIcon;
-				InstClass->mCategory = this->SwatchCategory;
-				InstClass->mMenuPriority = SwatchInfo.Priority;
-				if (SwatchGroup != nullptr) InstClass->mSubCategories.Add(SwatchGroup->GetClass());
-			}
-
-			this->SwatchDescriptorArray.Add(SlotID, InstClass);
-			return InstClass;
+			SwatchDesc->SwatchCDO->mSubCategories.Empty();
+			SwatchDesc->SwatchCDO->mSubCategories.AddUnique(SwatchGroup->GetClass());
 		}
 	}
 
-	return nullptr;
+	// Modify instance properties of the generated class
+	if (SwatchDesc->SwatchInst)
+	{
+		SwatchDesc->SwatchInst->ID = SlotID;
+		SwatchDesc->SwatchInst->HashName = GenName;
+		SwatchDesc->SwatchInst->PrimaryColour = PrimaryColor;
+		SwatchDesc->SwatchInst->SecondaryColour = SecondaryColor;
+		SwatchDesc->SwatchInst->Material = SwatchInfo.Material;
+		SwatchDesc->SwatchInst->mDisplayName = SwatchInfo.Name;
+		SwatchDesc->SwatchInst->mDescription = this->SwatchDescription;
+		SwatchDesc->SwatchInst->mIcon = SwatchDesc->SwatchCDO->mIcon;
+		SwatchDesc->SwatchInst->mPersistentBigIcon = SwatchDesc->SwatchCDO->mPersistentBigIcon;
+		SwatchDesc->SwatchInst->mSmallIcon = SwatchDesc->SwatchCDO->mSmallIcon;
+		SwatchDesc->SwatchInst->mCategory = this->SwatchCategory;
+		SwatchDesc->SwatchInst->mMenuPriority = SwatchInfo.Priority;
+		if (SwatchGroup != nullptr)
+		{
+			SwatchDesc->SwatchInst->mSubCategories.Empty();
+			SwatchDesc->SwatchInst->mSubCategories.AddUnique(SwatchGroup->GetClass());
+		}
+	}
+
+	this->SwatchDescriptorArray.Add(SlotID, SwatchDesc->SwatchInst);
+
+	return *SwatchDesc;
 }
 
 
-UUSSSwatchRecipe* AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchRecipe(int32 UniqueID, UUSSSwatchDesc* SwatchDescriptor)
+UUSSSwatchRecipe* AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchRecipe(int32 UniqueID, FUSSSwatchDescGenInfo& SwatchDescriptor)
 {
-	if (SwatchDescriptor == nullptr)
-	{
-		return nullptr;
-	}
-
-	UUSSSwatchDesc* SwatchDescCDO = (UUSSSwatchDesc*)SwatchDescriptor->GetClass()->GetDefaultObject();
+	UUSSSwatchDesc* SwatchDescCDO = SwatchDescriptor.SwatchCDO;
 
 	// Create a dynamic derivated class
 	FString genName = FString::Printf(TEXT("Gen_USS_SwatchRecipe_%d"), UniqueID);
-	UClass* NewClass = (UClass*)UUSSBPLib::FindOrCreateClass(USSSubPackageName, genName, UUSSSwatchRecipe::StaticClass());
 
-	if (NewClass)
-	{
-		UObject* tempCDO = NewClass->GetDefaultObject();
+	FUSSSwatchRecipeGenInfo* SwatchRecipe = nullptr;
+	FUSSSwatchRecipeGenInfo newSwatchRecipe = { 0 };
 
-		if (tempCDO)
-		{
-			// Modify CDO properties of the newly generated class
-			UUSSSwatchRecipe* CDO = Cast<UUSSSwatchRecipe>(tempCDO);
-			if (CDO)
-			{
-				CDO->mDisplayName = SwatchDescCDO->mDisplayName;
-				CDO->HashName = genName;
-				CDO->mCustomizationDesc = SwatchDescCDO->GetClass();
-				CDO->mProducedIn.Add(this->BuildGunBPClass);
-			}
+	if ((SwatchRecipe = this->USSInst->SwatchRecipeArray.Find(UniqueID)) == nullptr)
+	{	// The recipe does not exist yet, we need to create it
 
-			// Create an instance to return
-			UUSSSwatchRecipe* InstClass = NewObject<UUSSSwatchRecipe>(FindPackage(nullptr, *USSSubPackageName), NewClass, FName(*FString::Printf(TEXT("Inst_%s"), *genName)));
-
-			if (InstClass)
-			{	// For unknown reason this instance is not initialized using our modified CDO...
-
-				InstClass->mDisplayName = SwatchDescCDO->mDisplayName;
-				InstClass->HashName = genName;
-				InstClass->mCustomizationDesc = SwatchDescCDO->GetClass();
-				InstClass->mProducedIn.Add(this->BuildGunBPClass);
-
-				if (!this->SwatchRecipeArray.Contains(SwatchDescCDO->ID))
-				{
-					this->SwatchRecipeArray.Add(SwatchDescCDO->ID, InstClass);
-				}
-			}
-
-			return InstClass;
-		}
+		newSwatchRecipe.SwatchClass = UUSSBPLib::CreateClass(*USSSubPackageName, genName + FString("_Class"), UUSSSwatchRecipe::StaticClass());
+		newSwatchRecipe.SwatchCDO = Cast<UUSSSwatchRecipe>(newSwatchRecipe.SwatchClass->GetDefaultObject());
+		this->USSInst->SwatchRecipeArray.Add(UniqueID, newSwatchRecipe);
+		SwatchRecipe = &newSwatchRecipe;
 	}
 
+	if (SwatchRecipe->SwatchInst == nullptr)
+	{	// The descriptor instance does not exist yet or is not valid anymore
+
+		SwatchRecipe->SwatchInst = NewObject<UUSSSwatchRecipe>(FindPackage(nullptr, *USSSubPackageName), SwatchRecipe->SwatchClass, *FString::Printf(TEXT("%s_Inst"), *genName));
+	}
+
+	// Modify CDO properties of the generated class
+	if (SwatchRecipe->SwatchCDO)
+	{
+		SwatchRecipe->SwatchCDO->mDisplayName = SwatchDescCDO->mDisplayName;
+		SwatchRecipe->SwatchCDO->HashName = genName;
+		SwatchRecipe->SwatchCDO->mCustomizationDesc = SwatchDescCDO->GetClass();
+		SwatchRecipe->SwatchCDO->mProducedIn.Empty();
+		SwatchRecipe->SwatchCDO->mProducedIn.AddUnique(this->BuildGunBPClass);
+	}
+
+	// Modify instance properties of the generated class
+	if (SwatchRecipe->SwatchInst)
+	{
+		SwatchRecipe->SwatchInst->mDisplayName = SwatchDescCDO->mDisplayName;
+		SwatchRecipe->SwatchInst->HashName = genName;
+		SwatchRecipe->SwatchInst->mCustomizationDesc = SwatchDescCDO->GetClass();
+		SwatchRecipe->SwatchInst->mProducedIn.Empty();
+		SwatchRecipe->SwatchInst->mProducedIn.AddUnique(this->BuildGunBPClass);
+
+		this->SwatchRecipeArray.Add(UniqueID, SwatchRecipe->SwatchInst);
+		return SwatchRecipe->SwatchInst;
+	}
+	
 	return nullptr;
 }
 
@@ -342,11 +408,9 @@ bool AUniversalSwatchSlotsSubsystem::GenerateNewSwatchUsingInfo(UUSSSwatchGroup*
 		this->InternalSwatchMatch.Add(slotID, slotID);
 	}
 
-	UUSSSwatchDesc* SwatchDescriptor = this->GenerateDynamicSwatchDescriptor(slotID, genName, SwatchGroup, SwatchInfo);
-
 	this->ValidSlotIDs.RemoveAt(0);
 
-	this->GenerateDynamicSwatchRecipe(slotID, SwatchDescriptor);
+	this->GenerateDynamicSwatchRecipe(slotID, this->GenerateDynamicSwatchDescriptor(slotID, genName, SwatchGroup, SwatchInfo));
 
 	return true;
 }
@@ -357,7 +421,7 @@ void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
 	TArray<AActor*> foundActors;
 	bool shouldPatch = false;
 
-	if (this->SaveVersion == EUSSVersion::None)
+	if (this->SaveVersion != CurrVersion)
 	{	// We need to make a check anyway
 
 		shouldPatch = true;
@@ -404,13 +468,15 @@ void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
 				if (matchID)
 				{	// We have found a matching swatch descriptor 
 
-					UUSSSwatchDesc** newDesc = this->SwatchDescriptorArray.Find(*matchID);
+					FUSSSwatchDescGenInfo* newDesc = this->USSInst->SwatchDescriptorArray.Find(*matchID);
 
 					if (newDesc)
 					{	// There is a valid swatch descriptor
 
-						castBuild->mCustomizationData.SwatchDesc = (*newDesc)->GetClass()->GetDefaultObject()->GetClass();
-						UE_LOG(LogUSS_Subsystem, Display, TEXT("Patching descriptor \"%s\" with \"%s\" named \"%s\" for building \"%s\"."), *castDesc->GetPathName(), *((*newDesc)->GetClass()->GetDefaultObject()->GetClass()->GetPathName()), *(*newDesc)->mDisplayName.ToString(), *castBuild->GetName());
+						castBuild->mCustomizationData.ColorSlot = (uint8)*matchID;
+						castBuild->mCustomizationData.SwatchDesc = newDesc->SwatchClass;
+						castBuild->SetCustomizationData_Native(castBuild->mCustomizationData);
+						UE_LOG(LogUSS_Subsystem, Warning, TEXT("Patching descriptor \"%s\" with \"%s\" named \"%s\" for building \"%s\"."), *castDesc->GetPathName(), *newDesc->SwatchClass->GetPathName(), *(newDesc->SwatchInst)->mDisplayName.ToString(), *castBuild->GetName());
 					}
 					else
 					{	// There is no valid descriptor
@@ -441,6 +507,40 @@ void AUniversalSwatchSlotsSubsystem::RetrieveFreeColorSlotID()
 	{
 		this->ValidSlotIDs.Add(i);
 	}
+}
+
+
+void AUniversalSwatchSlotsSubsystem::ResetSubSystem()
+{
+	/*if (this->USSInst)
+	{
+		for (auto& tmp : this->USSInst->SwatchRecipeArray)
+		{
+			if (tmp.Value.SwatchInst->IsValidLowLevelFast())
+			{
+				tmp.Value.SwatchInst->ConditionalBeginDestroy();
+				tmp.Value.SwatchInst = nullptr;
+			}
+		}
+
+		for (auto& tmp : this->USSInst->SwatchGroupArray)
+		{
+			if (tmp.Value.SwatchInst->IsValidLowLevelFast())
+			{
+				tmp.Value.SwatchInst->ConditionalBeginDestroy();
+				tmp.Value.SwatchInst = nullptr;
+			}
+		}
+
+		for (auto& tmp : this->USSInst->SwatchDescriptorArray)
+		{
+			if (tmp.Value.SwatchInst->IsValidLowLevelFast())
+			{
+				tmp.Value.SwatchInst->ConditionalBeginDestroy();
+				tmp.Value.SwatchInst = nullptr;
+			}
+		}
+	}*/
 }
 
 
