@@ -199,7 +199,10 @@ UUSSSwatchGroup* AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchGroup(int3
 	{
 		FString genName = FString::Printf(TEXT("Gen_USS_SwatchGroup_%d"), UniqueGroupID);
 		FUSSSwatchGroupGenInfo* SwatchGroup = nullptr;
-		FUSSSwatchGroupGenInfo newSwatchGroup = { 0 };
+		FUSSSwatchGroupGenInfo newSwatchGroup;
+		newSwatchGroup.SwatchClass = nullptr;
+		newSwatchGroup.SwatchCDO = nullptr;
+		newSwatchGroup.SwatchInst = nullptr;
 
 		if ((SwatchGroup = this->USSInst->SwatchGroupArray.Find(UniqueGroupID)) == nullptr)
 		{	// The group does not exist yet, we need to create it
@@ -245,7 +248,10 @@ FUSSSwatchDescGenInfo& AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchDesc
 	FString genName = FString::Printf(TEXT("Gen_USS_SwatchDesc_%d"), SlotID);
 
 	FUSSSwatchDescGenInfo* SwatchDesc = nullptr;
-	FUSSSwatchDescGenInfo newSwatchDesc = { 0 };
+	FUSSSwatchDescGenInfo newSwatchDesc;
+	newSwatchDesc.SwatchClass = nullptr;
+	newSwatchDesc.SwatchCDO = nullptr;
+	newSwatchDesc.SwatchInst = nullptr;
 
 	if ((SwatchDesc = this->USSInst->SwatchDescriptorArray.Find(SlotID)) == nullptr)
 	{	// The descriptor does not exist yet, we need to create it
@@ -323,7 +329,10 @@ UUSSSwatchRecipe* AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchRecipe(in
 	FString genName = FString::Printf(TEXT("Gen_USS_SwatchRecipe_%d"), UniqueID);
 
 	FUSSSwatchRecipeGenInfo* SwatchRecipe = nullptr;
-	FUSSSwatchRecipeGenInfo newSwatchRecipe = { 0 };
+	FUSSSwatchRecipeGenInfo newSwatchRecipe;
+	newSwatchRecipe.SwatchClass = nullptr;
+	newSwatchRecipe.SwatchCDO = nullptr;
+	newSwatchRecipe.SwatchInst = nullptr;
 
 	if ((SwatchRecipe = this->USSInst->SwatchRecipeArray.Find(UniqueID)) == nullptr)
 	{	// The recipe does not exist yet, we need to create it

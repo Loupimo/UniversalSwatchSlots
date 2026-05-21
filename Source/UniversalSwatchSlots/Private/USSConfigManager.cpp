@@ -57,8 +57,6 @@ void UUSSConfigManager::InitConfigManager()
     {
         if (this->RootSection->SectionProperties.Contains("UserDefined"))
         {
-            //FString userDefined = ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("UserDefined"))->Value;
-            //this->ShouldActivateDefault = userDefined == FString("No") ? true : false;
             this->ShouldActivateDefault = !((UConfigPropertyBool*)*this->RootSection->SectionProperties.Find("UserDefined"))->Value;
         }
         else
@@ -76,6 +74,8 @@ void UUSSConfigManager::InitConfigManager()
             DefaultPalette->IsActive = true;
             ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->Value = DefaultPalette->PaletteName.ToString();
             ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->MarkDirty();
+
+            UE_LOG(LogUSSConfigManager, Display, TEXT("Activate Default Palette \"%s\"."), *DefaultPalette->PaletteName.ToString());
         }
         this->ConfPalettes.Add(this->GetConfigurationFolderPath() + DefaultPalette->PaletteName.ToString(), *DefaultPalette);
     }
@@ -95,6 +95,7 @@ bool UUSSConfigManager::FixActivePalette()
             {   // We already have an active palette
                 
                 currConf.Value.IsActive = false;
+                UE_LOG(LogUSSConfigManager, Display, TEXT("Palette \"%s\" is marked as active but an active palette is already set. Deactivating this one."), *currConf.Value.PaletteName.ToString());
             }
             else
             {   // This is the first one
@@ -102,6 +103,7 @@ bool UUSSConfigManager::FixActivePalette()
                 activeFound = true;
                 ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->Value = currConf.Value.PaletteName.ToString();
                 ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->MarkDirty();
+                UE_LOG(LogUSSConfigManager, Display, TEXT("Activate Palette \"%s\"."), *currConf.Value.PaletteName.ToString());
             }
         }
     }
@@ -114,6 +116,8 @@ void UUSSConfigManager::FindConfigurationFiles()
 {
     //Determine configuration path and try to read it to string if it exists
     const FString ConfigurationFolderPath = GetConfigurationFolderPath();
+
+    UE_LOG(LogUSSConfigManager, Display, TEXT("Looking for configuration file from floder : %s"), *ConfigurationFolderPath);
     FString ConfigurationFilePath = ConfigurationFolderPath;
     FJsonSerializableArray arr;
     FFileManagerGeneric fm = FFileManagerGeneric();
@@ -123,6 +127,7 @@ void UUSSConfigManager::FindConfigurationFiles()
     {   // Check for all configurations
 
         ConfigurationFilePath = ConfigurationFolderPath + filePath;
+        UE_LOG(LogUSSConfigManager, Display, TEXT("Found configuration file : %s"), *ConfigurationFilePath);
         this->ConfPaths.Add(ConfigurationFilePath, false);
     }
 }

@@ -74,24 +74,6 @@ public:
 	//FLinearColor SecondaryColour;
 };
 
-USTRUCT(BlueprintType)
-struct FUSSSession {
-	GENERATED_BODY()
-
-public:
-	/* The palette name. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString SessionName;
-
-	/* Tells if the primary colors should be added to the player clor preset or not. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool AddPrimaryColorsToPreset;
-
-	/* Tells if the secondary colors should be added to the player clor preset or not. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool AddSecondaryColorsToPreset;
-};
-
 
 USTRUCT(BlueprintType)
 struct FUSSGroup {
@@ -131,6 +113,14 @@ public:
 	/* Tells if the secondary colors should be added to the player color preset or not. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool AddSecondaryColorsToPreset;
+
+	/* Tells if the primary colors should be removed from the player color preset or not. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool RemovePrimaryColorsToPreset;
+
+	/* Tells if the secondary colors should be removed from the player color preset or not. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool RemoveSecondaryColorsToPreset;
 
 	/* The swatches contained in this palette. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

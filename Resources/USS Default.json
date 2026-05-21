@@ -5,6 +5,8 @@
 		"IsActive": false,
 		"AddPrimaryColorsToPreset": true,
 		"AddSecondaryColorsToPreset": true,
+		"RemovePrimaryColorsToPreset": false,
+		"RemoveSecondaryColorsToPreset": false,
 		"Groups": [
 			{
 				"Name": "LOCTABLE(\"/UniversalSwatchSlots/Config/StringTables/USS_DefaultConf_ST.USS_DefaultConf_ST\", \"DefPal_Iron_Group_Name\")",

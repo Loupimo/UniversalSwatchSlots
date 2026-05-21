@@ -20,7 +20,7 @@ UUSSSwatchDesc* UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchDescriptor(i
 
 	UE_LOG(LogUniversalSwatchSlotsGI, Display, TEXT("Creating new class : %s"), *GenName);
 
-	FUSSSwatchDescGenInfo newSwatchDesc = { 0 };
+	FUSSSwatchDescGenInfo newSwatchDesc;
 
 	newSwatchDesc.SwatchClass = UUSSBPLib::CreateClass(this->PackageName, GenName, UUSSSwatchDesc::StaticClass());
 	newSwatchDesc.SwatchCDO = Cast<UUSSSwatchDesc>(newSwatchDesc.SwatchClass->GetDefaultObject());

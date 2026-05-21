@@ -34,6 +34,15 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	UFUNCTION(BlueprintCallable, Category = "Config")
 	void InitUSSGameWorldModule(AUniversalSwatchSlotsSubsystem* Subsystem);
 
+
+	/**
+	 * Add / remove the given swatch colors to / from the gamestate player preset.
+	 *
+	 * @param	SwatchDescriptions		The swatch descriptors to use.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Swatch")
+	void ApplySwatchesColorOptionToPreset(TArray<UUSSSwatchDesc*> SwatchDescriptions, bool AddPrimaryColors, bool AddSecondaryColors, bool RemovePrimayColors, bool RemoveSecondaryColors);
+
 public:
 
 	/* Tells if More Swatch slots mod is loaded. */
