@@ -53,7 +53,7 @@ void UUSSConfigManager::InitConfigManager()
     bool activePaletteFound = this->FixActivePalette();
 
     // Check if we should active the default configuration or not
-    if (this->RootSection)
+    /*if (this->RootSection)
     {
         if (this->RootSection->SectionProperties.Contains("UserDefined"))
         {
@@ -63,17 +63,17 @@ void UUSSConfigManager::InitConfigManager()
         {
             this->ShouldActivateDefault = true;
         }
-    }
+    }*/
 
     if (!defaultPalFound)
     {   // We need to add the default palette
 
-        if (!activePaletteFound && this->ShouldActivateDefault)
+        if (!activePaletteFound/* && this->ShouldActivateDefault*/)
         {   // We need to activate the default configuration
 
             DefaultPalette->IsActive = true;
-            ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->Value = DefaultPalette->PaletteName.ToString();
-            ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->MarkDirty();
+            /*((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->Value = DefaultPalette->PaletteName.ToString();
+            ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->MarkDirty();*/
 
             UE_LOG(LogUSSConfigManager, Display, TEXT("Activate Default Palette \"%s\"."), *DefaultPalette->PaletteName.ToString());
         }
@@ -101,8 +101,8 @@ bool UUSSConfigManager::FixActivePalette()
             {   // This is the first one
 
                 activeFound = true;
-                ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->Value = currConf.Value.PaletteName.ToString();
-                ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->MarkDirty();
+                /*((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->Value = currConf.Value.PaletteName.ToString();
+                ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->MarkDirty();*/
                 UE_LOG(LogUSSConfigManager, Display, TEXT("Activate Palette \"%s\"."), *currConf.Value.PaletteName.ToString());
             }
         }
