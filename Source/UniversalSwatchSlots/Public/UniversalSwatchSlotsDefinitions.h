@@ -60,7 +60,7 @@ public:
 	FText Name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Priority;
+	int Priority;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EUSSSwatchMaterial Material;
@@ -86,7 +86,7 @@ public:
 
 	/* The palette name. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Priority;
+	int Priority;
 
 	/* The swatches contained in this palette. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

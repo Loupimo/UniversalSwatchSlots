@@ -224,7 +224,7 @@ UUSSSwatchGroup* AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchGroup(int3
 		{
 			SwatchGroup->SwatchCDO->mDisplayName = GroupInfo.Name;
 			SwatchGroup->SwatchCDO->HashName = genName;
-			SwatchGroup->SwatchCDO->mMenuPriority = GroupInfo.Priority;
+			SwatchGroup->SwatchCDO->mMenuPriority = (float)GroupInfo.Priority;
 		}
 
 		// Modify instance properties of the generated class
@@ -232,7 +232,7 @@ UUSSSwatchGroup* AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchGroup(int3
 		{
 			SwatchGroup->SwatchInst->mDisplayName = GroupInfo.Name;
 			SwatchGroup->SwatchInst->HashName = genName;
-			SwatchGroup->SwatchInst->mMenuPriority = GroupInfo.Priority;
+			SwatchGroup->SwatchInst->mMenuPriority = (float)GroupInfo.Priority;
 
 			this->SwatchGroupArray.Add(UniqueGroupID, SwatchGroup->SwatchInst);
 			return SwatchGroup->SwatchInst;
@@ -285,7 +285,7 @@ FUSSSwatchDescGenInfo& AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchDesc
 		SwatchDesc->SwatchCDO->mPersistentBigIcon = SwatchDesc->SwatchCDO->mIcon.Get();
 		SwatchDesc->SwatchCDO->mSmallIcon = SwatchDesc->SwatchCDO->mIcon.Get();
 		SwatchDesc->SwatchCDO->mCategory = this->SwatchCategory;
-		SwatchDesc->SwatchCDO->mMenuPriority = SwatchInfo.Priority;
+		SwatchDesc->SwatchCDO->mMenuPriority = (float)SwatchInfo.Priority;
 		if (SwatchGroup != nullptr)
 		{
 			SwatchDesc->SwatchCDO->mSubCategories.Empty();
@@ -307,7 +307,7 @@ FUSSSwatchDescGenInfo& AUniversalSwatchSlotsSubsystem::GenerateDynamicSwatchDesc
 		SwatchDesc->SwatchInst->mPersistentBigIcon = SwatchDesc->SwatchCDO->mPersistentBigIcon;
 		SwatchDesc->SwatchInst->mSmallIcon = SwatchDesc->SwatchCDO->mSmallIcon;
 		SwatchDesc->SwatchInst->mCategory = this->SwatchCategory;
-		SwatchDesc->SwatchInst->mMenuPriority = SwatchInfo.Priority;
+		SwatchDesc->SwatchInst->mMenuPriority = (float)SwatchInfo.Priority;
 		if (SwatchGroup != nullptr)
 		{
 			SwatchDesc->SwatchInst->mSubCategories.Empty();
