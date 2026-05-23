@@ -57,10 +57,11 @@ public:
 	 *
 	 * Note : if the configuration doesn't exist it will add it to the ConfPaths and ConfPalettes maps.
 	 * 
+	 * @param	OldName		The palette to name before the palette was dirty.
 	 * @param	ToMark		The palette to mark as dirty.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Config")
-	void MarkConfigurationAsDirty(FUSSPalette ToMark);
+	void MarkConfigurationAsDirty(FText OldName, FUSSPalette ToMark);
 	
 	/**
 	 * Mark the configuration as deleted.

@@ -434,6 +434,7 @@ void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
 	{	// We need to make a check anyway
 
 		shouldPatch = true;
+		UE_LOG(LogUSS_Subsystem, Display, TEXT("Version mismatch, save version : %d, expected : %d. Patching buildings descriptor..."), this->SaveVersion, CurrVersion);
 	}
 	else
 	{
@@ -443,6 +444,7 @@ void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
 			{	// We need to update
 
 				shouldPatch = true;
+				UE_LOG(LogUSS_Subsystem, Display, TEXT("Palette mismatch for swatch ID %d at ID %d. Patching buildings descriptor..."), Match.Key, Match.Value);
 				break;
 			}
 		}
@@ -452,7 +454,6 @@ void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
 	{	// We should patch buildings
 
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFGBuildable::StaticClass(), foundActors);
-		UE_LOG(LogUSS_Subsystem, Display, TEXT("Version or palette mismatch. Patching buildings descriptor..."));
 
 		for (AActor* CurrBuilding : foundActors)
 		{	// Check all actors of type AFGBuildable
@@ -638,4 +639,5 @@ void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<UUSSSwatchDesc*>
 void AUniversalSwatchSlotsSubsystem::UpdateSavedVersion()
 {
 	this->SaveVersion = CurrVersion;
+	UE_LOG(LogUSS_Subsystem, Display, TEXT("Update save version to %d"), this->SaveVersion);
 }

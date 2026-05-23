@@ -94,6 +94,7 @@ bool UUSSConfigManager::FixActivePalette()
             if (activeFound)
             {   // We already have an active palette
                 
+                *this->ConfPaths.Find(currConf.Key) = true; // Mark the palette as dirty
                 currConf.Value.IsActive = false;
                 UE_LOG(LogUSSConfigManager, Display, TEXT("Palette \"%s\" is marked as active but an active palette is already set. Deactivating this one."), *currConf.Value.PaletteName.ToString());
             }
@@ -133,16 +134,16 @@ void UUSSConfigManager::FindConfigurationFiles()
 }
 
 
-void UUSSConfigManager::MarkConfigurationAsDirty(FUSSPalette ToMark)
+void UUSSConfigManager::MarkConfigurationAsDirty(FText OldName, FUSSPalette ToMark)
 {
-    FString ConfPath = this->GetConfigurationFolderPath() + ToMark.PaletteName.ToString();
+    FString ConfPath = this->GetConfigurationFolderPath() + OldName.ToString(); // Use the old name to find the palette
 
-    FUSSPalette* exist = this->ConfPalettes.Find(ConfPath);
     bool* mark = this->ConfPaths.Find(ConfPath);
 
-    if (exist == nullptr)
+    if (mark == nullptr)
     {   // The configuration doesn't exist yet
 
+        ConfPath = this->GetConfigurationFolderPath() + ToMark.PaletteName.ToString(); // The palette does not exist, we can use the current name
         this->ConfPalettes.Add(ConfPath, ToMark);
         this->ConfPaths.Add(ConfPath, true);
         this->ConfToDelete.Remove(ConfPath);
@@ -150,24 +151,31 @@ void UUSSConfigManager::MarkConfigurationAsDirty(FUSSPalette ToMark)
     else
     {   // The configuration already exist
 
-        *exist = ToMark;
-    }
-
-    if (mark == nullptr)
-    {
-        this->ConfPaths.Add(ConfPath, true);
-        this->ConfToDelete.Remove(ConfPath);
-    }
-    else
-    {
         *mark = true;
         this->ConfToDelete.Remove(ConfPath);
+
+        if (OldName.ToString() != ToMark.PaletteName.ToString())
+        {
+            this->ConfPalettes.Remove(ConfPath);
+            this->ConfPaths.Remove(ConfPath);
+
+            ConfPath = this->GetConfigurationFolderPath() + ToMark.PaletteName.ToString();
+            this->ConfPalettes.Add(ConfPath, ToMark);
+        }
+        else
+        {
+            *this->ConfPalettes.Find(ConfPath) = ToMark;
+            UE_LOG(LogUSSConfigManager, Display, TEXT("%d configuration is marked as dirty"), *this->ConfPaths.Find(ConfPath));
+        }
     }
+
+    UE_LOG(LogUSSConfigManager, Display, TEXT("%s configuration is marked as dirty"), *ConfPath);
 }
 
 
 void UUSSConfigManager::MarkConfigurationAsDeleted(FString ConfPath)
 {
+    UE_LOG(LogUSSConfigManager, Display, TEXT("Deteting configuration %s"), *ConfPath);
     ConfPath = this->GetConfigurationFolderPath() + ConfPath;
     this->ConfPaths.Remove(ConfPath);
     this->ConfPalettes.Remove(ConfPath);
@@ -232,9 +240,15 @@ void UUSSConfigManager::SaveAndDeleteConfigurations()
             FUSSPalette* ToSave = this->ConfPalettes.Find(SaveConf.Key);
             if (ToSave)
             {
-                UE_LOG(LogUSSConfigManager, Verbose, TEXT("Saving configuration %s"), *SaveConf.Key);
-
-                this->SavePaletteToConfiguration(SaveConf.Key, *ToSave);
+                UE_LOG(LogUSSConfigManager, Display, TEXT("Saving configuration %s"), *SaveConf.Key);
+                if (SaveConf.Key.EndsWith(".json"))
+                {
+                    this->SavePaletteToConfiguration(SaveConf.Key, *ToSave);
+                }
+                else
+                {
+                    this->SavePaletteToConfiguration(SaveConf.Key + ".json", *ToSave);
+                }
             }
         }
     }
