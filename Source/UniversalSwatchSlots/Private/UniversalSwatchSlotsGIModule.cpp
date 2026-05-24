@@ -9,19 +9,21 @@ DECLARE_LOG_CATEGORY_EXTERN(LogUniversalSwatchSlotsGI, Log, All)
 
 DEFINE_LOG_CATEGORY(LogUniversalSwatchSlotsGI)
 
-UUSSSwatchDesc* UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchDescriptor(int32 UniqueID)
+void UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchDescriptor(int32 UniqueID)
 {
 	FString GenName = FString::Printf(TEXT("Gen_USS_SwatchDesc_%d"), UniqueID);
 
 	if (this->SwatchDescriptorArray.Contains(UniqueID))
-	{
-		return nullptr;
+	{	// A swatch descriptor class already exist at this ID, reuse it.
+
+		return;
 	}
 
 	UE_LOG(LogUniversalSwatchSlotsGI, Display, TEXT("Creating new class : %s"), *GenName);
 
 	FUSSSwatchDescGenInfo newSwatchDesc;
 
+	// Create the swatch descriptor class but no instance. Instance will be created by the USSSubsytem at world loading.
 	newSwatchDesc.SwatchClass = UUSSBPLib::CreateClass(this->PackageName, GenName, UUSSSwatchDesc::StaticClass());
 	newSwatchDesc.SwatchCDO = Cast<UUSSSwatchDesc>(newSwatchDesc.SwatchClass->GetDefaultObject());
 	newSwatchDesc.SwatchInst = nullptr;
@@ -43,19 +45,6 @@ UUSSSwatchDesc* UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchDescriptor(i
 	this->tmpSwatchDescriptorArray.Add(NewClass);
 	NewClass = (UClass*)GenerateDynamicClass(UUSSSwatchDesc::StaticClass(), FName(*GenName));
 	this->tmpSwatchDescriptorArray.Add(NewClass);*/
-	return nullptr;
-}
-
-
-UUSSSwatchRecipe* UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchRecipe(int32 UniqueID)
-{
-	// Create a dynamic derivated class
-	FString GenName = FString::Printf(TEXT("Gen_USS_SwatchRecipe_%d"), UniqueID);
-	UClass* NewClass = (UClass *) UUSSBPLib::FindOrCreateClass(this->PackageName, GenName, UUSSSwatchRecipe::StaticClass());
-	
-	//this->SwatchRecipeArray.Add(UniqueID, NewClass);
-	
-	return nullptr;
 }
 
 
@@ -67,38 +56,6 @@ void UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchClasses()
 	for (int32 i = startID; i < maxSlots; i++)
 	{
 		this->GenerateDynamicSwatchDescriptor(i);
-		// Skip recipe generation to prevent ReliableBufferOverflow replication bloat; descriptors alone are sufficient for save compatibility.
+		// Skip recipe generation to prevent ReliableBufferOverflow replication bloat; descriptors alone are sufficient for save compatibility / building patching.
 	}
-}
-
-
-UClass* UUniversalSwatchSlotsGIModule::GenerateDynamicClass(UClass* TemplateClass, FName GeneratedClassName)
-{
-	if (!TemplateClass || !TemplateClass->IsValidLowLevelFast())
-	{
-		return nullptr;
-	}
-
-	UClass* NewClass = NewObject<UClass>(GetTransientPackage(), GeneratedClassName, RF_Public | RF_Transient);
-
-	if (NewClass)
-	{
-		// Setting UCLASS properties
-		NewClass->PurgeClass(false);
-		NewClass->ClassFlags |= CLASS_Transient;
-		NewClass->PropertyLink = TemplateClass->PropertyLink;
-
-		// Setting class constructor
-		NewClass->ClassConstructor = TemplateClass->ClassConstructor;
-		NewClass->ClassWithin = TemplateClass->ClassWithin;
-
-		// Setting parent class
-		NewClass->SetSuperStruct(TemplateClass);
-
-		// Compile class
-		NewClass->StaticLink(true);
-		NewClass->Bind();
-	}
-
-	return NewClass;
 }

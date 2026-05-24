@@ -33,16 +33,9 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	TMap<FString, FUSSPalette> ConfPalettes;
 
-	/* The configuration path that are marked as deleted / for deletion. */
-	UPROPERTY(BlueprintReadOnly)
-	TArray<FString> ConfToDelete;
-
 	/* The table that represent the structure used to save / load the configuration files. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UDataTable* DefaultTable;
-
-	/* Tells if we should automatically activate the default palette as the active one. */
-	bool ShouldActivateDefault;
 
 public:
 
@@ -64,12 +57,12 @@ public:
 	void MarkConfigurationAsDirty(FText OldName, FUSSPalette ToMark);
 	
 	/**
-	 * Mark the configuration as deleted.
+	 * Delete the given configuration.
 	 *
-	 * @param	ToMark		The palette to mark as deleted.
+	 * @param	ToDelete		The palette to deleted.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Config")
-	void MarkConfigurationAsDeleted(FString ToMark);
+	void DeleteConfiguration(FString ToDelete);
 	
 	/**
 	 * Get the configuration folder path for this mod.
@@ -80,10 +73,10 @@ public:
 	FString GetConfigurationFolderPath();
 
 	/**
-	 * Save all the file marked as dirty and delete all the one marked as deleted.
+	 * Save all the files marked as dirty.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Config")
-	void SaveAndDeleteConfigurations();
+	void SaveConfigurations();
 
 	/**
 	 * Save the given palette to the desired configuration file.

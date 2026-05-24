@@ -16,8 +16,6 @@
 #include "ModLoading/ModLoadingLibrary.h"
 #include "Util/EngineUtil.h"
 #include "HAL/FileManagerGeneric.h"
-#include "Configuration/Properties/ConfigPropertyString.h"
-#include "Configuration/Properties/ConfigPropertyBool.h"
 
 
 DECLARE_LOG_CATEGORY_EXTERN(LogUSSConfigManager, Log, All)
@@ -52,28 +50,13 @@ void UUSSConfigManager::InitConfigManager()
 
     bool activePaletteFound = this->FixActivePalette();
 
-    // Check if we should active the default configuration or not
-    /*if (this->RootSection)
-    {
-        if (this->RootSection->SectionProperties.Contains("UserDefined"))
-        {
-            this->ShouldActivateDefault = !((UConfigPropertyBool*)*this->RootSection->SectionProperties.Find("UserDefined"))->Value;
-        }
-        else
-        {
-            this->ShouldActivateDefault = true;
-        }
-    }*/
-
     if (!defaultPalFound)
     {   // We need to add the default palette
 
-        if (!activePaletteFound/* && this->ShouldActivateDefault*/)
+        if (!activePaletteFound)
         {   // We need to activate the default configuration
 
             DefaultPalette->IsActive = true;
-            /*((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->Value = DefaultPalette->PaletteName.ToString();
-            ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->MarkDirty();*/
 
             UE_LOG(LogUSSConfigManager, Display, TEXT("Activate Default Palette \"%s\"."), *DefaultPalette->PaletteName.ToString());
         }
@@ -102,8 +85,6 @@ bool UUSSConfigManager::FixActivePalette()
             {   // This is the first one
 
                 activeFound = true;
-                /*((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->Value = currConf.Value.PaletteName.ToString();
-                ((UConfigPropertyString*)*this->RootSection->SectionProperties.Find("ActivePalette"))->MarkDirty();*/
                 UE_LOG(LogUSSConfigManager, Display, TEXT("Activate Palette \"%s\"."), *currConf.Value.PaletteName.ToString());
             }
         }
@@ -146,13 +127,11 @@ void UUSSConfigManager::MarkConfigurationAsDirty(FText OldName, FUSSPalette ToMa
         ConfPath = this->GetConfigurationFolderPath() + ToMark.PaletteName.ToString(); // The palette does not exist, we can use the current name
         this->ConfPalettes.Add(ConfPath, ToMark);
         this->ConfPaths.Add(ConfPath, true);
-        this->ConfToDelete.Remove(ConfPath);
     }
     else
     {   // The configuration already exist
 
         *mark = true;
-        this->ConfToDelete.Remove(ConfPath);
 
         if (OldName.ToString() != ToMark.PaletteName.ToString())
         {
@@ -165,7 +144,6 @@ void UUSSConfigManager::MarkConfigurationAsDirty(FText OldName, FUSSPalette ToMa
         else
         {
             *this->ConfPalettes.Find(ConfPath) = ToMark;
-            UE_LOG(LogUSSConfigManager, Display, TEXT("%d configuration is marked as dirty"), *this->ConfPaths.Find(ConfPath));
         }
     }
 
@@ -173,14 +151,13 @@ void UUSSConfigManager::MarkConfigurationAsDirty(FText OldName, FUSSPalette ToMa
 }
 
 
-void UUSSConfigManager::MarkConfigurationAsDeleted(FString ConfPath)
+void UUSSConfigManager::DeleteConfiguration(FString ToDelete)
 {
-    UE_LOG(LogUSSConfigManager, Display, TEXT("Deteting configuration %s"), *ConfPath);
-    ConfPath = this->GetConfigurationFolderPath() + ConfPath;
-    this->ConfPaths.Remove(ConfPath);
-    this->ConfPalettes.Remove(ConfPath);
-    //this->ConfToDelete.Add(ConfPath);
-    FPlatformFileManager::Get().GetPlatformFile().DeleteFile(ConfPath.GetCharArray().GetData());
+    UE_LOG(LogUSSConfigManager, Display, TEXT("Deteting configuration %s"), *ToDelete);
+    ToDelete = this->GetConfigurationFolderPath() + ToDelete;
+    this->ConfPaths.Remove(ToDelete);
+    this->ConfPalettes.Remove(ToDelete);
+    FPlatformFileManager::Get().GetPlatformFile().DeleteFile(ToDelete.GetCharArray().GetData());
 }
 
 
@@ -229,7 +206,7 @@ TMap<FString, FUSSPalette> UUSSConfigManager::ReadPalettesFromConfiguration(FStr
 
 
 
-void UUSSConfigManager::SaveAndDeleteConfigurations()
+void UUSSConfigManager::SaveConfigurations()
 {
     for (auto SaveConf : this->ConfPaths)
     {   // Save all configuration marked as dirty
@@ -252,12 +229,6 @@ void UUSSConfigManager::SaveAndDeleteConfigurations()
             }
         }
     }
-
-    /*for (auto DeleteConf : this->ConfToDelete)
-    {   // Delete all the given configuration
-
-        FPlatformFileManager::Get().GetPlatformFile().DeleteFile(DeleteConf.GetCharArray().GetData());
-    }*/
 }
 
 

@@ -54,51 +54,6 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 	}
 
 	bool bAnyChanged = false;
-	/*
-	TArray<FFactoryCustomizationColorSlot> newArray;
-
-	int32 ColorToCopy = 28;	// SF default slots
-
-	if (this->IsUsingMSS)
-	{
-		ColorToCopy += 20;
-	}
-
-	for (int32 i = 0; i < ColorToCopy; i++)
-	{	// Add the default colors to the array
-
-		newArray.Add(FGGameState->mBuildingColorSlots_Data[i]);
-	}
-
-	for (UUSSSwatchDesc* Swatch : SwatchDescriptions)
-	{	// Browse all the swatch descriptions
-		if (!Swatch)
-		{
-			continue;
-		}
-
-		const int32 ColourIndex = Swatch->ID;
-
-		UE_LOG(LogUSS_Subsystem, Display, TEXT("Added New color slot : %s"), *Swatch->mDisplayName.ToString());
-		FFactoryCustomizationColorSlot NewColourSlot = FFactoryCustomizationColorSlot(FLinearColor::Black, FLinearColor::Black);
-		NewColourSlot.PaintFinish = this->PaintFinishes[(uint8)Swatch->Material];
-
-		for (int32 i = newArray.Num(); i <= ColourIndex; ++i)
-		{
-			newArray.Add(NewColourSlot);
-			bAnyChanged = true;
-		}
-		
-		// Apply desired colors
-		NewColourSlot.PrimaryColor = Swatch->PrimaryColour;
-		NewColourSlot.SecondaryColor = Swatch->SecondaryColour;
-		newArray[ColourIndex] = NewColourSlot;
-
-		//FGGameState->Server_SetBuildingColorDataForSlot(ColourIndex, NewColourSlot);
-	}
-
-	FGGameState->SetupColorSlots_Data(newArray);
-	FGGameState->OnRep_BuildingColorSlot_Data();*/
 
 	for (UUSSSwatchDesc* Swatch : SwatchDescriptions)
 	{	// Browse all the swatch descriptions
@@ -131,8 +86,8 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 			const FFactoryCustomizationColorSlot& Existing = FGGameState->mBuildingColorSlots_Data[ColourIndex];
 			if (Existing.PrimaryColor != NewColourSlot.PrimaryColor || Existing.SecondaryColor != NewColourSlot.SecondaryColor || Existing.PaintFinish != NewColourSlot.PaintFinish)
 			{
-				UE_LOG(LogUSS_Subsystem, Display, TEXT("Index %d, Existing.P = %f, %f, %f, S = %f, %f, %f "), ColourIndex, Existing.PrimaryColor.R, Existing.PrimaryColor.B, Existing.PrimaryColor.G, Existing.SecondaryColor.R, Existing.SecondaryColor.B, Existing.SecondaryColor.G);
-				UE_LOG(LogUSS_Subsystem, Display, TEXT("Index %d, New.P      = %f, %f, %f, S = %f, %f, %f "), ColourIndex, NewColourSlot.PrimaryColor.R, Existing.PrimaryColor.B, NewColourSlot.PrimaryColor.G, NewColourSlot.SecondaryColor.R, NewColourSlot.SecondaryColor.B, NewColourSlot.SecondaryColor.G);
+				UE_LOG(LogUSS_Subsystem, Display, TEXT("Index %d, Existing Primary: R = %f, B = %f, G = %f, Secondary: R = %f, B = %f, G = %f"), ColourIndex, Existing.PrimaryColor.R, Existing.PrimaryColor.B, Existing.PrimaryColor.G, Existing.SecondaryColor.R, Existing.SecondaryColor.B, Existing.SecondaryColor.G);
+				UE_LOG(LogUSS_Subsystem, Display, TEXT("Index %d, New Primary:      R = %f, B = %f, G = %f, Secondary: R = %f, B = %f, G = %f"), ColourIndex, NewColourSlot.PrimaryColor.R, Existing.PrimaryColor.B, NewColourSlot.PrimaryColor.G, NewColourSlot.SecondaryColor.R, NewColourSlot.SecondaryColor.B, NewColourSlot.SecondaryColor.G);
 				FGGameState->mBuildingColorSlots_Data[ColourIndex] = NewColourSlot;
 				bAnyChanged = true;
 			}
@@ -154,6 +109,7 @@ void AUniversalSwatchSlotsSubsystem::GeneratePalette(FUSSPalette Palette)
 	if (Palette.Groups.Num() <= 0)
 	{	// The palette is empty
 
+		UE_LOG(LogUSS_Subsystem, Warning, TEXT("Your Palette does not have any group, no swatch will be created."));
 		return;
 	}
 
@@ -162,6 +118,7 @@ void AUniversalSwatchSlotsSubsystem::GeneratePalette(FUSSPalette Palette)
 
 		if (currGroup.Swatches.Num() <= 0)
 		{
+			UE_LOG(LogUSS_Subsystem, Warning, TEXT("Group %s does not contain any swatch, the group will be ignored."), *currGroup.Name.ToString());
 			continue;
 		}
 
@@ -517,40 +474,6 @@ void AUniversalSwatchSlotsSubsystem::RetrieveFreeColorSlotID()
 	{
 		this->ValidSlotIDs.Add(i);
 	}
-}
-
-
-void AUniversalSwatchSlotsSubsystem::ResetSubSystem()
-{
-	/*if (this->USSInst)
-	{
-		for (auto& tmp : this->USSInst->SwatchRecipeArray)
-		{
-			if (tmp.Value.SwatchInst->IsValidLowLevelFast())
-			{
-				tmp.Value.SwatchInst->ConditionalBeginDestroy();
-				tmp.Value.SwatchInst = nullptr;
-			}
-		}
-
-		for (auto& tmp : this->USSInst->SwatchGroupArray)
-		{
-			if (tmp.Value.SwatchInst->IsValidLowLevelFast())
-			{
-				tmp.Value.SwatchInst->ConditionalBeginDestroy();
-				tmp.Value.SwatchInst = nullptr;
-			}
-		}
-
-		for (auto& tmp : this->USSInst->SwatchDescriptorArray)
-		{
-			if (tmp.Value.SwatchInst->IsValidLowLevelFast())
-			{
-				tmp.Value.SwatchInst->ConditionalBeginDestroy();
-				tmp.Value.SwatchInst = nullptr;
-			}
-		}
-	}*/
 }
 
 

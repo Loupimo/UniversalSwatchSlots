@@ -12,10 +12,10 @@ void UUniversalSwatchSlotsWorldModule::GenerateSwatchesFromPalette(FUSSPalette P
 }
 
 
-void UUniversalSwatchSlotsWorldModule::InitUSSGameWorldModule(AUniversalSwatchSlotsSubsystem* Subsystem)
+void UUniversalSwatchSlotsWorldModule::InitUSSGameWorldModule(UUniversalSwatchSlotsGIModule* USSInstance, AUniversalSwatchSlotsSubsystem* Subsystem)
 {
 	this->USSSubsystem = Subsystem;
-	this->USSSubsystem->ResetSubSystem();
+	this->USSSubsystem->USSInst = USSInstance;
 	this->USSSubsystem->IsUsingMSS = this->IsUsingMoreSwatchSlots;
 	this->USSSubsystem->RetrieveFreeColorSlotID();
 }
@@ -66,7 +66,8 @@ void UUniversalSwatchSlotsWorldModule::ApplySwatchesColorOptionToPreset(TArray<U
 		{
 			FString toFind = FGGameState->mPlayerGlobalColorPresets[i].PresetName.ToString();
 			if ((tmpID = ColorToRemove.Find(toFind)) != INDEX_NONE)
-			{
+			{	// The color should not be added
+
 				ColorToRemove.RemoveAt(tmpID);
 			}
 			else
@@ -77,6 +78,7 @@ void UUniversalSwatchSlotsWorldModule::ApplySwatchesColorOptionToPreset(TArray<U
 			tmpID = INDEX_NONE;
 		}
 
+		// Sort by swatch name
 		FinalColorPreset.Sort([](const FGlobalColorPreset& Lhs, const FGlobalColorPreset& Rhs) -> bool {
 			if (Lhs.PresetName.ToString() < Rhs.PresetName.ToString()) return true;
 			return false;

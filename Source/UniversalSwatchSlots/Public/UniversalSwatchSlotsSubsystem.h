@@ -6,7 +6,6 @@
 #include "Subsystem/ModSubsystem.h"
 #include "FGSaveInterface.h"
 #include "UniversalSwatchSlotsGIModule.h"
-
 #include "UniversalSwatchSlotsDefinitions.h"
 
 #include "UniversalSwatchSlotsSubsystem.generated.h"
@@ -51,12 +50,10 @@ public:
 	/**
 	 * Create a new swatch using the desired group ID and swatch name.
 	 *
-	 * Note: This function will create a new swatch group if the given group ID doensn't exist in the SwatchGroupArray and call GenerateDynamicSwatchGroup -> GenerateDynamicSwatchDescriptor -> GenerateDynamicSwatchRecipe functions. This function does nothing if the swatch descriptor / recipe already exist.
+	 * Note: This function will create a new swatch. This function does nothing if the swatch descriptor / recipe already exist.
 	 *
-	 * @param	SwatchInformation			The swatch information to use.
-	 * @param	SwatchGroup					The used swatch group. NULL if the function was aborted.
-	 * @param	SwatchDescriptor			The generated swatch descriptor. NULL if the function was aborted.
-	 * @param	SwatchRecipe				The generated swatch recipe. NULL if the function was aborted.
+	 * @param	SwatchGroup			The swatch group to put the swatch into.
+	 * @param	SwatchInfo			The swatch information to use.
 	 *
 	 * @return True if the swatch was created, false otherwise.
 	 */
@@ -71,9 +68,9 @@ public:
 	 * @param	UniqueGroupID			The ID to give to the swatch group.
 	 * @param	GroupInfo				The swatch group information used to build the group.
 	 *
-	 * @warning Be sure that the desired swatch group doesn't exist otherwise its CDO will be modified.
+	 * @warning If it exists its CDO will be modified.
 	 *
-	 * @return The newly generated swatch group, nullptr otherwise.
+	 * @return The generated swatch group, nullptr otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	UUSSSwatchGroup* GenerateDynamicSwatchGroup(int32 UniqueGroupID, FUSSGroup GroupInfo);
@@ -86,13 +83,12 @@ public:
 	 * @param	SwatchGroup				The swatch group to use.
 	 * @param	SwatchInfo				The swatch information used to build the descriptor.
 	 *
-	 * @warning Be sure that the desired swatch descriptor doesn't exist otherwise its CDO will be modified.
+	 * @warning If it exists its CDO will be modified.
 	 *
-	 * @return The newly generated swatch descriptor, nullptr otherwise.
+	 * @return The generated swatch descriptor, nullptr otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	FUSSSwatchDescGenInfo& GenerateDynamicSwatchDescriptor(int32 SlotID, FString GenName, UFGCustomizerSubCategory* SwatchGroup, FUSSSwatch SwatchInfo);
-	//UUSSSwatchDesc* GenerateDynamicSwatchDescriptor(int32 SlotID, FString GenName, UFGCustomizerSubCategory* SwatchGroup, FUSSSwatch SwatchInfo);
 
 	/**
 	 * Create a new swatch recipe using the desired swatch descriptor.
@@ -100,13 +96,12 @@ public:
 	 * @param	UniqueID				The swatch receipe ID (should be the same as the swatch descriptor one).
 	 * @param	SwatchDescriptor		The swatch descriptor to use.
 	 *
-	 * @warning Be sure that a recipe for the given swatch descriptor doesn't exist otherwise its CDO will be modified.
+	 * @warning If it exists its CDO will be modified.
 	 *
 	 * @return The newly generated swatch recipe, nullptr otherwise.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	UUSSSwatchRecipe* GenerateDynamicSwatchRecipe(int32 UniqueID, FUSSSwatchDescGenInfo& SwatchDescriptor);
-	//UUSSSwatchRecipe* GenerateDynamicSwatchRecipe(int32 UniqueID, UUSSSwatchDesc* SwatchDescriptor);
 
 	/**
 	 * Patch existing buildings descriptor.
@@ -128,11 +123,7 @@ public:
 	/**
 	 * Update the saved swatches array.
 	 *
-	 *
-	 * @param	GeneratedName			The swatch generated name (use the BuildSwatchGenName function to create one).
-	 * @param	Out						The saved swatch info if found, NULL otherwise.
-	 *
-	 * @return True if the swatch was found, false otherwise.
+	 * @param	ToSave			The swatch descritors to save.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	void UpdateSavedSwatches(TArray<UUSSSwatchDesc*> ToSave);
@@ -147,8 +138,6 @@ public:
 	 * Update The available valid swatche slots ID.
 	 */
 	void RetrieveFreeColorSlotID();
-
-	void ResetSubSystem();
 
 public:
 
@@ -196,6 +185,7 @@ public:
 	UPROPERTY(SaveGame, BlueprintReadWrite, Category = "Saving")
 	bool WasUsingMSS = false;
 
+	/* The USS Game instance module. Required before creating any swatch. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	UUniversalSwatchSlotsGIModule* USSInst;
 

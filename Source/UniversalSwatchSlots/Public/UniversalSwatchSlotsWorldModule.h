@@ -29,11 +29,11 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	/**
 	 * Initialize the USS game world module using the given USS subsystem.
 	 *
+	 * @param	USSInstance			The USS instance to use.
 	 * @param	Subsystem			The USS subsytem to use.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Config")
-	void InitUSSGameWorldModule(AUniversalSwatchSlotsSubsystem* Subsystem);
-
+	void InitUSSGameWorldModule(UUniversalSwatchSlotsGIModule* USSInstance, AUniversalSwatchSlotsSubsystem* Subsystem);
 
 	/**
 	 * Add / remove the given swatch colors to / from the gamestate player preset.

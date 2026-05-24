@@ -10,30 +10,6 @@ DECLARE_LOG_CATEGORY_EXTERN(LogUniversalSwatchSlotsLib, Log, All)
 
 DEFINE_LOG_CATEGORY(LogUniversalSwatchSlotsLib)
 
-
-TSubclassOf<UObject> UUSSBPLib::FindOrCreateClass(FString PackageName, FString Name, UClass* ParentClass)
-{
-	// Safety checks before running the generator
-	auto found = FindObject<UClass>(FindPackage(nullptr, *PackageName), *Name, false);
-	if (Name == "") {
-		UE_LOG(LogUniversalSwatchSlotsLib, Error, TEXT("Name was empty, can't create class"));
-		return nullptr;
-	}
-	if (found) {
-		UE_LOG(LogUniversalSwatchSlotsLib, Display, TEXT("Class already existed so returning that instead of creating new"));
-		return found;
-	}
-	auto found_C = FindObject<UClass>(FindPackage(nullptr, *PackageName), *Name.Append("_C"), false);
-	if (found_C) {
-		UE_LOG(LogUniversalSwatchSlotsLib, Display, TEXT("Class already existed with _C suffix so returning that instead of creating new"));
-		return found_C;
-	}
-	UE_LOG(LogUniversalSwatchSlotsLib, Display, TEXT("Creating new class : %s"), *Name);
-
-	return UUSSBPLib::CreateClass(PackageName, Name, ParentClass);
-}
-
-
 UClass* UUSSBPLib::CreateClass(FString PackageName, FString Name, UClass* ParentClass)
 {
 	return FClassGenerator::GenerateSimpleClass(*PackageName, *Name, ParentClass);
@@ -75,7 +51,7 @@ UTexture2D* UUSSBPLib::GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColo
 	// Prevent garbage collector to delete the texture
 	NewTexture->AddToRoot();
 
-	// Initialiser texture data
+	// Init texture data
 	FTexture2DMipMap& Mip = NewTexture->GetPlatformData()->Mips[0];
 	void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
 	FColor* Pixels = static_cast<FColor*>(Data);
@@ -90,7 +66,7 @@ UTexture2D* UUSSBPLib::GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColo
 
 			if (DistanceToCenter > Radius - ArcThickness && DistanceToCenter <= Radius)
 			{
-				// Pixel dans l'arceau
+				// Pixel inside arc
 				Pixels[Y * Width + X] = ArcColor;
 			}
 			else if (DistanceToCenter <= Radius - ArcThickness)
@@ -107,7 +83,7 @@ UTexture2D* UUSSBPLib::GenerateSwatchIcon(FLinearColor PrimaryColor, FLinearColo
 			}
 			else
 			{
-				// Pixel en dehors du cercle
+				// Pixel outside the cercle
 				Pixels[Y * Width + X] = FColor::Transparent; // Transparent color
 			}
 		}

@@ -67,11 +67,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString PrimaryColor;
-	//FLinearColor PrimaryColour;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString SecondaryColor;
-	//FLinearColor SecondaryColour;
 };
 
 

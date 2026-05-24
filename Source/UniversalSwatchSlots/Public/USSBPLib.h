@@ -24,11 +24,10 @@ public:
 	  * @param	Name			The name to give to class.
 	  * @param	ParentClass		The parent class of this class.
 	  * 
-	  * @return If existing the matching class, otherwise the newly created class.
+	  * @return The newly created class.
 	  * 
 	  */
 	UFUNCTION(BlueprintCallable)
-	static TSubclassOf<UObject> FindOrCreateClass(FString PackageName, FString Name, UClass* ParentClass);
 	static UClass* CreateClass(FString PackageName, FString Name, UClass* ParentClass);
 
 	/**

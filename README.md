@@ -6,22 +6,26 @@ This JSON configuration gives you a lot of options to customize your palette as 
 - You can create groups to oragnize your swatches as you want.
 - You can name each of your swatch as you want (duplicates are allowed and will be treated as distinct slot).
 - You can define priority between groups and swatches in order to make them appear the way you want.
-- You can tell the mod to add the primary and / or the secondary colors of your swatches to the player color preset list.
+- You can tell the mod to add the primary and / or the secondary colors of your swatches to the player color preset list. If you think later on that was a bad idea there is an option to only remove swatches that are prensents in the palette you activate.
 
-Two default palettes come with this mod. Each contains the same dinstinct swatches for each craftable item in the game, only the language change (one in english, one in french).
+A default palette comes with this mod and is activated by default. It contains the dinstinct swatches for each craftable item in the game. All the names (groups and swatches) are based on your game language. It is currently availble for english, french, spanish and german (english will be chosen by default if your language is not supported).
 
 # How to Use
-In order to make the swatch slots appear in your game you need to configure the mod directly via the ingame menu or by editing the JSON file located at "YourStatifactoryGameFolder/FactoryGame/Configs/UniversalSwatchSlots/YourPaletteName"
-- **Step 1:** The first array represent the palette / session associations. This is where you tell the mod which palette to apply to which session game (be sure to use the session name and not the save game name). You can also configure the "add color swatches to player preset" behavior. 
-- **Step 2:** The second array represent your available palettes. You can add / edit / delete up to <span style="color:red">255 slots (including default + custom : 29, More Swatch Slots : 20 and other mod that could add more swatches)</span> but keep in mind that the more you have the longer it takes for the ingame menu to display. The fields are self explanatory and have tooltip to help you understand their purpose.
-- **Step 3:** Launch a save game that belongs to session your entered.
+In order to make the swatch slots appear in your game you need to configure the mod directly via the ingame menu or by editing the JSON file located at "YourStatifactoryGameFolder/FactoryGame/Configs/UniversalSwatchSlots/YourPaletteName.json"
+- **Step 1:** If you don't want to use the default palette your can create as many palettes as you want using the mod configueration menu.  
+You can add / edit / delete up to <span style="color:red">226 slots (default SF slots goes from 1 to 28 and slot 255 is for custom swatch). If you have More Swatch Slots installed it reduce the possibilities to 206 (as MSS has 20 slots)</span>. The fields are self explanatory and have tooltip to help you understand their purpose.  
+Once your are happy with your palette don't forget to tick the checkbox to activate it.
+- **Step 3:** Start a game.
 - **Step 4:** Go to your nearest Awesome Shop, customization tab, and buy the Universal Swatch Slots upgrade for only 1 coupon !!!
 
-Note: I recommand to directly edit the JSON configuration as the ingame menu can take a lot of time to display everything. Be sure to have launched the game at least one time with this mod in order to make the default configuration appears.
+<span style="color:red">Important note: If you change a swatch color in game it will not be saved in your configuration and will be lost once you reload your save !</span>
 
 # Multiplayer
 
-This mod has been tested on windows dedicated server but should also work with linux server. To make it work, simply copy the UniversalSwatchSlots located at "YourStatifactoryGameFolder/FactoryGame/Configs/" to your server configs folder. It is highly recommanded that joining players share the same configuration. They may have a different naming as long as the number of swatches and structures remain the same.
+This mod has been tested on windows dedicated server but should also work with linux server. You don't need to activate anything: the server will use the default mod's palette. If you wish to use a custom palette simply copy the "UniversalSwatchSlots" folder located at "YourStatifactoryGameFolder/FactoryGame/Configs/" to your server configs folder. Don't forget to activate the palette you want first ! 
+Joining players need to use the same configuration as the server's one. They may have a different naming as long as the number of swatches and order remain the same.
+
+Note: The swatch color are copied from the server to the player so changing a color swatch in your mod configuration will not affect the server. If your server doesn't not load the correct palette it means that you have another palette that is activated and has a higher priority (file name based).
 
 ![Awesome Shop](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/AS_Buy.png?raw=true)
 ![Swatches](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Swatches.png?raw=true)
@@ -35,12 +39,17 @@ Now it should be fully compatible with MSS and not overwrite slots anymore and t
 
 **I have deleted some swatches in the default configuration and want them back, how do I do ?**
 
-Simply delete or move your configuration file to another location and launch the game again. You can then edit the JSON to put your own palette back.
+Simply rename / delete the palette or move its json file to another location and launch the game again. The palette will be back as normal.
+
+**I want to copy the default palette, how do I do ?**
+
+Option 1: using the mod configuration menu simply rename the default palette's name. Do your changes, quit and relaunch the game. The default palette will reappear as well as your new palette.  
+Option 2: go to "YourStatifactoryGameFolder/FactoryGame/Configs/UniversalSwatchSlots/" folder and copy paste the palette file you want to use as base.
 
 **What happen if I have applied a swatch to a building and remove it from the palette ?**
 
 It will take the color of the next swatch in your palette.
-If your palette has no swatch or the swatch you removed was the last one, it wioll switch back to default.
+If your palette has no swatch or the swatch you removed was the last one, it will switch back to default.
 
 **What happen if I have applied swatches of a palette and want to switch to another ?**
 
