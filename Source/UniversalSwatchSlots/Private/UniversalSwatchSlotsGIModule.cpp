@@ -24,14 +24,18 @@ void UUniversalSwatchSlotsGIModule::GenerateDynamicSwatchDescriptor(int32 Unique
 	FUSSSwatchDescGenInfo newSwatchDesc;
 
 	// Create the swatch descriptor class but no instance. Instance will be created by the USSSubsytem at world loading.
-	newSwatchDesc.SwatchClass = UUSSBPLib::CreateClass(this->PackageName, GenName, UUSSSwatchDesc::StaticClass());
+	newSwatchDesc.SwatchClass = UUSSBPLib::CreateClass(this->PackageName, GenName + FString("_Class"), UUSSSwatchDesc::StaticClass());
 	newSwatchDesc.SwatchCDO = Cast<UUSSSwatchDesc>(newSwatchDesc.SwatchClass->GetDefaultObject());
 	newSwatchDesc.SwatchInst = nullptr;
 
 	this->SwatchDescriptorArray.Add(UniqueID, newSwatchDesc);
 
+	// 1.2.2 backward compatibility
+	UClass* NewClass = (UClass*)UUSSBPLib::CreateClass(this->PackageName, GenName, UUSSSwatchDesc::StaticClass());
+	this->tmpSwatchDescriptorArray.Add(NewClass);
+
 	// 1.1.0 - 1.2.1 backward compatibility
-	UClass* NewClass = (UClass*)UUSSBPLib::CreateClass(this->PackageName, GenName.Append("_C"), UUSSSwatchDesc::StaticClass());
+	NewClass = (UClass*)UUSSBPLib::CreateClass(this->PackageName, GenName.Append("_C"), UUSSSwatchDesc::StaticClass());
 	this->tmpSwatchDescriptorArray.Add(NewClass);
 
 	/*

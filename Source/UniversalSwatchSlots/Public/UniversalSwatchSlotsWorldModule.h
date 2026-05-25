@@ -36,12 +36,14 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	void InitUSSGameWorldModule(UUniversalSwatchSlotsGIModule* USSInstance, AUniversalSwatchSlotsSubsystem* Subsystem);
 
 	/**
-	 * Add / remove the given swatch colors to / from the gamestate player preset.
+	 * Remove all colors from player preset and create the array that should be added instead.
 	 *
 	 * @param	SwatchDescriptions		The swatch descriptors to use.
+	 * 
+	 * Note: The adding should be done inside blueprint. Otherwise cause crash for unknown reason...
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	void ApplySwatchesColorOptionToPreset(TArray<UUSSSwatchDesc*> SwatchDescriptions, bool AddPrimaryColors, bool AddSecondaryColors, bool RemovePrimayColors, bool RemoveSecondaryColors);
+	TArray<FGlobalColorPreset> ApplySwatchesColorOptionToPreset(TArray<UUSSSwatchDesc*> SwatchDescriptions, bool AddPrimaryColors, bool AddSecondaryColors, bool RemovePrimayColors, bool RemoveSecondaryColors);
 
 public:
 

@@ -10,7 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "USSBPLib.h"
 
-const EUSSVersion CurrVersion = EUSSVersion::V1_2_2;
+const EUSSVersion CurrVersion = EUSSVersion::V1_2_3;
 const FString USSSubPackageName = "/UniversalSwatchSlots";
 
 DECLARE_LOG_CATEGORY_EXTERN(LogUSS_Subsystem, Log, All)
@@ -72,7 +72,7 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 			for (int32 i = FGGameState->mBuildingColorSlots_Data.Num(); i <= ColourIndex; ++i)
 			{
 				FGGameState->mBuildingColorSlots_Data.Add(NewColourSlot);
-				UE_LOG(LogUSS_Subsystem, Display, TEXT("New color slot added to gamestate: %d"), i);
+				UE_LOG(LogUSS_Subsystem, Verbose, TEXT("New color slot added to gamestate: %d"), i);
 				bAnyChanged = true;
 			}
 		}

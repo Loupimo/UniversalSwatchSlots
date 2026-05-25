@@ -157,6 +157,10 @@ void UUSSConfigManager::DeleteConfiguration(FString ToDelete)
     ToDelete = this->GetConfigurationFolderPath() + ToDelete;
     this->ConfPaths.Remove(ToDelete);
     this->ConfPalettes.Remove(ToDelete);
+    if (!ToDelete.EndsWith(".json"))
+    {
+        ToDelete = ToDelete.Append(".json");
+    }
     FPlatformFileManager::Get().GetPlatformFile().DeleteFile(ToDelete.GetCharArray().GetData());
 }
 
