@@ -58,10 +58,6 @@ Otherwise:
 - If your new palette has less swatches than your previous one only the buildings that uses the first swatches (as many as your new palette has) will be changed, all other extra slots of your old palette should turned to black or default.
 - If your new palette has more or equal number of swatches than your previous one all the swatches will be modified.
 
-**I'm playing on dedicated server and accidentally saved my game under version 1.2.2, now player can't join even with higher version. How can I get my save back ?**
-
-1.2.2 introduced a desyncronizasion bug between server and client, hopefully the bug was detected in early stage and fixed. However if you are unlucky there is still a way: download your save on your local client, launch the game in solo, save and finally reupload the save to your server. You should now be able to join the server without losing any progress.
-
 **What happen if I have applied swatches of this mod to my building and uninstall the mod ?**
 
 They will turn black or back to their default color.

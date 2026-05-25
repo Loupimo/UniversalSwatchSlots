@@ -39,8 +39,16 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 	 * Remove all colors from player preset and create the array that should be added instead.
 	 *
 	 * @param	SwatchDescriptions		The swatch descriptors to use.
+	 * @param	AddPrimaryColors		Tell if we should add the primary colors to the final array.
+	 * @param	AddSecondaryColors		Tell if we should add the secondary colors to the final array.
+	 * @param	RemovePrimayColors		Tell if we should remove the primary colors from the final array.
+	 * @param	RemoveSecondaryColors	Tell if we should remove the primary colors from the final array.
 	 * 
-	 * Note: The adding should be done inside blueprint. Otherwise cause crash for unknown reason...
+	 * @return A sorted array containing all the player preset color to add.
+	 * 
+	 * @Warning: The adding should be done inside blueprint otherwise player will not be able to join the host.
+	 *
+	 * @Note: If AddXColors and RemoveXColors are true the Add operation will be executed.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
 	TArray<FGlobalColorPreset> ApplySwatchesColorOptionToPreset(TArray<UUSSSwatchDesc*> SwatchDescriptions, bool AddPrimaryColors, bool AddSecondaryColors, bool RemovePrimayColors, bool RemoveSecondaryColors);
