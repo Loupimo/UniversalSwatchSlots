@@ -61,5 +61,5 @@ public:
 
 	/* The subsystem used to load and store swatch data. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
-	AUniversalSwatchSlotsSubsystem* USSSubsystem = nullptr;
+	TObjectPtr<AUniversalSwatchSlotsSubsystem> USSSubsystem = nullptr;
 };

@@ -201,7 +201,7 @@ TMap<FString, FUSSPalette> UUSSConfigManager::ReadPalettesFromConfiguration(FStr
         else
         {   // There was a problem with this palette
 
-            UE_LOG(LogUSSConfigManager, Error, TEXT("Failed to parse palette %s from configuration file %s"), RowName, *FilePath);
+            UE_LOG(LogUSSConfigManager, Error, TEXT("Failed to parse palette %s from configuration file %s"), *RowName.ToString(), *FilePath);
         }
     }
 

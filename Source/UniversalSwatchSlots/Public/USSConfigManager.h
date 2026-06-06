@@ -35,7 +35,7 @@ public:
 
 	/* The table that represent the structure used to save / load the configuration files. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	UDataTable* DefaultTable;
+	TObjectPtr<UDataTable> DefaultTable;
 
 public:
 

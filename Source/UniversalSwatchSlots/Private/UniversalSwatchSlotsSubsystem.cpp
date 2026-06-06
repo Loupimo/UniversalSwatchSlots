@@ -5,7 +5,7 @@
 
 #include "Subsystem/SubsystemActorManager.h"
 #include "FGBuildableSubsystem.h"
-#include "FGBuildable.h"
+#include "Buildables/FGBuildable.h"
 #include "FGGameState.h"
 #include "Kismet/GameplayStatics.h"
 #include "USSBPLib.h"
@@ -525,7 +525,7 @@ void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<UUSSSwatchDesc*>
 			}
 		}
 
-		UUSSSwatchDesc** tmp = this->SwatchDescriptorArray.Find(matchingID);
+		TObjectPtr<UUSSSwatchDesc>* tmp = this->SwatchDescriptorArray.Find(matchingID);
 
 		if (tmp)
 		{	// We have found a match

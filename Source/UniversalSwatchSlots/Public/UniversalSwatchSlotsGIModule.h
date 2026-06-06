@@ -17,7 +17,7 @@ struct FUSSSwatchGenInfo
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	UClass* SwatchClass;
+	TObjectPtr<UClass> SwatchClass;
 };
 
 
@@ -29,10 +29,10 @@ struct FUSSSwatchGroupGenInfo : public FUSSSwatchGenInfo
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	UUSSSwatchGroup* SwatchCDO;
+	TObjectPtr<UUSSSwatchGroup> SwatchCDO;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	UUSSSwatchGroup* SwatchInst;
+	TObjectPtr<UUSSSwatchGroup> SwatchInst;
 };
 
 
@@ -44,10 +44,10 @@ struct FUSSSwatchDescGenInfo : public FUSSSwatchGenInfo
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	UUSSSwatchDesc* SwatchCDO;
+	TObjectPtr<UUSSSwatchDesc> SwatchCDO;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	UUSSSwatchDesc* SwatchInst;
+	TObjectPtr<UUSSSwatchDesc> SwatchInst;
 };
 
 USTRUCT(BlueprintType)
@@ -58,10 +58,10 @@ struct FUSSSwatchRecipeGenInfo : public FUSSSwatchGenInfo
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	UUSSSwatchRecipe* SwatchCDO;
+	TObjectPtr<UUSSSwatchRecipe> SwatchCDO;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	UUSSSwatchRecipe* SwatchInst;
+	TObjectPtr<UUSSSwatchRecipe> SwatchInst;
 };
 
 /**
@@ -104,7 +104,7 @@ public:
 
 	/* Store the descriptors of previous version in order to correctly patch buildings. */
 	UPROPERTY()
-	TArray<UClass*> tmpSwatchDescriptorArray;
+	TArray<TObjectPtr<UClass>> tmpSwatchDescriptorArray;
 
 protected:
 

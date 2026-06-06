@@ -163,15 +163,15 @@ public:
 
 	/* The list of all available swatch groups. This array is modified when the GenerateDynamicSwatchGroup function is called. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	TMap<int32, UUSSSwatchGroup*> SwatchGroupArray;
+	TMap<int32, TObjectPtr<UUSSSwatchGroup>> SwatchGroupArray;
 
 	/* The list of all generated swatch descriptors. This array is modified when the GenerateDynamicSwatchDescriptor function is called.  */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	TMap<int32, UUSSSwatchDesc*> SwatchDescriptorArray;
+	TMap<int32, TObjectPtr<UUSSSwatchDesc>> SwatchDescriptorArray;
 
 	/* The build gun blueprint class that will be used by the dynamically created swatch recipes. This array is modified when the GenerateDynamicSwatchRecipe function is called. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swatch")
-	TMap<int32, UUSSSwatchRecipe*> SwatchRecipeArray;
+	TMap<int32, TObjectPtr<UUSSSwatchRecipe>> SwatchRecipeArray;
 
 	/* A detailed array that contains info about saved swatches. */
 	UPROPERTY(SaveGame, BlueprintReadWrite, Category = "Saving")
@@ -187,7 +187,7 @@ public:
 
 	/* The USS Game instance module. Required before creating any swatch. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
-	UUniversalSwatchSlotsGIModule* USSInst;
+	TObjectPtr<UUniversalSwatchSlotsGIModule> USSInst;
 
 protected:
 
