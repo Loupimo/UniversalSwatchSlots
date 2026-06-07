@@ -23,6 +23,7 @@
 #include "InstanceData.h"
 #include "Components/InstancedStaticMeshComponent.h"
 #include "Components/SceneComponent.h"
+#include "Materials/MaterialInterface.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Pawn.h"
 
@@ -152,10 +153,28 @@ void FUSSBuildGunPaintMode::RegisterHooks()
 				{
 					for (int32 index : entry.Indices)
 					{
-						// Authoritative data + save. Live replication to connected clients on a
-						// dedicated server is handled by the game's bundle system (lags for big
-						// batches); the data is correct so it shows on reconnect / for joiners.
-						lightweightSubsystem->SetCustomizationDataOnInstance(entry.BuildableClass, customizationData, index);
+						// Mirror the game's single-lightweight paint so it replicates live: get a
+						// managed temporary actor for the instance, paint it, then copy the data back
+						// to the instance via the game's own path. The subsystem owns the temp's
+						// lifecycle (cleaned up end of tick) so we never Destroy it (no corruption).
+						FRuntimeBuildableInstanceData* runtimeData =
+							lightweightSubsystem->GetRuntimeDataForBuildableClassAndIndex(entry.BuildableClass, index);
+
+						bool didSpawn = false;
+						FInstanceToTemporaryBuildable* tempInfo = runtimeData
+							? lightweightSubsystem->FindOrSpawnBuildableForRuntimeData(entry.BuildableClass, runtimeData, index, didSpawn)
+							: nullptr;
+
+						if (tempInfo && tempInfo->Buildable)
+						{
+							tempInfo->Buildable->SetCustomizationData_Native(customizationData); // skipCombine=false -> merges
+							lightweightSubsystem->CopyCustomizationDataFromTemporaryToInstance(tempInfo->Buildable);
+						}
+						else
+						{
+							// Fallback: at least update the persistent data so it saves.
+							lightweightSubsystem->SetCustomizationDataOnInstance(entry.BuildableClass, customizationData, index);
+						}
 					}
 				}
 			}
@@ -272,6 +291,14 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 				TMap<UStaticMesh*, UInstancedStaticMeshComponent*> meshToISM;
 				AFGLightweightBuildableSubsystem* lightweightSubsystem = AFGLightweightBuildableSubsystem::Get(world);
 
+				// Optional material (set in the World module) to hide the otherwise-black main-pass
+				// render of the outline meshes. Must still write custom depth for the outline to show.
+				UMaterialInterface* outlineMaterial = nullptr;
+				if (UUniversalSwatchSlotsWorldModule* module = GetWorldModule(world))
+				{
+					outlineMaterial = module->LightweightOutlineMaterial;
+				}
+
 				for (const FBuildableClassLightweightIndices& entry : targetProxy->GetLightweightClassAndIndices())
 				{
 					AFGBuildable* cdo = entry.BuildableClass.GetDefaultObject();
@@ -308,6 +335,14 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 							{
 								ism = NewObject<UInstancedStaticMeshComponent>(holder);
 								ism->SetStaticMesh(meshData.StaticMesh);
+									if (outlineMaterial)
+									{
+										const int32 numMaterials = ism->GetNumMaterials();
+										for (int32 materialIndex = 0; materialIndex < numMaterials; ++materialIndex)
+										{
+											ism->SetMaterial(materialIndex, outlineMaterial);
+										}
+									}
 								ism->SetMobility(EComponentMobility::Movable);
 								ism->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 								ism->SetCastShadow(false);
