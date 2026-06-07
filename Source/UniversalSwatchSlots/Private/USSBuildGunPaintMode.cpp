@@ -135,37 +135,30 @@ void FUSSBuildGunPaintMode::RegisterHooks()
 			// Actor buildables (machines, etc.).
 			TArray<AFGBuildable*> buildables;
 			proxy->CollectBuildables(buildables);
-
-			int32 paintedActors = 0;
 			for (AFGBuildable* buildable : buildables)
 			{
 				if (buildable && buildable != hitBuildable)
 				{
 					buildable->SetCustomizationData_Native(customizationData); // skipCombine=false -> merges with existing
-					++paintedActors;
+					buildable->FlushNetDormancy(); // wake net dormancy so the change replicates live to connected clients
 				}
 			}
 
 			// Lightweight instances (foundations, walls, ...) which have no actor and are
 			// not returned by CollectBuildables. The proxy tracks them as class + indices.
-			int32 paintedLightweight = 0;
 			if (AFGLightweightBuildableSubsystem* lightweightSubsystem = AFGLightweightBuildableSubsystem::Get(self->GetWorld()))
 			{
 				for (const FBuildableClassLightweightIndices& entry : proxy->GetLightweightClassAndIndices())
 				{
 					for (int32 index : entry.Indices)
 					{
-						FLightweightBuildableInstanceRef ref;
-						ref.Initialize(lightweightSubsystem, entry.BuildableClass, index);
-						if (ref.SetCustomizationData(customizationData))
-						{
-							++paintedLightweight;
-						}
+						// Authoritative data + save. Live replication to connected clients on a
+						// dedicated server is handled by the game's bundle system (lags for big
+						// batches); the data is correct so it shows on reconnect / for joiners.
+						lightweightSubsystem->SetCustomizationDataOnInstance(entry.BuildableClass, customizationData, index);
 					}
 				}
 			}
-
-			UE_LOG(LogUSS, Warning, TEXT("Blueprint paint: %d actor + %d lightweight buildable(s)"), paintedActors, paintedLightweight);
 		});
 }
 
@@ -318,14 +311,24 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 								ism->SetMobility(EComponentMobility::Movable);
 								ism->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 								ism->SetCastShadow(false);
-								ism->SetRenderInMainPass(false);
 								ism->SetRenderCustomDepth(true);
 								ism->SetCustomDepthStencilValue((int32)EOutlineColor::OC_HOLOGRAMLINE);
 								ism->RegisterComponent();
 								ism->AttachToComponent(holder->GetRootComponent(), FAttachmentTransformRules::KeepWorldTransform);
+								// Render only the custom-depth outline, not the (uncolored, black) mesh.
+								// Setting this AFTER registration + dirtying the render state makes it
+								// take effect (setting it before RegisterComponent did not).
+								ism->SetRenderInMainPass(false);
+								ism->MarkRenderStateDirty();
 							}
 
-							ism->AddInstance(meshData.RelativeTransform * instanceWorld, /*bWorldSpace=*/true);
+							// Small shrink as a safety net in case the mesh still renders in the main
+							// pass (keeps any black hidden inside the real building). If SetRenderInMainPass
+							// works, only the outline shows and this just insets it very slightly.
+							// Tweak toward 1.0 for a crisper outline, toward 0.98 if any black peeks.
+							FTransform outlineTransform = meshData.RelativeTransform * instanceWorld;
+							outlineTransform.SetScale3D(outlineTransform.GetScale3D() * 0.99f);
+							ism->AddInstance(outlineTransform, /*bWorldSpace=*/true);
 						}
 					}
 				}
