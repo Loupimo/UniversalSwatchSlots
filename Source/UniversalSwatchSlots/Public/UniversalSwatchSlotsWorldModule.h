@@ -9,6 +9,8 @@
 
 #include "UniversalSwatchSlotsWorldModule.generated.h"
 
+class UUSSPaintModeWidget;
+
 
 /**
  *
@@ -62,4 +64,10 @@ public:
 	/* The subsystem used to load and store swatch data. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	TObjectPtr<AUniversalSwatchSlotsSubsystem> USSSubsystem = nullptr;
+
+	/* HUD widget shown while painting, to display/cycle the paint build mode (Default / Blueprint).
+	   Must be a Widget Blueprint reparented to UUSSPaintModeWidget.
+	   Set this in the RootGameWorld_UniversalSwatchSlots blueprint defaults. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
+	TSubclassOf<UUSSPaintModeWidget> PaintModeWidgetClass;
 };

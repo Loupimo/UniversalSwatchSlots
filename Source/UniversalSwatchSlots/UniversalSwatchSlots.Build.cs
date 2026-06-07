@@ -40,6 +40,7 @@ public class UniversalSwatchSlots : ModuleRules
 			//"EnhancedInput",
 			//"GameplayCameras",
 			//"TemplateSequence",
+			"EnhancedInput",
 			"NetCore",
 			"GameplayTags",
 			"Json", "JsonUtilities"
@@ -47,7 +48,7 @@ public class UniversalSwatchSlots : ModuleRules
 
 		// FactoryGame plugins
 		PublicDependencyModuleNames.AddRange(new string[] {
-			//"AbstractInstance",
+			"AbstractInstance",
 			//"InstancedSplinesComponent",
 			//"SignificanceISPC"
 		});
