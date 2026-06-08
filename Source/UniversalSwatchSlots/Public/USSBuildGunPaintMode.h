@@ -11,6 +11,9 @@ class AFGBlueprintProxy;
 class AFGCharacterPlayer;
 class UUniversalSwatchSlotsWorldModule;
 class UWorld;
+class UFGBuildGunStatePaint;
+class UFGFactoryCustomizationDescriptor_Material;
+struct FFactoryCustomizationData;
 
 /**
  * Adds a "Default / Blueprint" build-mode toggle to the build gun's Paint state,
@@ -30,6 +33,23 @@ public:
 	static void RegisterHooks();
 
 private:
+	/** Resolves the real aimed buildable for the current paint. For swatch/pattern/skin the hit
+	 *  actor IS the building and carries the blueprint proxy. For materials the engine aims a
+	 *  transient mesh-swap preview actor (no proxy), so we fall back to the paint state's private
+	 *  aimed-at / customization-target actor (exposed via an Access Transformer friend). */
+	static AFGBuildable* ResolveAimedBuildable(UFGBuildGunStatePaint* self, AActor* hitActor);
+
+	/** Applies the active paint to every other building of the blueprint (actor buildables +
+	 *  lightweight instances). The proxy is captured before the original paint runs because a
+	 *  material apply can reconstruct the focused building and drop its proxy link.
+	 *  Used for swatch / pattern / skin (pure per-instance customization data). */
+	static void ApplyToBlueprintPlan(UFGBuildGunStatePaint* self, FFactoryCustomizationData* customizationData, AFGBlueprintProxy* proxy, AFGBuildable* skipBuildable);
+
+	/** Materials are not per-instance data: for foundations/walls a material is a different
+	 *  recipe/mesh, so each plan lightweight must be removed and re-added as the swapped class,
+	 *  then re-registered to the blueprint proxy (the game's own apply leaves the focused
+	 *  building unlinked). Actor buildables have no material variant and are left untouched. */
+	static void ApplyMaterialSwapToPlan(UFGBuildGunStatePaint* self, AFGBlueprintProxy* proxy, TSubclassOf<UFGFactoryCustomizationDescriptor_Material> material);
 	/** Creates and shows the paint-mode indicator for the local player. */
 	static void ShowIndicator(UFGBuildGunState* paintState);
 

@@ -14,6 +14,7 @@
 #include "FGColorInterface.h"
 #include "FGCharacterPlayer.h"
 #include "FGGameState.h"
+#include "FGCustomizationRecipe.h"
 #include "FGLightweightBuildableSubsystem.h"
 
 #include "Patching/NativeHookManager.h"
@@ -28,6 +29,174 @@ TWeakObjectPtr<AFGBlueprintProxy> FUSSBuildGunPaintMode::HighlightedProxy;
 TArray<TWeakObjectPtr<AFGBuildable>> FUSSBuildGunPaintMode::HighlightedBuildables;
 TWeakObjectPtr<AFGCharacterPlayer> FUSSBuildGunPaintMode::HighlightCharacter;
 TWeakObjectPtr<AActor> FUSSBuildGunPaintMode::LightweightInstigator;
+
+AFGBuildable* FUSSBuildGunPaintMode::ResolveAimedBuildable(UFGBuildGunStatePaint* self, AActor* hitActor)
+{
+	// Swatch / pattern / skin: the hit actor is the real building and carries the proxy.
+	if (AFGBuildable* hit = Cast<AFGBuildable>(hitActor))
+	{
+		if (hit->GetBlueprintProxy())
+		{
+			return hit;
+		}
+	}
+
+	// Material: the engine aims a transient mesh-swap preview actor (no proxy). The real aimed
+	// building is kept by the paint state itself (private, friended via AccessTransformers.ini).
+	// We accept the first candidate that actually belongs to a blueprint.
+	if (self)
+	{
+		if (AFGBuildable* aimed = Cast<AFGBuildable>(self->mCurrentlyAimedAtActor))
+		{
+			if (aimed->GetBlueprintProxy())
+			{
+				return aimed;
+			}
+		}
+		if (AFGBuildable* target = Cast<AFGBuildable>(self->mCurrentCustomizationTarget))
+		{
+			if (target->GetBlueprintProxy())
+			{
+				return target;
+			}
+		}
+	}
+
+	// Last resort: whatever the hit actor was (may be null / proxy-less -> no propagation).
+	return Cast<AFGBuildable>(hitActor);
+}
+
+void FUSSBuildGunPaintMode::ApplyToBlueprintPlan(UFGBuildGunStatePaint* self, FFactoryCustomizationData* customizationData, AFGBlueprintProxy* proxy, AFGBuildable* skipBuildable)
+{
+	if (!self || !proxy)
+	{
+		return; // the aimed building isn't part of a blueprint
+	}
+
+	// Actor buildables (machines, etc.).
+	TArray<AFGBuildable*> buildables;
+	proxy->CollectBuildables(buildables);
+	for (AFGBuildable* buildable : buildables)
+	{
+		if (buildable && buildable != skipBuildable)
+		{
+			buildable->SetCustomizationData_Native(*customizationData); // skipCombine=false -> merges with existing
+			buildable->FlushNetDormancy(); // wake net dormancy so the change replicates live to connected clients
+		}
+	}
+
+	// Lightweight instances (foundations, walls, ...) which have no actor and are
+	// not returned by CollectBuildables. The proxy tracks them as class + indices.
+	if (AFGLightweightBuildableSubsystem* lightweightSubsystem = AFGLightweightBuildableSubsystem::Get(self->GetWorld()))
+	{
+		for (const FBuildableClassLightweightIndices& entry : proxy->GetLightweightClassAndIndices())
+		{
+			for (int32 index : entry.Indices)
+			{
+				// Mirror the game's single-lightweight paint so it replicates live: get a
+				// managed temporary actor for the instance, paint it, then copy the data back
+				// to the instance via the game's own path. The subsystem owns the temp's
+				// lifecycle (cleaned up end of tick) so we never Destroy it (no corruption).
+				FRuntimeBuildableInstanceData* runtimeData =
+					lightweightSubsystem->GetRuntimeDataForBuildableClassAndIndex(entry.BuildableClass, index);
+
+				bool didSpawn = false;
+				FInstanceToTemporaryBuildable* tempInfo = runtimeData
+					? lightweightSubsystem->FindOrSpawnBuildableForRuntimeData(entry.BuildableClass, runtimeData, index, didSpawn)
+					: nullptr;
+
+				if (tempInfo && tempInfo->Buildable)
+				{
+					tempInfo->Buildable->SetCustomizationData_Native(*customizationData); // skipCombine=false -> merges
+					lightweightSubsystem->CopyCustomizationDataFromTemporaryToInstance(tempInfo->Buildable);
+				}
+				else
+				{
+					// Fallback: at least update the persistent data so it saves.
+					lightweightSubsystem->SetCustomizationDataOnInstance(entry.BuildableClass, *customizationData, index);
+				}
+			}
+		}
+	}
+}
+
+void FUSSBuildGunPaintMode::ApplyMaterialSwapToPlan(UFGBuildGunStatePaint* self, AFGBlueprintProxy* proxy, TSubclassOf<UFGFactoryCustomizationDescriptor_Material> material)
+{
+	if (!self || !proxy || !material)
+	{
+		return;
+	}
+
+	AFGLightweightBuildableSubsystem* lightweightSubsystem = AFGLightweightBuildableSubsystem::Get(self->GetWorld());
+	if (!lightweightSubsystem)
+	{
+		return;
+	}
+
+	// The material maps each source buildable class -> the recipe (and thus mesh) to switch to.
+	UFGFactoryCustomizationDescriptor_Material* materialCDO = material.GetDefaultObject();
+	if (!materialCDO)
+	{
+		return;
+	}
+	const TMap<TSubclassOf<AFGBuildable>, TSubclassOf<UFGRecipe>>& buildableMap = materialCDO->GetBuildableMap();
+
+	// Snapshot the plan's lightweight (class, index) pairs BEFORE mutating the subsystem: removing
+	// and re-adding instances edits the proxy's index lists, which we'd otherwise be iterating.
+	// We run instead of (not after) the game's paint, so the proxy still includes the focused
+	// instance -> it gets swapped like all the others and stays linked to the plan.
+	struct FPlanInstance { TSubclassOf<AFGBuildable> Class; int32 Index; };
+	TArray<FPlanInstance> planInstances;
+	for (const FBuildableClassLightweightIndices& entry : proxy->GetLightweightClassAndIndices())
+	{
+		for (int32 index : entry.Indices)
+		{
+			planInstances.Add({ entry.BuildableClass, index });
+		}
+	}
+
+	for (const FPlanInstance& instance : planInstances)
+	{
+		const TSubclassOf<UFGRecipe> newRecipe = buildableMap.FindRef(instance.Class);
+		if (!newRecipe)
+		{
+			continue; // this material doesn't change this buildable type
+		}
+		const TSubclassOf<AFGBuildable> newClass = AFGBuildable::GetBuildableClassFromRecipe(newRecipe);
+		if (!newClass || newClass == instance.Class)
+		{
+			continue; // no mesh/class change needed
+		}
+
+		FRuntimeBuildableInstanceData* runtimeData =
+			lightweightSubsystem->GetRuntimeDataForBuildableClassAndIndex(instance.Class, instance.Index);
+		if (!runtimeData)
+		{
+			continue;
+		}
+
+		// Fresh runtime data for the swapped class: keep transform / customization / proxy /
+		// type-specific data + builder, set the new recipe and material. We deliberately do not
+		// copy the runtime-only Handles (the new instance gets its own).
+		FFactoryCustomizationData newCustomization = runtimeData->CustomizationData;
+		newCustomization.MaterialDesc = material;
+
+		FRuntimeBuildableInstanceData newData(runtimeData->Transform, newCustomization, newRecipe, runtimeData->BlueprintProxy);
+		newData.TypeSpecificData = runtimeData->TypeSpecificData;
+		newData.BuiltBy = runtimeData->BuiltBy;
+
+		// Swap the instance (remove old class/index, add as the new class) and re-link it to the
+		// blueprint so it stays part of the plan (the game's own apply leaves the focused one out).
+		lightweightSubsystem->RemoveByInstanceIndex(instance.Class, instance.Index);
+		const int32 newIndex = lightweightSubsystem->AddFromBuildableInstanceData(newClass, newData);
+
+		proxy->UnregisterLightweightInstance(instance.Class, instance.Index);
+		if (newIndex != INDEX_NONE)
+		{
+			proxy->RegisterLightweightInstance(newClass, newIndex);
+		}
+	}
+}
 
 void FUSSBuildGunPaintMode::RegisterHooks()
 {
@@ -114,64 +283,54 @@ void FUSSBuildGunPaintMode::RegisterHooks()
 	SUBSCRIBE_METHOD_VIRTUAL(UFGBuildGunStatePaint::Server_ExecutePaint_Implementation, paintCDO,
 		[](auto& scope, UFGBuildGunStatePaint* self, uint8 mode, FFactoryCustomizationData customizationData, AActor* hitActor)
 		{
-			scope(self, mode, customizationData, hitActor); // normal single-target paint first
-
+			// Resolve the aimed plan BEFORE anything runs. In material mode the original aims a
+			// transient mesh-swap preview (so hitActor has no blueprint proxy), so we resolve the
+			// real aimed building and its proxy up front.
 			AFGBuildGun* gun = self ? self->GetBuildGun() : nullptr;
-			if (!gun || gun->GetCurrentBuildGunMode() != UUSSModeDescriptor::StaticClass())
+			const bool blueprintMode = gun && gun->GetCurrentBuildGunMode() == UUSSModeDescriptor::StaticClass();
+
+			AFGBlueprintProxy* proxy = nullptr;
+			AFGBuildable* skipBuildable = nullptr;
+			if (blueprintMode)
 			{
-				return; // only expand when our Blueprint paint mode is active
+				skipBuildable = ResolveAimedBuildable(self, hitActor);
+				proxy = skipBuildable ? skipBuildable->GetBlueprintProxy() : nullptr;
 			}
 
-			AFGBuildable* hitBuildable = Cast<AFGBuildable>(hitActor);
-			AFGBlueprintProxy* proxy = hitBuildable ? hitBuildable->GetBlueprintProxy() : nullptr;
-			if (!proxy)
+			// What is the player painting right now? The active recipe's descriptor tells us
+			// (swatch / pattern / material / skin). A material is a recipe/mesh swap, not
+			// per-instance data, so it needs a completely different path.
+			TSubclassOf<UFGFactoryCustomizationDescriptor_Material> material = nullptr;
+			if (blueprintMode && proxy)
 			{
-				return; // the aimed building isn't part of a blueprint
-			}
-
-			// Actor buildables (machines, etc.).
-			TArray<AFGBuildable*> buildables;
-			proxy->CollectBuildables(buildables);
-			for (AFGBuildable* buildable : buildables)
-			{
-				if (buildable && buildable != hitBuildable)
+				UClass* activeDescClass = nullptr;
+				if (const TSubclassOf<UFGCustomizationRecipe> activeRecipe = self->GetActiveRecipe())
 				{
-					buildable->SetCustomizationData_Native(customizationData); // skipCombine=false -> merges with existing
-					buildable->FlushNetDormancy(); // wake net dormancy so the change replicates live to connected clients
+					activeDescClass = *UFGCustomizationRecipe::GetCustomizationDescriptor(activeRecipe);
+				}
+				if (activeDescClass && activeDescClass->IsChildOf(UFGFactoryCustomizationDescriptor_Material::StaticClass()))
+				{
+					material = TSubclassOf<UFGFactoryCustomizationDescriptor_Material>(activeDescClass);
 				}
 			}
 
-			// Lightweight instances (foundations, walls, ...) which have no actor and are
-			// not returned by CollectBuildables. The proxy tracks them as class + indices.
-			if (AFGLightweightBuildableSubsystem* lightweightSubsystem = AFGLightweightBuildableSubsystem::Get(self->GetWorld()))
+			if (material)
 			{
-				for (const FBuildableClassLightweightIndices& entry : proxy->GetLightweightClassAndIndices())
+				// We swap EVERY plan lightweight ourselves, including the focused one, so they all
+				// keep their existing customization and stay linked to the blueprint. Suppress the
+				// original paint (SML auto-forwards unless cancelled): it would reconstruct only the
+				// focused building, drop it from the plan and lose its prior customization.
+				// (Trade-off: no per-building paint cost / build effect from the game here.)
+				scope.Cancel();
+				ApplyMaterialSwapToPlan(self, proxy, material);
+			}
+			else
+			{
+				scope(self, mode, customizationData, hitActor); // normal single-target paint first
+
+				if (proxy)
 				{
-					for (int32 index : entry.Indices)
-					{
-						// Mirror the game's single-lightweight paint so it replicates live: get a
-						// managed temporary actor for the instance, paint it, then copy the data back
-						// to the instance via the game's own path. The subsystem owns the temp's
-						// lifecycle (cleaned up end of tick) so we never Destroy it (no corruption).
-						FRuntimeBuildableInstanceData* runtimeData =
-							lightweightSubsystem->GetRuntimeDataForBuildableClassAndIndex(entry.BuildableClass, index);
-
-						bool didSpawn = false;
-						FInstanceToTemporaryBuildable* tempInfo = runtimeData
-							? lightweightSubsystem->FindOrSpawnBuildableForRuntimeData(entry.BuildableClass, runtimeData, index, didSpawn)
-							: nullptr;
-
-						if (tempInfo && tempInfo->Buildable)
-						{
-							tempInfo->Buildable->SetCustomizationData_Native(customizationData); // skipCombine=false -> merges
-							lightweightSubsystem->CopyCustomizationDataFromTemporaryToInstance(tempInfo->Buildable);
-						}
-						else
-						{
-							// Fallback: at least update the persistent data so it saves.
-							lightweightSubsystem->SetCustomizationDataOnInstance(entry.BuildableClass, customizationData, index);
-						}
-					}
+					ApplyToBlueprintPlan(self, &customizationData, proxy, skipBuildable);
 				}
 			}
 		});
@@ -342,16 +501,16 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 		}
 	}
 
-	// Active swatch (the color the player would paint) for the live preview below. Null if the
-	// player has no swatch selected (e.g. painting a pattern/material) -> no color preview then.
+	// What the player is about to paint = the active customization recipe's descriptor (a swatch,
+	// pattern, material or skin). Drives the visual-only live preview on every plan building.
 	UFGBuildGunStatePaint* paintStateTyped = Cast<UFGBuildGunStatePaint>(paintState);
-	const TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> activeSwatch =
-		paintStateTyped ? paintStateTyped->GetActiveSwatchDesc() : nullptr;
+	const TSubclassOf<UFGCustomizationRecipe> activeRecipe = paintStateTyped ? paintStateTyped->GetActiveRecipe() : nullptr;
+	UClass* activeDescClass = activeRecipe ? *UFGCustomizationRecipe::GetCustomizationDescriptor(activeRecipe) : nullptr;
 	AFGGameState* gameState = paintState->GetWorld() ? paintState->GetWorld()->GetGameState<AFGGameState>() : nullptr;
 
 	// Re-apply every frame: the game clears a building's outline when the cursor leaves it, so we
-	// re-show it (we run after the game's tick). We also apply the active swatch as a visual-only
-	// preview (ApplyCustomizationData_Native doesn't touch the saved data, so we can revert it).
+	// re-show it (we run after the game's tick). We also apply the active customization as a
+	// visual-only preview (ApplyCustomizationData_Native doesn't touch the saved data -> revertible).
 	for (const TWeakObjectPtr<AFGBuildable>& weakBuildable : HighlightedBuildables)
 	{
 		AFGBuildable* buildable = weakBuildable.Get();
@@ -362,12 +521,33 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 
 		IFGColorInterface::Execute_StartIsAimedAtForColor(buildable, character, true);
 
-		if (activeSwatch && gameState)
+		if (activeDescClass && gameState)
 		{
 			FFactoryCustomizationData previewData = buildable->GetCustomizationData_Native(); // copy real data
-			previewData.SwatchDesc = activeSwatch;                                            // swap in the active color
+			if (activeDescClass->IsChildOf(UFGFactoryCustomizationDescriptor_Swatch::StaticClass()))
+			{
+				previewData.SwatchDesc = activeDescClass;
+			}
+			else if (activeDescClass->IsChildOf(UFGFactoryCustomizationDescriptor_Pattern::StaticClass()))
+			{
+				previewData.PatternDesc = activeDescClass;
+				// Live pattern rotation: the gun's rotation lives in the paint state's private
+				// mPatternRotation, aligned per-building (so patterns don't spin with foundation
+				// orientation). Both are reachable now via the Access Transformer friend, so the
+				// preview updates as the player rotates the pattern.
+				previewData.PatternRotation =
+					paintStateTyped->AlignPatternRotationWithActor(buildable, paintStateTyped->mPatternRotation);
+			}
+			else if (activeDescClass->IsChildOf(UFGFactoryCustomizationDescriptor_Material::StaticClass()))
+			{
+				previewData.MaterialDesc = activeDescClass;
+			}
+			else if (activeDescClass->IsChildOf(UFGFactoryCustomizationDescriptor_Skin::StaticClass()))
+			{
+				previewData.SkinDesc = activeDescClass;
+			}
 			previewData.Initialize(gameState);
-			buildable->ApplyCustomizationData_Native(previewData);                            // visual only
+			buildable->ApplyCustomizationData_Native(previewData); // visual only
 		}
 	}
 }
