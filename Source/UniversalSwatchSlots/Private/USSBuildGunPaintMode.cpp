@@ -30,6 +30,10 @@ TWeakObjectPtr<AFGBlueprintProxy> FUSSBuildGunPaintMode::HighlightedProxy;
 TArray<TWeakObjectPtr<AFGBuildable>> FUSSBuildGunPaintMode::HighlightedBuildables;
 TWeakObjectPtr<AFGCharacterPlayer> FUSSBuildGunPaintMode::HighlightCharacter;
 TWeakObjectPtr<AActor> FUSSBuildGunPaintMode::LightweightInstigator;
+TSet<TWeakObjectPtr<AFGBuildable>> FUSSBuildGunPaintMode::PreviewedBuildables;
+TWeakObjectPtr<UClass> FUSSBuildGunPaintMode::LastPreviewDescClass;
+uint8 FUSSBuildGunPaintMode::LastPreviewPatternRotation = 0;
+TWeakObjectPtr<AFGBuildable> FUSSBuildGunPaintMode::LastGameFocusedBuildable;
 
 // True if the player can pay 'cost' from 'inventory' (empty cost / free build is always affordable).
 static bool USSCanAffordCost(UFGInventoryComponent* inventory, const TArray<FItemAmount>& cost)
@@ -602,13 +606,37 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 	// buffers are written concurrently by lightweight replication, and the two writes race ->
 	// FInstanceSceneDataBuffers::BeginWriteAccess assert (hard crash). So we keep the (safe)
 	// custom-depth outline on every plan building, but only apply the colour preview when we are
-	// the authority (host / single player) -- unless the player opts in via the console variable.
-	// The on-click result is identical either way.
+	// the authority (host / single player) -- unless the player opts in via the mod's world-module
+	// toggle (GetClientPreview). The on-click result is identical either way.
 	const bool bCanPreviewColor = (world && world->GetNetMode() != NM_Client) || (world && GetWorldModule(world)->GetClientPreview());
 
-	// Re-apply every frame: the game clears a building's outline when the cursor leaves it, so we
-	// re-show it (we run after the game's tick). We also apply the active customization as a
-	// visual-only preview (ApplyCustomizationData_Native doesn't touch the saved data -> revertible).
+	// Writing per-instance colour data on instanced meshes is racy (it can collide with the render
+	// thread / lightweight replication, especially on clients). So we apply the colour preview as
+	// rarely as possible: ONCE per building, and again only when the active customization changes
+	// (descriptor or pattern rotation). The outline below is cheap/safe (custom depth) and stays
+	// per-tick. PreviewedBuildables tracks which buildings already carry the current preview.
+	const uint8 currentPatternRotation = paintStateTyped ? paintStateTyped->mPatternRotation : 0;
+	if (LastPreviewDescClass.Get() != activeDescClass || LastPreviewPatternRotation != currentPatternRotation)
+	{
+		PreviewedBuildables.Reset(); // customization changed -> re-apply once to every plan building
+		LastPreviewDescClass = activeDescClass;
+		LastPreviewPatternRotation = currentPatternRotation;
+	}
+
+	// The game previews the active customization on the building you aim at and REVERTS it when you
+	// move off (restoring its real look), which wipes our colour preview on that building. Detect
+	// the game's focus change and evict the building you just left so the loop below re-applies the
+	// preview to it once.
+	AFGBuildable* gameFocus = paintStateTyped ? Cast<AFGBuildable>(paintStateTyped->mCurrentlyAimedAtActor) : nullptr;
+	if (LastGameFocusedBuildable.Get() != gameFocus)
+	{
+		if (AFGBuildable* leftBuildable = LastGameFocusedBuildable.Get())
+		{
+			PreviewedBuildables.Remove(TWeakObjectPtr<AFGBuildable>(leftBuildable));
+		}
+		LastGameFocusedBuildable = gameFocus;
+	}
+
 	for (const TWeakObjectPtr<AFGBuildable>& weakBuildable : HighlightedBuildables)
 	{
 		AFGBuildable* buildable = weakBuildable.Get();
@@ -617,9 +645,12 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 			continue;
 		}
 
+		// Outline is safe to refresh every tick (the game clears it when the cursor leaves a building).
 		IFGColorInterface::Execute_StartIsAimedAtForColor(buildable, character, true);
 
-		if (bCanPreviewColor && activeDescClass && gameState)
+		// Colour preview only the first time we see this building with the current customization
+		// (visual-only: ApplyCustomizationData_Native doesn't touch the saved data -> revertible).
+		if (bCanPreviewColor && activeDescClass && gameState && !PreviewedBuildables.Contains(weakBuildable))
 		{
 			FFactoryCustomizationData previewData = buildable->GetCustomizationData_Native(); // copy real data
 			if (activeDescClass->IsChildOf(UFGFactoryCustomizationDescriptor_Swatch::StaticClass()))
@@ -629,10 +660,9 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 			else if (activeDescClass->IsChildOf(UFGFactoryCustomizationDescriptor_Pattern::StaticClass()))
 			{
 				previewData.PatternDesc = activeDescClass;
-				// Live pattern rotation: the gun's rotation lives in the paint state's private
-				// mPatternRotation, aligned per-building (so patterns don't spin with foundation
-				// orientation). Both are reachable now via the Access Transformer friend, so the
-				// preview updates as the player rotates the pattern.
+				// Pattern rotation lives in the paint state's private mPatternRotation, aligned
+				// per-building (so patterns don't spin with foundation orientation), reachable via
+				// the Access Transformer friend. Rotating re-applies (it changes the signature above).
 				previewData.PatternRotation =
 					paintStateTyped->AlignPatternRotationWithActor(buildable, paintStateTyped->mPatternRotation);
 			}
@@ -646,6 +676,7 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 			}
 			previewData.Initialize(gameState);
 			buildable->ApplyCustomizationData_Native(previewData); // visual only
+			PreviewedBuildables.Add(weakBuildable);
 		}
 	}
 }
@@ -653,13 +684,6 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 void FUSSBuildGunPaintMode::ClearBlueprintHighlight()
 {
 	AFGCharacterPlayer* character = HighlightCharacter.Get();
-
-	// Mirror UpdateBlueprintHighlight's colour-preview gate: we only applied the colour preview as
-	// the authority, so we only revert it there. On a network client we never wrote it, and the
-	// revert would hit the same racy instanced-buffer write -> crash.
-	UWorld* highlightWorld = character ? character->GetWorld() : nullptr;
-	const bool bDidPreviewColor =
-		(highlightWorld && highlightWorld->GetNetMode() != NM_Client) || (highlightWorld && GetWorldModule(highlightWorld)->GetClientPreview());
 
 	for (const TWeakObjectPtr<AFGBuildable>& weakBuildable : HighlightedBuildables)
 	{
@@ -674,10 +698,10 @@ void FUSSBuildGunPaintMode::ClearBlueprintHighlight()
 			IFGColorInterface::Execute_StopIsAimedAtForColor(buildable, character);
 		}
 
-		// Revert the visual color preview to the building's real (untouched) customization data.
-		// (Lightweight temps revert on their own when the subsystem reclaims them, but doing it
-		// here too is harmless.)
-		if (bDidPreviewColor)
+		// Revert ONLY the buildings we actually previewed (tracked in PreviewedBuildables): restores
+		// their real look, and keeps the racy colour writes to the same minimum as the apply.
+		// (Lightweight temps also revert on their own when the subsystem reclaims them.)
+		if (PreviewedBuildables.Contains(weakBuildable))
 		{
 			const FFactoryCustomizationData& realData = buildable->GetCustomizationData_Native();
 			if (realData.IsInitialized())
@@ -700,6 +724,10 @@ void FUSSBuildGunPaintMode::ClearBlueprintHighlight()
 	}
 
 	HighlightedBuildables.Reset();
+	PreviewedBuildables.Reset();
+	LastPreviewDescClass = nullptr;
+	LastPreviewPatternRotation = 0;
+	LastGameFocusedBuildable = nullptr;
 	LightweightInstigator = nullptr;
 	HighlightedProxy = nullptr;
 	HighlightCharacter = nullptr;

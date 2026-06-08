@@ -83,4 +83,19 @@ private:
 
 	/** Instance-converter instigator keeping the plan's lightweight instances spawned as temps. */
 	static TWeakObjectPtr<AActor> LightweightInstigator;
+
+	/** Plan buildings that currently have the colour preview applied. Writing per-instance colour
+	 *  data on instanced meshes is racy, so we apply the preview ONCE per building (tracked here)
+	 *  instead of every tick, and re-apply only when the active customization changes. */
+	static TSet<TWeakObjectPtr<AFGBuildable>> PreviewedBuildables;
+
+	/** The customization the colour preview was last applied with; a change forces a single
+	 *  re-apply across every plan building. */
+	static TWeakObjectPtr<UClass> LastPreviewDescClass;
+	static uint8 LastPreviewPatternRotation;
+
+	/** The building the game is currently previewing (its aimed-at building). When this changes the
+	 *  game reverts the one you just left, wiping our colour preview on it -- so we evict that
+	 *  building to re-apply the preview to it once. */
+	static TWeakObjectPtr<AFGBuildable> LastGameFocusedBuildable;
 };
