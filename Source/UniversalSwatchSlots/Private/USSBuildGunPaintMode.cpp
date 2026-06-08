@@ -355,7 +355,7 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 	for (const TWeakObjectPtr<AFGBuildable>& weakBuildable : HighlightedBuildables)
 	{
 		AFGBuildable* buildable = weakBuildable.Get();
-		if (!buildable)
+		if (!IsValid(buildable))
 		{
 			continue;
 		}
@@ -377,21 +377,24 @@ void FUSSBuildGunPaintMode::ClearBlueprintHighlight()
 	AFGCharacterPlayer* character = HighlightCharacter.Get();
 	for (const TWeakObjectPtr<AFGBuildable>& weakBuildable : HighlightedBuildables)
 	{
-		if (AFGBuildable* buildable = weakBuildable.Get())
+		AFGBuildable* buildable = weakBuildable.Get();
+		if (!IsValid(buildable))
 		{
-			if (character)
-			{
-				IFGColorInterface::Execute_StopIsAimedAtForColor(buildable, character);
-			}
+			continue;
+		}
 
-			// Revert the visual color preview to the building's real (untouched) customization data.
-			// (Lightweight temps revert on their own when the subsystem reclaims them, but doing it
-			// here too is harmless.)
-			const FFactoryCustomizationData& realData = buildable->GetCustomizationData_Native();
-			if (realData.IsInitialized())
-			{
-				buildable->ApplyCustomizationData_Native(realData);
-			}
+		if (character)
+		{
+			IFGColorInterface::Execute_StopIsAimedAtForColor(buildable, character);
+		}
+
+		// Revert the visual color preview to the building's real (untouched) customization data.
+		// (Lightweight temps revert on their own when the subsystem reclaims them, but doing it
+		// here too is harmless.)
+		const FFactoryCustomizationData& realData = buildable->GetCustomizationData_Native();
+		if (realData.IsInitialized())
+		{
+			buildable->ApplyCustomizationData_Native(realData);
 		}
 	}
 
