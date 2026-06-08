@@ -16,6 +16,7 @@
 #include "FGGameState.h"
 #include "FGCustomizationRecipe.h"
 #include "FGLightweightBuildableSubsystem.h"
+#include "FGInventoryComponent.h"
 
 #include "Patching/NativeHookManager.h"
 #include "Module/WorldModuleManager.h"
@@ -29,6 +30,74 @@ TWeakObjectPtr<AFGBlueprintProxy> FUSSBuildGunPaintMode::HighlightedProxy;
 TArray<TWeakObjectPtr<AFGBuildable>> FUSSBuildGunPaintMode::HighlightedBuildables;
 TWeakObjectPtr<AFGCharacterPlayer> FUSSBuildGunPaintMode::HighlightCharacter;
 TWeakObjectPtr<AActor> FUSSBuildGunPaintMode::LightweightInstigator;
+
+// True if the player can pay 'cost' from 'inventory' (empty cost / free build is always affordable).
+static bool USSCanAffordCost(UFGInventoryComponent* inventory, const TArray<FItemAmount>& cost)
+{
+	if (cost.Num() == 0)
+	{
+		return true; // nothing to pay
+	}
+	if (!inventory)
+	{
+		return false; // it costs something but we have nowhere to pay from
+	}
+	for (const FItemAmount& item : cost)
+	{
+		if (item.ItemClass && item.Amount > 0 && !inventory->HasItems(item.ItemClass, item.Amount))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+// Removes 'cost' from 'inventory' (assumes affordability was already checked).
+static void USSDeductCost(UFGInventoryComponent* inventory, const TArray<FItemAmount>& cost)
+{
+	if (!inventory)
+	{
+		return;
+	}
+	for (const FItemAmount& item : cost)
+	{
+		if (item.ItemClass && item.Amount > 0)
+		{
+			inventory->Remove(item.ItemClass, item.Amount);
+		}
+	}
+}
+
+int32 FUSSBuildGunPaintMode::CountPlanBuildings(AFGBlueprintProxy* proxy)
+{
+	if (!proxy)
+	{
+		return 0;
+	}
+
+	TArray<AFGBuildable*> buildables;
+	proxy->CollectBuildables(buildables);
+	int32 count = buildables.Num();
+
+	for (const FBuildableClassLightweightIndices& entry : proxy->GetLightweightClassAndIndices())
+	{
+		count += entry.Indices.Num();
+	}
+	return count;
+}
+
+TArray<FItemAmount> FUSSBuildGunPaintMode::ScaleCost(const TArray<FItemAmount>& perApplicationCost, int32 buildingCount)
+{
+	const int32 scale = FMath::Max(buildingCount, 0);
+
+	TArray<FItemAmount> scaled;
+	scaled.Reserve(perApplicationCost.Num());
+	for (const FItemAmount& item : perApplicationCost)
+	{
+		scaled.Add(FItemAmount(item.ItemClass, item.Amount * scale));
+	}
+	return scaled;
+}
 
 AFGBuildable* FUSSBuildGunPaintMode::ResolveAimedBuildable(UFGBuildGunStatePaint* self, AActor* hitActor)
 {
@@ -289,29 +358,43 @@ void FUSSBuildGunPaintMode::RegisterHooks()
 			AFGBuildGun* gun = self ? self->GetBuildGun() : nullptr;
 			const bool blueprintMode = gun && gun->GetCurrentBuildGunMode() == UUSSModeDescriptor::StaticClass();
 
-			AFGBlueprintProxy* proxy = nullptr;
-			AFGBuildable* skipBuildable = nullptr;
-			if (blueprintMode)
+			AFGBuildable* skipBuildable = blueprintMode ? ResolveAimedBuildable(self, hitActor) : nullptr;
+			AFGBlueprintProxy* proxy = skipBuildable ? skipBuildable->GetBlueprintProxy() : nullptr;
+
+			// Not our blueprint paint (or not aiming at a plan): vanilla single-target paint.
+			if (!blueprintMode || !proxy)
 			{
-				skipBuildable = ResolveAimedBuildable(self, hitActor);
-				proxy = skipBuildable ? skipBuildable->GetBlueprintProxy() : nullptr;
+				scope(self, mode, customizationData, hitActor);
+				return;
 			}
 
 			// What is the player painting right now? The active recipe's descriptor tells us
 			// (swatch / pattern / material / skin). A material is a recipe/mesh swap, not
 			// per-instance data, so it needs a completely different path.
 			TSubclassOf<UFGFactoryCustomizationDescriptor_Material> material = nullptr;
-			if (blueprintMode && proxy)
+			if (const TSubclassOf<UFGCustomizationRecipe> activeRecipe = self->GetActiveRecipe())
 			{
-				UClass* activeDescClass = nullptr;
-				if (const TSubclassOf<UFGCustomizationRecipe> activeRecipe = self->GetActiveRecipe())
-				{
-					activeDescClass = *UFGCustomizationRecipe::GetCustomizationDescriptor(activeRecipe);
-				}
+				UClass* activeDescClass = *UFGCustomizationRecipe::GetCustomizationDescriptor(activeRecipe);
 				if (activeDescClass && activeDescClass->IsChildOf(UFGFactoryCustomizationDescriptor_Material::StaticClass()))
 				{
 					material = TSubclassOf<UFGFactoryCustomizationDescriptor_Material>(activeDescClass);
 				}
+			}
+
+			// Vanilla cost: painting the whole plan costs the per-building customization cost times
+			// the number of buildings. Block the entire paint up front if the player can't afford it
+			// (unless no-build-cost is on), so we never paint a partial plan.
+			AFGCharacterPlayer* character = Cast<AFGCharacterPlayer>(gun->GetInstigator());
+			UFGInventoryComponent* inventory = character ? character->GetInventory() : nullptr;
+			const bool bFreeBuild = true;// inventory&& inventory->GetNoBuildCost();
+			const int32 buildingCount = CountPlanBuildings(proxy);
+			const TArray<FItemAmount> perApplyCost = self->GetCustomizationCost();
+
+			if (!bFreeBuild && !USSCanAffordCost(inventory, ScaleCost(perApplyCost, buildingCount)))
+			{
+				scope.Cancel();                  // paint nothing
+				self->OnApplyCustomizationFailed();
+				return;
 			}
 
 			if (material)
@@ -320,18 +403,23 @@ void FUSSBuildGunPaintMode::RegisterHooks()
 				// keep their existing customization and stay linked to the blueprint. Suppress the
 				// original paint (SML auto-forwards unless cancelled): it would reconstruct only the
 				// focused building, drop it from the plan and lose its prior customization.
-				// (Trade-off: no per-building paint cost / build effect from the game here.)
 				scope.Cancel();
+				if (!bFreeBuild)
+				{
+					USSDeductCost(inventory, ScaleCost(perApplyCost, buildingCount)); // charge all N
+				}
 				ApplyMaterialSwapToPlan(self, proxy, material);
 			}
 			else
 			{
-				scope(self, mode, customizationData, hitActor); // normal single-target paint first
-
-				if (proxy)
+				// The game paints + charges the focused building (1); we paint the rest and charge
+				// the remaining (N-1) so the total is exactly the whole-plan cost.
+				scope(self, mode, customizationData, hitActor);
+				if (!bFreeBuild)
 				{
-					ApplyToBlueprintPlan(self, &customizationData, proxy, skipBuildable);
+					USSDeductCost(inventory, ScaleCost(perApplyCost, buildingCount - 1));
 				}
+				ApplyToBlueprintPlan(self, &customizationData, proxy, skipBuildable);
 			}
 		});
 }
@@ -506,7 +594,17 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 	UFGBuildGunStatePaint* paintStateTyped = Cast<UFGBuildGunStatePaint>(paintState);
 	const TSubclassOf<UFGCustomizationRecipe> activeRecipe = paintStateTyped ? paintStateTyped->GetActiveRecipe() : nullptr;
 	UClass* activeDescClass = activeRecipe ? *UFGCustomizationRecipe::GetCustomizationDescriptor(activeRecipe) : nullptr;
-	AFGGameState* gameState = paintState->GetWorld() ? paintState->GetWorld()->GetGameState<AFGGameState>() : nullptr;
+	UWorld* world = paintState->GetWorld();
+	AFGGameState* gameState = world ? world->GetGameState<AFGGameState>() : nullptr;
+
+	// The per-instance colour preview writes the engine's instanced-mesh buffers
+	// (ApplyCustomizationData_Native -> UFGColoredInstanceManager). On a network client those same
+	// buffers are written concurrently by lightweight replication, and the two writes race ->
+	// FInstanceSceneDataBuffers::BeginWriteAccess assert (hard crash). So we keep the (safe)
+	// custom-depth outline on every plan building, but only apply the colour preview when we are
+	// the authority (host / single player) -- unless the player opts in via the console variable.
+	// The on-click result is identical either way.
+	const bool bCanPreviewColor = (world && world->GetNetMode() != NM_Client) || (world && GetWorldModule(world)->GetClientPreview());
 
 	// Re-apply every frame: the game clears a building's outline when the cursor leaves it, so we
 	// re-show it (we run after the game's tick). We also apply the active customization as a
@@ -521,7 +619,7 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 
 		IFGColorInterface::Execute_StartIsAimedAtForColor(buildable, character, true);
 
-		if (activeDescClass && gameState)
+		if (bCanPreviewColor && activeDescClass && gameState)
 		{
 			FFactoryCustomizationData previewData = buildable->GetCustomizationData_Native(); // copy real data
 			if (activeDescClass->IsChildOf(UFGFactoryCustomizationDescriptor_Swatch::StaticClass()))
@@ -555,6 +653,14 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 void FUSSBuildGunPaintMode::ClearBlueprintHighlight()
 {
 	AFGCharacterPlayer* character = HighlightCharacter.Get();
+
+	// Mirror UpdateBlueprintHighlight's colour-preview gate: we only applied the colour preview as
+	// the authority, so we only revert it there. On a network client we never wrote it, and the
+	// revert would hit the same racy instanced-buffer write -> crash.
+	UWorld* highlightWorld = character ? character->GetWorld() : nullptr;
+	const bool bDidPreviewColor =
+		(highlightWorld && highlightWorld->GetNetMode() != NM_Client) || (highlightWorld && GetWorldModule(highlightWorld)->GetClientPreview());
+
 	for (const TWeakObjectPtr<AFGBuildable>& weakBuildable : HighlightedBuildables)
 	{
 		AFGBuildable* buildable = weakBuildable.Get();
@@ -571,10 +677,13 @@ void FUSSBuildGunPaintMode::ClearBlueprintHighlight()
 		// Revert the visual color preview to the building's real (untouched) customization data.
 		// (Lightweight temps revert on their own when the subsystem reclaims them, but doing it
 		// here too is harmless.)
-		const FFactoryCustomizationData& realData = buildable->GetCustomizationData_Native();
-		if (realData.IsInitialized())
+		if (bDidPreviewColor)
 		{
-			buildable->ApplyCustomizationData_Native(realData);
+			const FFactoryCustomizationData& realData = buildable->GetCustomizationData_Native();
+			if (realData.IsInitialized())
+			{
+				buildable->ApplyCustomizationData_Native(realData);
+			}
 		}
 	}
 

@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/WeakObjectPtrTemplates.h"
+#include "ItemAmount.h"
 
 
 class UUSSPaintModeWidget;
@@ -32,13 +33,20 @@ public:
 	/** Installs the build-gun hooks. Call once from module startup. */
 	static void RegisterHooks();
 
-private:
 	/** Resolves the real aimed buildable for the current paint. For swatch/pattern/skin the hit
 	 *  actor IS the building and carries the blueprint proxy. For materials the engine aims a
 	 *  transient mesh-swap preview actor (no proxy), so we fall back to the paint state's private
-	 *  aimed-at / customization-target actor (exposed via an Access Transformer friend). */
+	 *  aimed-at / customization-target actor (exposed via an Access Transformer friend). Public so
+	 *  the HUD cost query can resolve the same building the paint will act on. */
 	static AFGBuildable* ResolveAimedBuildable(UFGBuildGunStatePaint* self, AActor* hitActor);
 
+	/** Number of buildings in a blueprint plan (actor buildables + lightweight instances). */
+	static int32 CountPlanBuildings(AFGBlueprintProxy* proxy);
+
+	/** Per-application customization cost scaled by a building count (whole-plan paint cost). */
+	static TArray<FItemAmount> ScaleCost(const TArray<FItemAmount>& perApplicationCost, int32 buildingCount);
+
+private:
 	/** Applies the active paint to every other building of the blueprint (actor buildables +
 	 *  lightweight instances). The proxy is captured before the original paint runs because a
 	 *  material apply can reconstruct the focused building and drop its proxy link.

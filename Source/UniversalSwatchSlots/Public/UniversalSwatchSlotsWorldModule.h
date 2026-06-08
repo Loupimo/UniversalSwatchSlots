@@ -4,12 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Module/GameWorldModule.h"
+#include "ItemAmount.h"
 
 #include "UniversalSwatchSlotsSubsystem.h"
 
 #include "UniversalSwatchSlotsWorldModule.generated.h"
 
 class UUSSPaintModeWidget;
+class AFGBuildGun;
 
 
 /**
@@ -57,6 +59,10 @@ class UNIVERSALSWATCHSLOTS_API UUniversalSwatchSlotsWorldModule : public UGameWo
 
 public:
 
+	/* Tells if client should render the preview customization in blueprint mode. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	bool IsClientPreviewEnabled;
+
 	/* Tells if More Swatch slots mod is loaded. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	bool IsUsingMoreSwatchSlots;
@@ -70,4 +76,28 @@ public:
 	   Set this in the RootGameWorld_UniversalSwatchSlots blueprint defaults. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
 	TSubclassOf<UUSSPaintModeWidget> PaintModeWidgetClass;
+
+	/**
+	 * Total resource cost to paint the blueprint the build gun is currently aiming at, with the
+	 * active customization, in Blueprint paint mode. This is the per-building customization cost
+	 * times the number of buildings in the plan (actors + lightweights). Use it to show the
+	 * required resources in the HUD before the player paints.
+	 *
+	 * @param	BuildGun			The local player's build gun.
+	 * @param	OutCost				The total cost for the whole plan.
+	 * @param	OutBuildingCount	The number of buildings the cost covers.
+	 * 
+	 * @return An empty cost (and 0 buildings) when not aiming at a plan, not in Paint state, or
+	 * when no-build-cost is enabled.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Paint")
+	void GetBlueprintPaintCost(AFGBuildGun* BuildGun, TArray<FItemAmount>& OutCost, int32& OutBuildingCount) const;
+	
+	/**
+	 * Get the client preview rendering state.
+	 *
+	 * @return True if the client should render the preview, false otherwise.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Config")
+	bool GetClientPreview() const;
 };

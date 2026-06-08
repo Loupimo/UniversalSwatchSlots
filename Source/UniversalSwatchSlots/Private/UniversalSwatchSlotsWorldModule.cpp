@@ -6,6 +6,14 @@
 #include "GameFramework/Actor.h"
 #include "FGGameState.h"
 
+#include "USSBuildGunPaintMode.h"
+#include "Equipment/FGBuildGun.h"
+#include "Equipment/FGBuildGunPaint.h"
+#include "Buildables/FGBuildable.h"
+#include "FGBlueprintProxy.h"
+#include "FGCharacterPlayer.h"
+#include "FGInventoryComponent.h"
+
 
 void UUniversalSwatchSlotsWorldModule::GenerateSwatchesFromPalette(FUSSPalette Palette)
 {
@@ -19,6 +27,48 @@ void UUniversalSwatchSlotsWorldModule::InitUSSGameWorldModule(UUniversalSwatchSl
 	this->USSSubsystem->USSInst = USSInstance;
 	this->USSSubsystem->IsUsingMSS = this->IsUsingMoreSwatchSlots;
 	this->USSSubsystem->RetrieveFreeColorSlotID();
+}
+
+void UUniversalSwatchSlotsWorldModule::GetBlueprintPaintCost(AFGBuildGun* BuildGun, TArray<FItemAmount>& OutCost, int32& OutBuildingCount) const
+{
+	OutCost.Reset();
+	OutBuildingCount = 0;
+
+	if (!BuildGun)
+	{
+		return;
+	}
+
+	// Only meaningful while the build gun is in the Paint state.
+	UFGBuildGunStatePaint* paint = Cast<UFGBuildGunStatePaint>(BuildGun->GetCurrentState());
+	if (!paint)
+	{
+		return;
+	}
+
+	// No-build-cost (creative): nothing to display.
+	const AFGCharacterPlayer* character = Cast<AFGCharacterPlayer>(BuildGun->GetInstigator());
+	const UFGInventoryComponent* inventory = character ? character->GetInventory() : nullptr;
+	if (inventory && inventory->GetNoBuildCost())
+	{
+		return;
+	}
+
+	// Resolve the same building the paint will act on (handles the material preview actor too).
+	AFGBuildable* aimed = FUSSBuildGunPaintMode::ResolveAimedBuildable(paint, BuildGun->GetHitResult().GetActor());
+	AFGBlueprintProxy* proxy = aimed ? aimed->GetBlueprintProxy() : nullptr;
+	if (!proxy)
+	{
+		return; // not aiming at a blueprint
+	}
+
+	OutBuildingCount = FUSSBuildGunPaintMode::CountPlanBuildings(proxy);
+	OutCost = FUSSBuildGunPaintMode::ScaleCost(paint->GetCustomizationCost(), OutBuildingCount);
+}
+
+bool UUniversalSwatchSlotsWorldModule::GetClientPreview() const
+{
+    return this->IsClientPreviewEnabled;
 }
 
 TArray<FGlobalColorPreset> UUniversalSwatchSlotsWorldModule::ApplySwatchesColorOptionToPreset(TArray<UUSSSwatchDesc*> SwatchDescriptions, bool AddPrimaryColors, bool AddSecondaryColors, bool RemovePrimayColors, bool RemoveSecondaryColors)
