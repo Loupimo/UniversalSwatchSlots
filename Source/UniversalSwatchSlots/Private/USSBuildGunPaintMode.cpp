@@ -14,16 +14,11 @@
 #include "FGColorInterface.h"
 #include "FGCharacterPlayer.h"
 #include "FGLightweightBuildableSubsystem.h"
-#include "FGBlueprintFunctionLibrary.h" // EOutlineColor
 
 #include "Patching/NativeHookManager.h"
 #include "Module/WorldModuleManager.h"
 
-#include "AbstractInstanceInterface.h"
-#include "InstanceData.h"
-#include "Components/InstancedStaticMeshComponent.h"
-#include "Components/SceneComponent.h"
-#include "Materials/MaterialInterface.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Pawn.h"
 
@@ -31,7 +26,7 @@ TWeakObjectPtr<UUSSPaintModeWidget> FUSSBuildGunPaintMode::IndicatorWidget;
 TWeakObjectPtr<AFGBlueprintProxy> FUSSBuildGunPaintMode::HighlightedProxy;
 TArray<TWeakObjectPtr<AFGBuildable>> FUSSBuildGunPaintMode::HighlightedBuildables;
 TWeakObjectPtr<AFGCharacterPlayer> FUSSBuildGunPaintMode::HighlightCharacter;
-TWeakObjectPtr<AActor> FUSSBuildGunPaintMode::HighlightISMHolder;
+TWeakObjectPtr<AActor> FUSSBuildGunPaintMode::LightweightInstigator;
 
 void FUSSBuildGunPaintMode::RegisterHooks()
 {
@@ -262,14 +257,14 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 		targetProxy = aimed ? aimed->GetBlueprintProxy() : nullptr;
 	}
 
-	// Rebuild the highlighted set only when the aimed blueprint changes.
+	// Rebuild the actor set only when the aimed blueprint changes.
 	if (targetProxy != HighlightedProxy.Get())
 	{
-		ClearBlueprintHighlight(); // remove the previous blueprint's outline
+		ClearBlueprintHighlight();
 
 		if (targetProxy)
 		{
-			// Per-building outline for actor buildables (machines, etc.).
+			// Actor buildables (machines, etc.) get the outline directly.
 			TArray<AFGBuildable*> buildables;
 			targetProxy->CollectBuildables(buildables);
 			for (AFGBuildable* buildable : buildables)
@@ -280,95 +275,18 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 				}
 			}
 
-			// Lightweight instances (foundations, walls, ...) have no actor, so we render
-			// custom-depth outline copies of their meshes on a holder actor, with the same
-			// stencil as the machines' outline -> identical look. Render-in-main-pass is off
-			// so only the outline shows (no duplicate mesh). No temp buildables are spawned,
-			// so the lightweight subsystem is left untouched.
-			if (UWorld* world = paintState->GetWorld())
+			// Keep the blueprint's lightweight instances spawned as temporary actors while we
+			// highlight, via an instance-converter instigator covering the plan. Without it the
+			// subsystem reclaims them between frames (and respawn is throttled), so the outline
+			// would be incomplete. We remove the instigator on clear so they are reclaimed.
+			if (AFGLightweightBuildableSubsystem* lightweightSubsystem = AFGLightweightBuildableSubsystem::Get(paintState->GetWorld()))
 			{
-				AActor* holder = nullptr;
-				TMap<UStaticMesh*, UInstancedStaticMeshComponent*> meshToISM;
-				AFGLightweightBuildableSubsystem* lightweightSubsystem = AFGLightweightBuildableSubsystem::Get(world);
-
-				// Optional material (set in the World module) to hide the otherwise-black main-pass
-				// render of the outline meshes. Must still write custom depth for the outline to show.
-				UMaterialInterface* outlineMaterial = nullptr;
-				if (UUniversalSwatchSlotsWorldModule* module = GetWorldModule(world))
+				if (UBoxComponent* box = targetProxy->GetBoundingBox())
 				{
-					outlineMaterial = module->LightweightOutlineMaterial;
+					const float radius = box->GetScaledBoxExtent().Size();
+					LightweightInstigator = lightweightSubsystem->AddInstanceConverterInstigator(
+						radius, nullptr, FTransform(box->GetComponentLocation()));
 				}
-
-				for (const FBuildableClassLightweightIndices& entry : targetProxy->GetLightweightClassAndIndices())
-				{
-					AFGBuildable* cdo = entry.BuildableClass.GetDefaultObject();
-					if (!cdo || !lightweightSubsystem)
-					{
-						continue;
-					}
-
-					const TArray<FInstanceData> instanceMeshes = IAbstractInstanceInterface::Execute_GetActorLightweightInstanceData(cdo);
-
-					for (int32 index : entry.Indices)
-					{
-						FLightweightBuildableInstanceRef ref;
-						ref.Initialize(lightweightSubsystem, entry.BuildableClass, index);
-						const FTransform instanceWorld = ref.GetBuildableTransform();
-
-						for (const FInstanceData& meshData : instanceMeshes)
-						{
-							if (!meshData.StaticMesh)
-							{
-								continue;
-							}
-
-							if (!holder)
-							{
-								holder = world->SpawnActor<AActor>();
-								USceneComponent* root = NewObject<USceneComponent>(holder, TEXT("Root"));
-								holder->SetRootComponent(root);
-								root->RegisterComponent();
-							}
-
-							UInstancedStaticMeshComponent*& ism = meshToISM.FindOrAdd(meshData.StaticMesh);
-							if (!ism)
-							{
-								ism = NewObject<UInstancedStaticMeshComponent>(holder);
-								ism->SetStaticMesh(meshData.StaticMesh);
-									if (outlineMaterial)
-									{
-										const int32 numMaterials = ism->GetNumMaterials();
-										for (int32 materialIndex = 0; materialIndex < numMaterials; ++materialIndex)
-										{
-											ism->SetMaterial(materialIndex, outlineMaterial);
-										}
-									}
-								ism->SetMobility(EComponentMobility::Movable);
-								ism->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-								ism->SetCastShadow(false);
-								ism->SetRenderCustomDepth(true);
-								ism->SetCustomDepthStencilValue((int32)EOutlineColor::OC_HOLOGRAMLINE);
-								ism->RegisterComponent();
-								ism->AttachToComponent(holder->GetRootComponent(), FAttachmentTransformRules::KeepWorldTransform);
-								// Render only the custom-depth outline, not the (uncolored, black) mesh.
-								// Setting this AFTER registration + dirtying the render state makes it
-								// take effect (setting it before RegisterComponent did not).
-								ism->SetRenderInMainPass(false);
-								ism->MarkRenderStateDirty();
-							}
-
-							// Small shrink as a safety net in case the mesh still renders in the main
-							// pass (keeps any black hidden inside the real building). If SetRenderInMainPass
-							// works, only the outline shows and this just insets it very slightly.
-							// Tweak toward 1.0 for a crisper outline, toward 0.98 if any black peeks.
-							FTransform outlineTransform = meshData.RelativeTransform * instanceWorld;
-							outlineTransform.SetScale3D(outlineTransform.GetScale3D() * 0.99f);
-							ism->AddInstance(outlineTransform, /*bWorldSpace=*/true);
-						}
-					}
-				}
-
-				HighlightISMHolder = holder;
 			}
 
 			HighlightedProxy = targetProxy;
@@ -376,17 +294,81 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 		}
 	}
 
-	// Re-apply every frame: the game hides a building's outline when the cursor leaves
-	// it, which would clear our preview when moving within the same blueprint. We run
-	// after the game's tick (scope already ran), so re-showing it wins.
-	if (HighlightedProxy.Get())
+	AFGBlueprintProxy* highlightedProxy = HighlightedProxy.Get();
+	if (!highlightedProxy)
 	{
-		for (const TWeakObjectPtr<AFGBuildable>& weakBuildable : HighlightedBuildables)
+		return;
+	}
+
+	// Lightweight instances (foundations, walls, ...) have no persistent actor. We spawn (and
+	// keep alive each frame) managed temporary actors for them, then outline those temps exactly
+	// like the game does for a single aimed lightweight (StartIsAimedAtForColor handles Nanite).
+	// Capped so a huge blueprint doesn't spawn too many actors at once. The subsystem owns the
+	// temps' lifecycle; once we stop referencing them (on clear) they are reclaimed.
+	if (AFGLightweightBuildableSubsystem* lightweightSubsystem = AFGLightweightBuildableSubsystem::Get(paintState->GetWorld()))
+	{
+		constexpr int32 MaxLightweightTemps = 200;
+		int32 tempCount = 0;
+
+		// Keep the instigator active each frame (the game's aim instigator follows the player),
+		// otherwise the temps it should keep alive get reclaimed and respawned every tick.
+		if (AActor* instigator = LightweightInstigator.Get())
 		{
-			if (AFGBuildable* buildable = weakBuildable.Get())
+			if (UBoxComponent* box = highlightedProxy->GetBoundingBox())
 			{
-				IFGColorInterface::Execute_StartIsAimedAtForColor(buildable, character, true);
+				lightweightSubsystem->SetInstanceInstigatorLocation(instigator, box->GetComponentLocation());
 			}
+		}
+
+		for (const FBuildableClassLightweightIndices& entry : highlightedProxy->GetLightweightClassAndIndices())
+		{
+			for (int32 index : entry.Indices)
+			{
+				if (tempCount >= MaxLightweightTemps)
+				{
+					break;
+				}
+
+				// Actively spawn the managed temp for this instance (FindOrSpawn). The instigator
+				// added on rebuild keeps already-spawned temps alive between frames, so across a
+				// few ticks they accumulate to the whole plan instead of being reclaimed.
+				FRuntimeBuildableInstanceData* runtimeData =
+					lightweightSubsystem->GetRuntimeDataForBuildableClassAndIndex(entry.BuildableClass, index);
+				if (!runtimeData)
+				{
+					UE_LOG(LogUSS, Warning, TEXT("LW %s[%d]: NO RUNTIME DATA"), *GetNameSafe(entry.BuildableClass), index);
+					continue;
+				}
+
+				bool didSpawn = false;
+				FInstanceToTemporaryBuildable* tempInfo =
+					lightweightSubsystem->FindOrSpawnBuildableForRuntimeData(entry.BuildableClass, runtimeData, index, didSpawn);
+				if (tempInfo && tempInfo->Buildable)
+				{
+					HighlightedBuildables.AddUnique(tempInfo->Buildable);
+					++tempCount;
+					UE_LOG(LogUSS, Warning, TEXT("LW %s[%d]: OK (didSpawn=%d)"), *GetNameSafe(entry.BuildableClass), index, didSpawn ? 1 : 0);
+				}
+				else
+				{
+					UE_LOG(LogUSS, Warning, TEXT("LW %s[%d]: NO TEMP (didSpawn=%d)"), *GetNameSafe(entry.BuildableClass), index, didSpawn ? 1 : 0);
+				}
+			}
+
+			if (tempCount >= MaxLightweightTemps)
+			{
+				break;
+			}
+		}
+	}
+
+	// Re-apply every frame: the game clears a building's outline when the cursor leaves it, so we
+	// re-show it (we run after the game's tick). This also re-confirms the lightweight temps.
+	for (const TWeakObjectPtr<AFGBuildable>& weakBuildable : HighlightedBuildables)
+	{
+		if (AFGBuildable* buildable = weakBuildable.Get())
+		{
+			IFGColorInterface::Execute_StartIsAimedAtForColor(buildable, character, true);
 		}
 	}
 }
@@ -405,14 +387,20 @@ void FUSSBuildGunPaintMode::ClearBlueprintHighlight()
 		}
 	}
 
-	// Destroy the lightweight outline ISM holder, if any.
-	if (AActor* holder = HighlightISMHolder.Get())
+	// Remove the instigator so the subsystem reclaims the lightweight temporaries it kept alive.
+	if (AActor* instigator = LightweightInstigator.Get())
 	{
-		holder->Destroy();
+		if (UWorld* world = instigator->GetWorld())
+		{
+			if (AFGLightweightBuildableSubsystem* lightweightSubsystem = AFGLightweightBuildableSubsystem::Get(world))
+			{
+				lightweightSubsystem->RemoveInstanceConverterInstigator(instigator);
+			}
+		}
 	}
 
 	HighlightedBuildables.Reset();
-	HighlightISMHolder = nullptr;
+	LightweightInstigator = nullptr;
 	HighlightedProxy = nullptr;
 	HighlightCharacter = nullptr;
 }

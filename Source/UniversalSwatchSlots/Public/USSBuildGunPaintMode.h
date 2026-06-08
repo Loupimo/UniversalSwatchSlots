@@ -53,6 +53,6 @@ private:
 	static TArray<TWeakObjectPtr<AFGBuildable>> HighlightedBuildables;
 	static TWeakObjectPtr<AFGCharacterPlayer> HighlightCharacter;
 
-	/** Holder actor carrying the custom-depth outline ISMs for the plan's lightweight instances. */
-	static TWeakObjectPtr<AActor> HighlightISMHolder;
+	/** Instance-converter instigator keeping the plan's lightweight instances spawned as temps. */
+	static TWeakObjectPtr<AActor> LightweightInstigator;
 };

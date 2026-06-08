@@ -10,7 +10,6 @@
 #include "UniversalSwatchSlotsWorldModule.generated.h"
 
 class UUSSPaintModeWidget;
-class UMaterialInterface;
 
 
 /**
@@ -71,10 +70,4 @@ public:
 	   Set this in the RootGameWorld_UniversalSwatchSlots blueprint defaults. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
 	TSubclassOf<UUSSPaintModeWidget> PaintModeWidgetClass;
-
-	/* Optional material applied to the lightweight-outline meshes (to hide their otherwise
-	   black, uncolored main-pass render). Must still write custom depth for the outline to
-	   show (an opaque/invisible material, not a translucent one). Set in RootGameWorld_UniversalSwatchSlots. */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
-	TObjectPtr<UMaterialInterface> LightweightOutlineMaterial;
 };
