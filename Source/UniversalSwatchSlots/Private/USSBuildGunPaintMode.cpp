@@ -13,6 +13,7 @@
 #include "FGBlueprintProxy.h"
 #include "FGColorInterface.h"
 #include "FGCharacterPlayer.h"
+#include "FGGameState.h"
 #include "FGLightweightBuildableSubsystem.h"
 
 #include "Patching/NativeHookManager.h"
@@ -303,13 +304,10 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 	// Lightweight instances (foundations, walls, ...) have no persistent actor. We spawn (and
 	// keep alive each frame) managed temporary actors for them, then outline those temps exactly
 	// like the game does for a single aimed lightweight (StartIsAimedAtForColor handles Nanite).
-	// Capped so a huge blueprint doesn't spawn too many actors at once. The subsystem owns the
-	// temps' lifecycle; once we stop referencing them (on clear) they are reclaimed.
+	// The subsystem owns the temps' lifecycle; once we stop referencing them (on clear) they are
+	// reclaimed.
 	if (AFGLightweightBuildableSubsystem* lightweightSubsystem = AFGLightweightBuildableSubsystem::Get(paintState->GetWorld()))
 	{
-		constexpr int32 MaxLightweightTemps = 200;
-		int32 tempCount = 0;
-
 		// Keep the instigator active each frame (the game's aim instigator follows the player),
 		// otherwise the temps it should keep alive get reclaimed and respawned every tick.
 		if (AActor* instigator = LightweightInstigator.Get())
@@ -324,51 +322,52 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 		{
 			for (int32 index : entry.Indices)
 			{
-				if (tempCount >= MaxLightweightTemps)
-				{
-					break;
-				}
-
-				// Actively spawn the managed temp for this instance (FindOrSpawn). The instigator
-				// added on rebuild keeps already-spawned temps alive between frames, so across a
-				// few ticks they accumulate to the whole plan instead of being reclaimed.
 				FRuntimeBuildableInstanceData* runtimeData =
 					lightweightSubsystem->GetRuntimeDataForBuildableClassAndIndex(entry.BuildableClass, index);
 				if (!runtimeData)
 				{
-					UE_LOG(LogUSS, Warning, TEXT("LW %s[%d]: NO RUNTIME DATA"), *GetNameSafe(entry.BuildableClass), index);
 					continue;
 				}
 
 				bool didSpawn = false;
-				FInstanceToTemporaryBuildable* tempInfo =
-					lightweightSubsystem->FindOrSpawnBuildableForRuntimeData(entry.BuildableClass, runtimeData, index, didSpawn);
-				if (tempInfo && tempInfo->Buildable)
+				if (FInstanceToTemporaryBuildable* tempInfo =
+					lightweightSubsystem->FindOrSpawnBuildableForRuntimeData(entry.BuildableClass, runtimeData, index, didSpawn))
 				{
-					HighlightedBuildables.AddUnique(tempInfo->Buildable);
-					++tempCount;
-					UE_LOG(LogUSS, Warning, TEXT("LW %s[%d]: OK (didSpawn=%d)"), *GetNameSafe(entry.BuildableClass), index, didSpawn ? 1 : 0);
+					if (tempInfo->Buildable)
+					{
+						HighlightedBuildables.AddUnique(tempInfo->Buildable);
+					}
 				}
-				else
-				{
-					UE_LOG(LogUSS, Warning, TEXT("LW %s[%d]: NO TEMP (didSpawn=%d)"), *GetNameSafe(entry.BuildableClass), index, didSpawn ? 1 : 0);
-				}
-			}
-
-			if (tempCount >= MaxLightweightTemps)
-			{
-				break;
 			}
 		}
 	}
 
+	// Active swatch (the color the player would paint) for the live preview below. Null if the
+	// player has no swatch selected (e.g. painting a pattern/material) -> no color preview then.
+	UFGBuildGunStatePaint* paintStateTyped = Cast<UFGBuildGunStatePaint>(paintState);
+	const TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> activeSwatch =
+		paintStateTyped ? paintStateTyped->GetActiveSwatchDesc() : nullptr;
+	AFGGameState* gameState = paintState->GetWorld() ? paintState->GetWorld()->GetGameState<AFGGameState>() : nullptr;
+
 	// Re-apply every frame: the game clears a building's outline when the cursor leaves it, so we
-	// re-show it (we run after the game's tick). This also re-confirms the lightweight temps.
+	// re-show it (we run after the game's tick). We also apply the active swatch as a visual-only
+	// preview (ApplyCustomizationData_Native doesn't touch the saved data, so we can revert it).
 	for (const TWeakObjectPtr<AFGBuildable>& weakBuildable : HighlightedBuildables)
 	{
-		if (AFGBuildable* buildable = weakBuildable.Get())
+		AFGBuildable* buildable = weakBuildable.Get();
+		if (!buildable)
 		{
-			IFGColorInterface::Execute_StartIsAimedAtForColor(buildable, character, true);
+			continue;
+		}
+
+		IFGColorInterface::Execute_StartIsAimedAtForColor(buildable, character, true);
+
+		if (activeSwatch && gameState)
+		{
+			FFactoryCustomizationData previewData = buildable->GetCustomizationData_Native(); // copy real data
+			previewData.SwatchDesc = activeSwatch;                                            // swap in the active color
+			previewData.Initialize(gameState);
+			buildable->ApplyCustomizationData_Native(previewData);                            // visual only
 		}
 	}
 }
@@ -383,6 +382,15 @@ void FUSSBuildGunPaintMode::ClearBlueprintHighlight()
 			if (character)
 			{
 				IFGColorInterface::Execute_StopIsAimedAtForColor(buildable, character);
+			}
+
+			// Revert the visual color preview to the building's real (untouched) customization data.
+			// (Lightweight temps revert on their own when the subsystem reclaims them, but doing it
+			// here too is harmless.)
+			const FFactoryCustomizationData& realData = buildable->GetCustomizationData_Native();
+			if (realData.IsInitialized())
+			{
+				buildable->ApplyCustomizationData_Native(realData);
 			}
 		}
 	}
