@@ -7,10 +7,11 @@
 #include "FGBuildableSubsystem.h"
 #include "Buildables/FGBuildable.h"
 #include "FGGameState.h"
+#include "FGLightweightBuildableSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "USSBPLib.h"
 
-const EUSSVersion CurrVersion = EUSSVersion::V1_2_3;
+const EUSSVersion CurrVersion = EUSSVersion::V1_3_1;
 const FString USSSubPackageName = "/UniversalSwatchSlots";
 
 DECLARE_LOG_CATEGORY_EXTERN(LogUSS_Subsystem, Log, All)
@@ -98,6 +99,30 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 	{
 		// Let GameState apply / refresh any internal state using the current slots.
 		FGGameState->SetupColorSlots_Data(FGGameState->mBuildingColorSlots_Data);
+	}
+
+	// Push every swatch colour through the BuildableSubsystem's per-slot setter (the same path the
+	// customization menu uses for live edits). This marks the slot "dirty" so the subsystem
+	// re-applies it to every building/instance already using it. Without this, buildings that
+	// resolved and CACHED their colour on load (before these custom slots existed) keep showing a
+	// stale colour until they are repainted -- even though the swatch assignment is correct.
+	// Note: this is the BuildableSubsystem's LOCAL setter, not the GameState reliable RPC we avoid
+	// above, so calling it in a loop is safe. Runs server-side (we already returned on clients);
+	// clients refresh from the replicated GameState slot data.
+	if (AFGBuildableSubsystem* BuildableSubsystem = AFGBuildableSubsystem::Get(GetWorld()))
+	{
+		for (UUSSSwatchDesc* Swatch : SwatchDescriptions)
+		{
+			if (!Swatch)
+			{
+				continue;
+			}
+
+			FFactoryCustomizationColorSlot ColourSlot(Swatch->PrimaryColour, Swatch->SecondaryColour);
+			ColourSlot.PaintFinish = this->PaintFinishes[(uint8)Swatch->Material];
+
+			BuildableSubsystem->SetColorSlot_Data((uint8)Swatch->ID, ColourSlot);
+		}
 	}
 }
 
@@ -408,51 +433,118 @@ void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
 	}
 
 	if (shouldPatch)
-	{	// We should patch buildings
+	{	// We should patch buildings (a swatch moved slot / version changed)
 
+		AFGGameState* gameState = Cast<AFGGameState>(UGameplayStatics::GetGameState(this));
+
+		// Remaps a USS swatch to its current slot (if it moved) and forces the cached per-instance
+		// colour to re-resolve from the (now correct) slot data. Without the re-resolution the
+		// remapped building keeps its OLD resolved colour (SetCustomizationData_Native reuses the
+		// existing Data array), so the swatch assignment looks right but the colour stays wrong
+		// until a repaint. Returns true if the data is a USS swatch that was remapped.
+		auto RemapAndReinit = [this, gameState](FFactoryCustomizationData& data) -> bool
+		{
+			UClass* swatchClass = data.SwatchDesc.Get();
+			if (!swatchClass || !swatchClass->IsChildOf(UUSSSwatchDesc::StaticClass()))
+			{
+				return false; // not one of our swatches
+			}
+
+			FString idStr;
+			swatchClass->GetName(idStr);
+			idStr.RemoveFromStart(TEXT("Gen_USS_SwatchDesc_"));
+			idStr.RemoveFromEnd(TEXT("_C"));
+
+			const int32* matchID = this->InternalSwatchMatch.Find(FCString::Atoi(*idStr));
+			if (!matchID)
+			{
+				return false; // no mapping (e.g. removed from the palette)
+			}
+
+			const FUSSSwatchDescGenInfo* newDesc = this->USSInst->SwatchDescriptorArray.Find(*matchID);
+			if (!newDesc)
+			{
+				return false; // no current descriptor for that slot
+			}
+
+			data.ColorSlot = (uint8)*matchID;
+			data.SwatchDesc = newDesc->SwatchClass;
+			data.Data.Reset();
+			if (gameState)
+			{
+				data.Initialize(gameState);
+			}
+			return true;
+		};
+
+		int32 patchedActors = 0;
+		int32 patchedLightweights = 0;
+
+		// 1) Actor buildables: machines, but also foundations / walls (still actors at this point).
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFGBuildable::StaticClass(), foundActors);
-
 		for (AActor* CurrBuilding : foundActors)
-		{	// Check all actors of type AFGBuildable
+		{
+			AFGBuildable* castBuild = Cast<AFGBuildable>(CurrBuilding);
+			if (!castBuild)
+			{
+				continue;
+			}
 
-			AFGBuildable* castBuild = (AFGBuildable*)CurrBuilding;
+			FFactoryCustomizationData data = castBuild->GetCustomizationData_Native();
+			if (RemapAndReinit(data))
+			{
+				castBuild->SetCustomizationData_Native(data);
+				++patchedActors;
+			}
+		}
 
-			UClass* tmpDesc = castBuild->mCustomizationData.SwatchDesc.Get();
+		// 2) Lightweight buildables: beams and other purely structural pieces are managed as
+		//    lightweight instances (no actor) from load, so GetAllActorsOfClass above misses them.
+		//    Remap them too, the same way the build gun paints a single lightweight (temp actor ->
+		//    set data -> copy back, which also refreshes the visual).
+		if (AFGLightweightBuildableSubsystem* lwSubsystem = AFGLightweightBuildableSubsystem::Get(GetWorld()))
+		{
+			// Snapshot the class list first; spawning/copying temporaries mutates the subsystem.
+			TArray<TSubclassOf<AFGBuildable>> lightweightClasses;
+			lwSubsystem->GetAllLightweightBuildableInstances().GetKeys(lightweightClasses);
 
-			if (tmpDesc && tmpDesc->IsChildOf(UUSSSwatchDesc::StaticClass()))
-			{	// The descriptor is from USS mod
+			for (const TSubclassOf<AFGBuildable>& buildableClass : lightweightClasses)
+			{
+				const TArray<FRuntimeBuildableInstanceData>* instances = lwSubsystem->GetAllLightweightBuildableInstances().Find(buildableClass);
+				const int32 instanceCount = instances ? instances->Num() : 0;
 
-				UUSSSwatchDesc* castDesc = (UUSSSwatchDesc*)tmpDesc;
+				for (int32 index = 0; index < instanceCount; ++index)
+				{
+					FRuntimeBuildableInstanceData* runtimeData = lwSubsystem->GetRuntimeDataForBuildableClassAndIndex(buildableClass, index);
+					if (!runtimeData)
+					{
+						continue; // empty / removed slot
+					}
 
-				FString tmpStr;
-				castDesc->GetName(tmpStr);
+					FFactoryCustomizationData data = runtimeData->CustomizationData;
+					if (!RemapAndReinit(data))
+					{
+						continue; // not a USS swatch (or no remap needed)
+					}
 
-				tmpStr.RemoveFromStart("Gen_USS_SwatchDesc_");
-				tmpStr.RemoveFromEnd("_C");
-
-				int* matchID = this->InternalSwatchMatch.Find(FCString::Atoi(*tmpStr));
-
-				if (matchID)
-				{	// We have found a matching swatch descriptor 
-
-					FUSSSwatchDescGenInfo* newDesc = this->USSInst->SwatchDescriptorArray.Find(*matchID);
-
-					if (newDesc)
-					{	// There is a valid swatch descriptor
-
-						castBuild->mCustomizationData.ColorSlot = (uint8)*matchID;
-						castBuild->mCustomizationData.SwatchDesc = newDesc->SwatchClass;
-						castBuild->SetCustomizationData_Native(castBuild->mCustomizationData);
-						UE_LOG(LogUSS_Subsystem, Warning, TEXT("Patching descriptor \"%s\" with \"%s\" named \"%s\" for building \"%s\"."), *castDesc->GetPathName(), *newDesc->SwatchClass->GetPathName(), *(newDesc->SwatchInst)->mDisplayName.ToString(), *castBuild->GetName());
+					bool didSpawn = false;
+					FInstanceToTemporaryBuildable* tempInfo = lwSubsystem->FindOrSpawnBuildableForRuntimeData(buildableClass, runtimeData, index, didSpawn);
+					if (tempInfo && tempInfo->Buildable)
+					{
+						tempInfo->Buildable->SetCustomizationData_Native(data);
+						lwSubsystem->CopyCustomizationDataFromTemporaryToInstance(tempInfo->Buildable);
 					}
 					else
-					{	// There is no valid descriptor
-
-						UE_LOG(LogUSS_Subsystem, Warning, TEXT("Can't patch \"%s\" for building \"%s\". No matching descriptor found"), *castDesc->GetPathName(), *castBuild->GetName());
+					{
+						// Fallback: at least persist the remapped data so it saves correctly.
+						lwSubsystem->SetCustomizationDataOnInstance(buildableClass, data, index);
 					}
+					++patchedLightweights;
 				}
 			}
 		}
+
+		UE_LOG(LogUSS_Subsystem, Display, TEXT("Patched USS swatch descriptors: %d actor buildings, %d lightweight instances."), patchedActors, patchedLightweights);
 	}
 }
 
