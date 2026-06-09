@@ -8,10 +8,13 @@
 #include "Buildables/FGBuildable.h"
 #include "FGGameState.h"
 #include "FGLightweightBuildableSubsystem.h"
+#include "FGFactoryColoringTypes.h"
 #include "Kismet/GameplayStatics.h"
 #include "USSBPLib.h"
 
-const EUSSVersion CurrVersion = EUSSVersion::V1_3_1;
+#include "UObject/UObjectHash.h" // GetDerivedClasses
+
+const EUSSVersion CurrVersion = EUSSVersion::V1_3_2;
 const FString USSSubPackageName = "/UniversalSwatchSlots";
 
 DECLARE_LOG_CATEGORY_EXTERN(LogUSS_Subsystem, Log, All)
@@ -54,6 +57,8 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 		return;
 	}
 
+	AFGBuildableSubsystem* BuildableSubsystem = AFGBuildableSubsystem::Get(GetWorld());
+
 	bool bAnyChanged = false;
 
 	for (UUSSSwatchDesc* Swatch : SwatchDescriptions)
@@ -95,6 +100,53 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 		}
 	}
 
+	// External swatch-mod compatibility: an external mod (e.g. External Finishes) writes its colour
+	// slots in Construct, but the save's stale slot data is re-applied over them and the mod never
+	// re-writes -> its swatches show OUR old colours. The buildable subsystem is already clobbered
+	// by the time any of our phases run, so we cannot read the mod's colours from it. Instead we
+	// rebuild the external slots from the authoritative source: the PaintFinish swatch descriptors
+	// themselves (always valid in memory), the same way the external mod builds them.
+	if (BuildableSubsystem && this->ExternalAddedSwatches > 0)
+	{
+		const int32 reservedStart = 28; // first non-vanilla slot (see RetrieveFreeColorSlotID)
+		const int32 reservedEnd = reservedStart + this->ExternalAddedSwatches; // exclusive
+
+		TArray<UClass*> paintFinishClasses;
+		GetDerivedClasses(UFGFactoryCustomizationDescriptor_PaintFinish::StaticClass(), paintFinishClasses, true);
+
+		for (UClass* descClass : paintFinishClasses)
+		{
+			const UFGFactoryCustomizationDescriptor* descCDO = descClass ? Cast<UFGFactoryCustomizationDescriptor>(descClass->GetDefaultObject()) : nullptr;
+			if (!descCDO)
+			{
+				continue;
+			}
+
+			const int32 slot = descCDO->ID;
+			if (slot < reservedStart || slot >= reservedEnd)
+			{
+				continue; // not in the external mod's reserved range (excludes vanilla 18-23 and our 47+)
+			}
+
+			// Rebuild the colour slot from the finish: its forced colour, with the finish itself set.
+			float roughness = 0.f, metallic = 0.f;
+			bool hasForcedColor = false;
+			FLinearColor forcedColor = FLinearColor::White;
+			UFGFactoryCustomizationDescriptor_PaintFinish::GetPaintFinishSettings(descClass, roughness, metallic, hasForcedColor, forcedColor);
+
+			FFactoryCustomizationColorSlot ColourSlot(forcedColor, forcedColor);
+			ColourSlot.PaintFinish = descClass;
+
+			if (FGGameState->mBuildingColorSlots_Data.IsValidIndex(slot) &&
+				FGGameState->mBuildingColorSlots_Data[slot] != ColourSlot)
+			{
+				FGGameState->mBuildingColorSlots_Data[slot] = ColourSlot;
+				bAnyChanged = true;
+			}
+			BuildableSubsystem->SetColorSlot_Data((uint8)slot, ColourSlot);
+		}
+	}
+
 	if (bAnyChanged)
 	{
 		// Let GameState apply / refresh any internal state using the current slots.
@@ -109,7 +161,7 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 	// Note: this is the BuildableSubsystem's LOCAL setter, not the GameState reliable RPC we avoid
 	// above, so calling it in a loop is safe. Runs server-side (we already returned on clients);
 	// clients refresh from the replicated GameState slot data.
-	if (AFGBuildableSubsystem* BuildableSubsystem = AFGBuildableSubsystem::Get(GetWorld()))
+	if (BuildableSubsystem)
 	{
 		for (UUSSSwatchDesc* Swatch : SwatchDescriptions)
 		{
@@ -454,6 +506,7 @@ void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
 			swatchClass->GetName(idStr);
 			idStr.RemoveFromStart(TEXT("Gen_USS_SwatchDesc_"));
 			idStr.RemoveFromEnd(TEXT("_C"));
+			idStr.RemoveFromEnd(TEXT("_Class"));
 
 			const int32* matchID = this->InternalSwatchMatch.Find(FCString::Atoi(*idStr));
 			if (!matchID)
@@ -553,13 +606,13 @@ void AUniversalSwatchSlotsSubsystem::RetrieveFreeColorSlotID()
 {
 	int32 SFSlots = 28; // 0 - 17 swatches, 18 = concrete, 19 = carbon, 20 = caterium, 21 = chrome, 22 = copper, 23 = unpainted, 24 - 27 = project assembly
 
-	int32 StartID = SFSlots;
+	int32 StartID = SFSlots + this->ExternalAddedSwatches;
 
-	if (this->IsUsingMSS)
+	/*if (this->IsUsingMSS)
 	{	// At the moment MSS adds 20 pre-defined index for swatches (28 - 47)
 
 		StartID += 20;
-	}
+	}*/
 
 	// 255 = custom
 	for (int32 i = StartID; i < 255; i++)
@@ -589,33 +642,32 @@ bool AUniversalSwatchSlotsSubsystem::FindSavedSwatch(FString GeneratedName, FUSS
 
 void AUniversalSwatchSlotsSubsystem::UpdateSavedSwatches(TArray<UUSSSwatchDesc*> ToSave)
 {
+	int32 offset = this->ExternalAddedSwatches;
+
+	if (this->WasUsingMSS)
+	{	// The save file was using MSS
+
+		if (!this->IsUsingSwatchMods)
+		{	// MSS is not currently loaded
+
+			if (this->SaveVersion <= EUSSVersion::V1_3_1)
+			{	// Backward compatibility. Before 1.3.2 only MSS was supported
+
+				offset -= 20;
+			}
+			else
+			{
+				offset -= this->PreviousExternalSlots;
+			}
+
+			UE_LOG(LogUSS_Subsystem, Warning, TEXT("Mod that adds swatches was used by the saved game but are not currently installed. Fixing index."));
+		}
+	}
+
 	for (FUSSSwatchSaveInfo& currSaved : this->SavedSwatches)
 	{	// Print a warning for all remaining swatches that were not found
 
-		uint32 matchingID = currSaved.SwatchSlotID;
-
-		if (this->WasUsingMSS)
-		{	// The save file was using MSS
-
-			if (!this->IsUsingMSS)
-			{	// MSS is not currently loaded 
-
-				matchingID -= 20;
-
-				UE_LOG(LogUSS_Subsystem, Warning, TEXT("More swatch slot was used by the saved game but is not currently installed. Fixing index."));
-			}
-		}
-		else
-		{	// The save file was not using MSS
-
-			if (this->IsUsingMSS)
-			{ // MSS is loaded
-
-				matchingID += 20;
-
-				UE_LOG(LogUSS_Subsystem, Warning, TEXT("More swatch slot wasn't used by the saved game but is currently installed. Fixing index."));
-			}
-		}
+		uint32 matchingID = currSaved.SwatchSlotID + offset;
 
 		TObjectPtr<UUSSSwatchDesc>* tmp = this->SwatchDescriptorArray.Find(matchingID);
 

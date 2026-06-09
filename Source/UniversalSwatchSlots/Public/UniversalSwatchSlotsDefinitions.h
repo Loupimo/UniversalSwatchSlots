@@ -17,7 +17,8 @@ enum class EUSSVersion : uint8
 	V1_1_0 = 2	UMETA(DisplayName = "1.1.0"),		// 1.1.0
 	V1_2_2 = 3	UMETA(DisplayName = "1.2.2"),		// 1.2.2
 	V1_2_3 = 4	UMETA(DisplayName = "1.2.3"),		// 1.2.3
-	V1_3_1 = 5	UMETA(DisplayName = "1.3.1")		// 1.3.1
+	V1_3_1 = 5	UMETA(DisplayName = "1.3.1"),		// 1.3.1
+	V1_3_2 = 6	UMETA(DisplayName = "1.3.2")		// 1.3.2
 };
 
 UENUM(BlueprintType)

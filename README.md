@@ -3,7 +3,7 @@ Tired of re-doing your color preset between each game or being limited by the lo
 
 This mod allows you to create your own palette of swatches and apply it to any session game you want. Meaning that you can share swatches between different session or even with other players by simply copying their JSON configuration!
 This JSON configuration gives you a lot of options to customize your palette as you wish:
-- You can create groups to oragnize your swatches as you want.
+- You can create groups to organize your swatches as you want.
 - You can name each of your swatch as you want (duplicates are allowed and will be treated as distinct slot).
 - You can define priority between groups and swatches in order to make them appear the way you want.
 - You can tell the mod to add the primary and / or the secondary colors of your swatches to the player color preset list. If you think later on that was a bad idea there is an option to only remove swatches that are prensents in the palette you activate.
@@ -25,7 +25,19 @@ Once your are happy with your palette don't forget to tick the checkbox to activ
 This mod has been tested on windows dedicated server but should also work with linux server. You don't need to activate anything: the server will use the default mod's palette. If you wish to use a custom palette simply copy the "UniversalSwatchSlots" folder located at "YourStatifactoryGameFolder/FactoryGame/Configs/" to your server configs folder. Don't forget to activate the palette you want first ! 
 Joining players need to use the same configuration as the server's one. They may have a different naming as long as the number of swatches and order remain the same.
 
-Note: The swatch color are copied from the server to the player so changing a color swatch in your mod configuration will not affect the server. If your server doesn't not load the correct palette it means that you have another palette that is activated and has a higher priority (file name based).
+Note: The swatch color are copied from the server to the player so changing a color swatch in your mod configuration will not affect the server. If your server doesn't load the correct palette it means that you have another activated palette that has a higher priority (file name based).
+
+# New Feature
+
+Since version 1.3.0 this mod adds a new feature ! You can now press "R" when holding the customizer in hand to switch to blueprint mod painting. This allows you to paint all buildings of a same blueprint at once ! It works with USS swatches, vanilla swatches, patterns and materials.
+
+Normally when using the material customizer, the targeted building will no longer be part of the blueprint it used to belong to. Here it will still be part of it after it changed. Currently, you will not be charged for modifying materials however you will not get refunded by the previous needed materials
+
+Also you can preview the changes before applying them. For performance reason, previewing material changes is not possible.
+
+If you are playing on a dedicated server or joining someone else you can activate the preview by tick the corresponding option in the mod configuration (<span style="color:yellow">Caution: Activating it may, on very rare cases, causes a crash client side!</span>)
+
+Note: Changing color or material of a blueprint placed in game does not affect the original one.
 
 ![Awesome Shop](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/AS_Buy.png?raw=true)
 ![Swatches](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Swatches.png?raw=true)

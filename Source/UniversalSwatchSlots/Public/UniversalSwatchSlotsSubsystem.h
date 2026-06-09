@@ -141,9 +141,13 @@ public:
 
 public:
 
-	/* Tells if More Swatch slots mod is loaded. */
+	/* Tells if mods that add swatches are loaded. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
-	bool IsUsingMSS;
+	bool IsUsingSwatchMods;
+
+	/* The number of external swatches added by other mods. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	int ExternalAddedSwatches;
 
 	/* The build gun blueprint class that will be used by the dynamically created swatch recipes. */
 	UPROPERTY(EditDefaultsOnly, Category = "Swatch")
@@ -184,6 +188,10 @@ public:
 	/* Tells is More swatch slots was installed when the game was saved. */
 	UPROPERTY(SaveGame, BlueprintReadWrite, Category = "Saving")
 	bool WasUsingMSS = false;
+
+	/* Gets the number of external slots was added by external mods. */
+	UPROPERTY(SaveGame, BlueprintReadWrite, Category = "Saving")
+	int PreviousExternalSlots = 0;
 
 	/* The USS Game instance module. Required before creating any swatch. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")

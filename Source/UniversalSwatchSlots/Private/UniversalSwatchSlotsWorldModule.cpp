@@ -25,7 +25,8 @@ void UUniversalSwatchSlotsWorldModule::InitUSSGameWorldModule(UUniversalSwatchSl
 {
 	this->USSSubsystem = Subsystem;
 	this->USSSubsystem->USSInst = USSInstance;
-	this->USSSubsystem->IsUsingMSS = this->IsUsingMoreSwatchSlots;
+	this->USSSubsystem->IsUsingSwatchMods = this->IsUsingSwatchMods;
+    this->USSSubsystem->ExternalAddedSwatches = this->ExternalAddedSwatches;
 	this->USSSubsystem->RetrieveFreeColorSlotID();
 }
 

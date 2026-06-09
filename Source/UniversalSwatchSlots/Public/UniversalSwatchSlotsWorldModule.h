@@ -63,9 +63,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	bool IsClientPreviewEnabled;
 
-	/* Tells if More Swatch slots mod is loaded. */
+	/* Tells if mods that add swatches are loaded. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
-	bool IsUsingMoreSwatchSlots;
+	bool IsUsingSwatchMods;
+
+	/* The number of external swatches added by other mods. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	int ExternalAddedSwatches;
 
 	/* The subsystem used to load and store swatch data. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
