@@ -41,6 +41,27 @@ AUniversalSwatchSlotsSubsystem* AUniversalSwatchSlotsSubsystem::Get(UObject* Wor
 }
 
 
+void AUniversalSwatchSlotsSubsystem::EnsureGameStateColorSlotsSize()
+{
+	AFGGameState* FGGameState = Cast<AFGGameState>(UGameplayStatics::GetGameState(this));
+	if (!FGGameState)
+	{
+		return;
+	}
+
+	// Custom swatch slots go up to 254 (255 = INDEX_CUSTOM_COLOR_SLOT). Grow the array so every
+	// possible slot index is in bounds. Default (black) entries are placeholders; the real colours
+	// are written on the server and replicated to clients. Runs on both sides (no early-out on
+	// !HasAuthority) precisely so a joining client has a valid array before any building resolves.
+	const int32 RequiredNum = 255;
+	if (FGGameState->mBuildingColorSlots_Data.Num() < RequiredNum)
+	{
+		FGGameState->mBuildingColorSlots_Data.SetNum(RequiredNum);
+		UE_LOG(LogUSS_Subsystem, Display, TEXT("Pre-sized building colour slots to %d entries (was smaller)."), RequiredNum);
+	}
+}
+
+
 void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<UUSSSwatchDesc*> SwatchDescriptions)
 {
 	AFGGameState* FGGameState = Cast<AFGGameState>(UGameplayStatics::GetGameState(this));

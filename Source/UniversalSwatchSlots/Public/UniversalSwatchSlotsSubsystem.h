@@ -40,6 +40,17 @@ public:
 	void AddNewSwatchesColorSlotsToGameState(TArray<UUSSSwatchDesc*> SwatchDescriptions);
 
 	/**
+	 * Pre-size the game state's building colour slot array so a building never resolves its colour
+	 * (Initialize -> GetBuildingColorDataForSlot) against an out-of-range / empty array and crashes.
+	 *
+	 * MUST be called on BOTH client and server, early (before buildings tick). On the server the
+	 * real colours are written afterwards; on a joining client the array is empty until replicated,
+	 * so without this pre-size a custom-slot building that ticks during the join reads out of bounds.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Swatch")
+	void EnsureGameStateColorSlotsSize();
+
+	/**
 	 * Generate all the groups, swatches descriptor and receipes of the given palette.
 	 *
 	 * @param	Palette			The palette to generate.

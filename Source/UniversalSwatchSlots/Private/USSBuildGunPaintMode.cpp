@@ -17,6 +17,7 @@
 #include "FGCustomizationRecipe.h"
 #include "FGLightweightBuildableSubsystem.h"
 #include "FGInventoryComponent.h"
+#include "FGBuildableSubsystem.h"
 
 #include "Patching/NativeHookManager.h"
 #include "Module/WorldModuleManager.h"
@@ -274,6 +275,43 @@ void FUSSBuildGunPaintMode::ApplyMaterialSwapToPlan(UFGBuildGunStatePaint* self,
 void FUSSBuildGunPaintMode::RegisterHooks()
 {
 	UFGBuildGunStatePaint* paintCDO = GetMutableDefault<UFGBuildGunStatePaint>();
+
+	// (f) Crash-safety for joining clients. A building resolves its colour via
+	//     AFGGameState::GetBuildingColorDataForSlot(slot), which indexes mBuildingColorSlots_Data
+	//     with no bounds check. On a joining client a custom-slot building can resolve before that
+	//     array has been replicated (it is still empty), reading out of bounds and crashing. We hook
+	//     the lookup itself and grow the array to cover the requested slot right before the read.
+	//     (Placeholders; the real colours are written by the mod on the server / replicated.)
+	//     This is the leaf function, so it covers every call path (not just the subsystem tick).
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4191) // SML reinterpret_cast for a by-value-class-return hook
+#endif
+	SUBSCRIBE_METHOD(AFGGameState::GetBuildingColorDataForSlot,
+		[](auto& scope, AFGGameState* self, uint8 slot)
+		{
+			if (!self)
+			{
+				// The game state isn't ready yet on a joining client: the buildable subsystem tick
+				// resolves a building's colour (FFactoryCustomizationData::Initialize) with a NULL
+				// game state before it has replicated. The original would dereference a null 'this'
+				// (reading the colour-slot array field off address 0x0 -> crash). Return a default
+				// colour and skip the original; the building re-resolves once the state is ready.
+				scope.Override(FFactoryCustomizationColorSlot());
+				return;
+			}
+			if (self->mBuildingColorSlots_Data.Num() <= (int32)slot)
+			{
+				// Game state valid but the slot array isn't sized yet -> grow it so the original's
+				// indexed read stays in bounds (the real colour is written by the mod / replicated).
+				self->mBuildingColorSlots_Data.SetNum((int32)slot + 1);
+			}
+			// auto-forward: the original now reads a valid 'this' and an in-bounds array
+		});
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+	UE_LOG(LogUSS, Display, TEXT("USS: registered GetBuildingColorDataForSlot bounds-safety hook."));
 
 	// (a) Expose two build modes (Default + Blueprint) while in the Paint state,
 	//     so the build gun shows a "Default / Blueprint" roller like Dismantle.
