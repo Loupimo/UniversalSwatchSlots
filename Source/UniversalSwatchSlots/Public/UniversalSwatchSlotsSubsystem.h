@@ -40,15 +40,18 @@ public:
 	void AddNewSwatchesColorSlotsToGameState(TArray<UUSSSwatchDesc*> SwatchDescriptions);
 
 	/**
-	 * Pre-size the game state's building colour slot array so a building never resolves its colour
-	 * (Initialize -> GetBuildingColorDataForSlot) against an out-of-range / empty array and crashes.
+	 * Re-apply every swatch colour to the buildable subsystem so buildings recolour after a load.
 	 *
-	 * MUST be called on BOTH client and server, early (before buildings tick). On the server the
-	 * real colours are written afterwards; on a joining client the array is empty until replicated,
-	 * so without this pre-size a custom-slot building that ticks during the join reads out of bounds.
+	 * C++ replacement for the old "Add new swatch Colors To Buildable Subsystem" Blueprint function.
+	 * Unlike AddNewSwatchesColorSlotsToGameState (server-only slot-data population), this MUST run on
+	 * BOTH client and server, and AFTER the buildables have loaded, so SetColorSlot_Data's dirty
+	 * re-apply reaches the buildings that already cached a default colour during load. It only touches
+	 * the buildable subsystem's LOCAL colour array, never the replicated game-state array.
+	 *
+	 * @param	SwatchDescriptions		The swatch descriptors to re-apply (same list passed to AddNew...).
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Swatch")
-	void EnsureGameStateColorSlotsSize();
+	void ReapplySwatchColorsToBuildables(TArray<UUSSSwatchDesc*> SwatchDescriptions);
 
 	/**
 	 * Generate all the groups, swatches descriptor and receipes of the given palette.

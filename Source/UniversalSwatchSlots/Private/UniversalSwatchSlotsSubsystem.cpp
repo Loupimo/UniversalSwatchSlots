@@ -41,27 +41,6 @@ AUniversalSwatchSlotsSubsystem* AUniversalSwatchSlotsSubsystem::Get(UObject* Wor
 }
 
 
-void AUniversalSwatchSlotsSubsystem::EnsureGameStateColorSlotsSize()
-{
-	AFGGameState* FGGameState = Cast<AFGGameState>(UGameplayStatics::GetGameState(this));
-	if (!FGGameState)
-	{
-		return;
-	}
-
-	// Custom swatch slots go up to 254 (255 = INDEX_CUSTOM_COLOR_SLOT). Grow the array so every
-	// possible slot index is in bounds. Default (black) entries are placeholders; the real colours
-	// are written on the server and replicated to clients. Runs on both sides (no early-out on
-	// !HasAuthority) precisely so a joining client has a valid array before any building resolves.
-	const int32 RequiredNum = 255;
-	if (FGGameState->mBuildingColorSlots_Data.Num() < RequiredNum)
-	{
-		FGGameState->mBuildingColorSlots_Data.SetNum(RequiredNum);
-		UE_LOG(LogUSS_Subsystem, Display, TEXT("Pre-sized building colour slots to %d entries (was smaller)."), RequiredNum);
-	}
-}
-
-
 void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<UUSSSwatchDesc*> SwatchDescriptions)
 {
 	AFGGameState* FGGameState = Cast<AFGGameState>(UGameplayStatics::GetGameState(this));
@@ -113,8 +92,8 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 			const FFactoryCustomizationColorSlot& Existing = FGGameState->mBuildingColorSlots_Data[ColourIndex];
 			if (Existing.PrimaryColor != NewColourSlot.PrimaryColor || Existing.SecondaryColor != NewColourSlot.SecondaryColor || Existing.PaintFinish != NewColourSlot.PaintFinish)
 			{
-				UE_LOG(LogUSS_Subsystem, Display, TEXT("Index %d, Existing Primary: R = %f, B = %f, G = %f, Secondary: R = %f, B = %f, G = %f"), ColourIndex, Existing.PrimaryColor.R, Existing.PrimaryColor.B, Existing.PrimaryColor.G, Existing.SecondaryColor.R, Existing.SecondaryColor.B, Existing.SecondaryColor.G);
-				UE_LOG(LogUSS_Subsystem, Display, TEXT("Index %d, New Primary:      R = %f, B = %f, G = %f, Secondary: R = %f, B = %f, G = %f"), ColourIndex, NewColourSlot.PrimaryColor.R, Existing.PrimaryColor.B, NewColourSlot.PrimaryColor.G, NewColourSlot.SecondaryColor.R, NewColourSlot.SecondaryColor.B, NewColourSlot.SecondaryColor.G);
+				UE_LOG(LogUSS_Subsystem, Verbose, TEXT("Index %d, Existing Primary: R = %f, G = %f, B = %f, Secondary: R = %f, G = %f, B = %f"), ColourIndex, Existing.PrimaryColor.R, Existing.PrimaryColor.G, Existing.PrimaryColor.B, Existing.SecondaryColor.R, Existing.SecondaryColor.G, Existing.SecondaryColor.B);
+				UE_LOG(LogUSS_Subsystem, Verbose, TEXT("Index %d, New Primary:      R = %f, G = %f, B = %f, Secondary: R = %f, G = %f, B = %f"), ColourIndex, NewColourSlot.PrimaryColor.R, NewColourSlot.PrimaryColor.G, NewColourSlot.PrimaryColor.B, NewColourSlot.SecondaryColor.R, NewColourSlot.SecondaryColor.G, NewColourSlot.SecondaryColor.B);
 				FGGameState->mBuildingColorSlots_Data[ColourIndex] = NewColourSlot;
 				bAnyChanged = true;
 			}
@@ -196,6 +175,56 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 
 			BuildableSubsystem->SetColorSlot_Data((uint8)Swatch->ID, ColourSlot);
 		}
+	}
+}
+
+
+void AUniversalSwatchSlotsSubsystem::ReapplySwatchColorsToBuildables(TArray<UUSSSwatchDesc*> SwatchDescriptions)
+{
+	// C++ replacement for the old "Add new swatch Colors To Buildable Subsystem" Blueprint function.
+	//
+	// On a load, buildings can resolve their colour (FFactoryCustomizationData::Initialize) before the
+	// custom slots exist and cache a default (black) colour. AddNewSwatchesColorSlotsToGameState writes
+	// the authoritative slot data, but (a) it returns early on clients and (b) its own re-apply runs
+	// before the buildables are registered -> neither recolours the already-loaded buildings.
+	//
+	// This pushes every swatch colour through the buildable subsystem's per-slot setter (the same path
+	// the customization menu uses for live edits), marking each slot dirty so the subsystem re-applies
+	// it to every building/instance already using it. Call it AFTER the buildables have loaded, on BOTH
+	// client and server (the server path is client-skipped, and the colours come from the same config).
+	//
+	// Safety: this only grows/writes the buildable subsystem's LOCAL mColorSlots_Data, never the
+	// game-state's replicated mBuildingColorSlots_Data, so it cannot trigger the dedicated-server
+	// realloc crash that the read-only GetBuildingColorDataForSlot hook guards against.
+	AFGBuildableSubsystem* BuildableSubsystem = AFGBuildableSubsystem::Get(GetWorld());
+	if (!BuildableSubsystem)
+	{
+		return;
+	}
+
+	for (UUSSSwatchDesc* Swatch : SwatchDescriptions)
+	{
+		if (!Swatch)
+		{
+			continue;
+		}
+
+		FFactoryCustomizationColorSlot ColourSlot(Swatch->PrimaryColour, Swatch->SecondaryColour);
+		if (this->PaintFinishes.IsValidIndex((uint8)Swatch->Material))
+		{
+			ColourSlot.PaintFinish = this->PaintFinishes[(uint8)Swatch->Material];
+		}
+
+		// The engine's SetColorSlot_Data indexes mColorSlots_Data without growing it, so make sure the
+		// slot exists first (mirrors the old BP's "grow until valid" step). Only fires if the array
+		// isn't sized yet; post-load it usually already covers every slot. This is the local,
+		// non-replicated array -> growing it here is safe (unlike the game-state array during BeginPlay).
+		if (BuildableSubsystem->mColorSlots_Data.Num() <= Swatch->ID)
+		{
+			BuildableSubsystem->mColorSlots_Data.SetNum(Swatch->ID + 1);
+		}
+
+		BuildableSubsystem->SetColorSlot_Data((uint8)Swatch->ID, ColourSlot);
 	}
 }
 
