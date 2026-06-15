@@ -299,10 +299,12 @@ void FUSSSameSwatchPaintMode::UpdateHighlight(UFGBuildGunState* paintState)
 	AFGGameState* gameState = world ? world->GetGameState<AFGGameState>() : nullptr;
 	UUniversalSwatchSlotsWorldModule* module = FUSSBuildGunPaintMode::GetWorldModule(world);
 
-	// Writing per-instance colour data on instanced meshes races with lightweight replication on a
-	// client (BeginWriteAccess assert). So only preview colour when we are the authority, unless the
-	// player opts in via the world-module toggle. The outline below is applied in all cases.
-	const bool bCanPreviewColor = (world && world->GetNetMode() != NM_Client) || (module && module->GetClientPreview());
+	// Writing per-instance colour data on instanced meshes can hit the engine's BeginWriteAccess assert
+	// (it races lightweight replication on a client, and parallel factory ticks on the host). So the
+	// colour preview is gated by a per-side toggle: the host toggle (default ON) and the client toggle
+	// (default OFF). The outline below is applied in all cases.
+	const bool bCanPreviewColor = module
+		&& ((world && world->GetNetMode() != NM_Client) ? module->IsHostPreviewEnabled : module->GetClientPreview());
 
 	// Re-apply the preview once per building, and again when the active customization changes.
 	const uint8 currentPatternRotation = paint ? paint->mPatternRotation : 0;

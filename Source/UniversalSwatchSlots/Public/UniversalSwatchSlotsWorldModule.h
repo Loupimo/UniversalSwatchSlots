@@ -80,6 +80,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	bool IsClientPreviewEnabled;
 
+	/* Tells if the host/authority should render the colour preview while painting. Default ON. Turn it
+	   OFF if you hit the engine's BeginWriteAccess instanced-mesh assert (the colour preview writes
+	   per-instance data, which can rarely race a parallel factory tick on the host). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	bool IsHostPreviewEnabled = true;
+
 	/* Tells if mods that add swatches are loaded. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	bool IsUsingSwatchMods;

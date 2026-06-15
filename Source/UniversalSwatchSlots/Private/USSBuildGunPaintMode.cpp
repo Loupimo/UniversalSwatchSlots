@@ -327,37 +327,39 @@ void FUSSBuildGunPaintMode::RegisterHooks()
 			}
 		});
 
-	// (b) Start in "Default" when entering Paint so the selector has a valid current mode.
-	// C4191: SML's NativeHookManager intentionally reinterpret_casts when hooking a
-	// function that returns a class type by value (here TSubclassOf<...>). The warning
-	// is emitted from SML at this instantiation point, so we silence it locally (MSVC).
-#if defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable: 4191)
-#endif
-	SUBSCRIBE_METHOD_VIRTUAL(UFGBuildGunStatePaint::GetInitialBuildGunMode, paintCDO,
-		[](auto& scope, const UFGBuildGunState* state)
-		{
-			if (state && state->IsA<UFGBuildGunStatePaint>())
-			{
-				scope.Override(TSubclassOf<UFGBuildGunModeDescriptor>(UUSSPaintModeDefault::StaticClass()));
-			}
-			// Other states: leave untouched, the original is auto-forwarded.
-		});
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
-
-	// (c) Cycling on the mode-select key (tap) and the radial (hold) are owned by the
+	// (b) Cycling on the mode-select key (tap) and the radial (hold) are owned by the
 	//     UUSSPaintModeWidget, which binds the ModeSelect input itself while in Paint.
+	//
+	//     NOTE: we deliberately do NOT hook UFGBuildGunStatePaint::GetInitialBuildGunMode to seed the
+	//     starting mode. That function returns TSubclassOf<UFGBuildGunModeDescriptor> BY VALUE, and
+	//     SML's by-value-return trampoline (ApplyCallUserTypeByValue) assumes the MSVC sret/this order;
+	//     on the Linux dedicated server (System V ABI) that ordering differs, corrupting the call and
+	//     null-dereferencing when entering the paint state (Server_GotoPaintState -> GotoStateInternal).
+	//     We seed the starting mode from BeginState instead (void hook -> ABI-safe everywhere).
 
-	// (d) HUD widget: show while the Paint state is active, hide when it ends.
+	// (d) HUD widget: show while the Paint state is active, hide when it ends. Also seed the build mode
+	//     to our "Default" so the roller starts on a valid USS mode (replaces the removed by-value hook).
 	SUBSCRIBE_METHOD(UFGBuildGunStatePaint::BeginState,
 		[](auto& scope, UFGBuildGunState* state)
 		{
 			scope(state); // run the game's BeginState first
 			if (state && state->IsA<UFGBuildGunStatePaint>())
 			{
+				// Start on our "Default" mode unless the build gun is already on one of ours (so we
+				// don't clobber a persisted Blueprint / Same Swatch selection). Done before showing the
+				// indicator so the roller displays the right mode immediately. SetCurrentBuildGunMode
+				// takes its argument by value and returns void -> no by-value-return ABI hazard.
+				if (AFGBuildGun* gun = state->GetBuildGun())
+				{
+					const TSubclassOf<UFGBuildGunModeDescriptor> current = gun->GetCurrentBuildGunMode();
+					if (current != UUSSPaintModeDefault::StaticClass()
+						&& current != UUSSModeDescriptor::StaticClass()
+						&& current != UUSSPaintSameSwatchModeDescriptor::StaticClass())
+					{
+						gun->SetCurrentBuildGunMode(UUSSPaintModeDefault::StaticClass());
+					}
+				}
+
 				ShowIndicator(state);
 			}
 		});
@@ -662,13 +664,15 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 	AFGGameState* gameState = world ? world->GetGameState<AFGGameState>() : nullptr;
 
 	// The per-instance colour preview writes the engine's instanced-mesh buffers
-	// (ApplyCustomizationData_Native -> UFGColoredInstanceManager). On a network client those same
-	// buffers are written concurrently by lightweight replication, and the two writes race ->
-	// FInstanceSceneDataBuffers::BeginWriteAccess assert (hard crash). So we keep the (safe)
-	// custom-depth outline on every plan building, but only apply the colour preview when we are
-	// the authority (host / single player) -- unless the player opts in via the mod's world-module
-	// toggle (GetClientPreview). The on-click result is identical either way.
-	const bool bCanPreviewColor = (world && world->GetNetMode() != NM_Client) || (world && GetWorldModule(world)->GetClientPreview());
+	// (ApplyCustomizationData_Native -> UFGColoredInstanceManager). Those buffers can be written
+	// concurrently -- by lightweight replication on a network client, and by parallel factory ticks on
+	// the host -- and the colliding writes hit FInstanceSceneDataBuffers::BeginWriteAccess (hard crash).
+	// So we keep the (safe) custom-depth outline on every plan building, but gate the colour preview
+	// behind a per-side toggle: the host toggle (default ON) and the client toggle (default OFF). The
+	// on-click result is identical either way.
+	UUniversalSwatchSlotsWorldModule* module = GetWorldModule(world);
+	const bool bCanPreviewColor = module
+		&& ((world && world->GetNetMode() != NM_Client) ? module->IsHostPreviewEnabled : module->GetClientPreview());
 
 	// Writing per-instance colour data on instanced meshes is racy (it can collide with the render
 	// thread / lightweight replication, especially on clients). So we apply the colour preview as
