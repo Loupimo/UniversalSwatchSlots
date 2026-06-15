@@ -150,7 +150,12 @@ void AUniversalSwatchSlotsSubsystem::AddNewSwatchesColorSlotsToGameState(TArray<
 	if (bAnyChanged)
 	{
 		// Let GameState apply / refresh any internal state using the current slots.
-		FGGameState->SetupColorSlots_Data(FGGameState->mBuildingColorSlots_Data);
+		// SetupColorSlots_Data takes its argument by const& and assigns it INTO the game state's own
+		// mBuildingColorSlots_Data. Passing that same array is a self-assignment (mArr = mArr), which
+		// trips TArray's self-assignment assert and crashes on a brand-new game (where bAnyChanged is
+		// true). Pass a separate copy so the assignment has distinct source/destination.
+		const TArray<FFactoryCustomizationColorSlot> slotsCopy = FGGameState->mBuildingColorSlots_Data;
+		FGGameState->SetupColorSlots_Data(slotsCopy);
 	}
 
 	// Push every swatch colour through the BuildableSubsystem's per-slot setter (the same path the

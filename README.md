@@ -22,7 +22,7 @@ Once your are happy with your palette don't forget to tick the checkbox to activ
 
 # Multiplayer
 
-This mod has been tested on windows dedicated server but should also work with linux server. You don't need to activate anything: the server will use the default mod's palette. If you wish to use a custom palette simply copy the "UniversalSwatchSlots" folder located at "YourStatifactoryGameFolder/FactoryGame/Configs/" to your server configs folder. Don't forget to activate the palette you want first ! 
+This mod has been tested on windows dedicated server but should also work with linux server (thanks to CTRQuko and Programmer-Timmy for the tests). You don't need to activate anything: the server will use the default mod's palette. If you wish to use a custom palette simply copy the "UniversalSwatchSlots" folder located at "YourStatifactoryGameFolder/FactoryGame/Configs/" to your server configs folder. Don't forget to activate the palette you want first ! 
 Joining players need to use the same configuration as the server's one. They may have a different naming as long as the number of swatches and order remain the same.
 
 Note: The swatch color are copied from the server to the player so changing a color swatch in your mod configuration will not affect the server. If your server doesn't load the correct palette it means that you have another activated palette that has a higher priority (file name based).
