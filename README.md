@@ -27,7 +27,7 @@ Joining players need to use the same configuration as the server's one. They may
 
 Note: The swatch color are copied from the server to the player so changing a color swatch in your mod configuration will not affect the server. If your server doesn't load the correct palette it means that you have another activated palette that has a higher priority (file name based).
 
-# New Feature
+# New painting modes
 
 Since version 1.3.0 this mod adds a new feature ! You can now press "R" when holding the customizer in hand to switch to blueprint mod painting. This allows you to paint all buildings of a same blueprint at once ! It works with USS swatches, vanilla swatches, patterns and materials.
 
@@ -38,6 +38,12 @@ Also you can preview the changes before applying them. For performance reason, p
 If you are playing on a dedicated server or joining someone else you can activate the preview by tick the corresponding option in the mod configuration (<span style="color:yellow">Caution: Activating it may, on very rare cases, causes a crash client side!</span>)
 
 Note: Changing color or material of a blueprint placed in game does not affect the original one.
+
+![BP Painte Mod](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/BP_Paint_Mode.png?raw=true)
+
+Since version 1.3.5 this mod adds another painting mod: similar swatches. Jjust like the blueprint mod it allows you to paint all buildings of a blueprint that share the same swatch as the one applied on the  focused / locked building.
+
+![Similar Swatches Paint Mode](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Similar_Paint_Mode.png?raw=true)
 
 ![Awesome Shop](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/AS_Buy.png?raw=true)
 ![Swatches](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Swatches.png?raw=true)
