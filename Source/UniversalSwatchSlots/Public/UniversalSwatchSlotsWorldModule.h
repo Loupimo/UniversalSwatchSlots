@@ -12,6 +12,23 @@
 
 class UUSSPaintModeWidget;
 class AFGBuildGun;
+class UFGFactoryCustomizationDescriptor_Swatch;
+
+/**
+ * Fired (client-side) whenever the "Same Swatch" paint-mode HUD info changes: a new reference swatch
+ * is aimed at, the matching count changes, the mode is entered/left, or the lock is toggled. Bind this
+ * in your HUD widget to refresh reactively instead of polling on Tick.
+ *
+ * @param SwatchDesc	The reference swatch descriptor (null when inactive / not aiming at a plan).
+ * @param Count			Number of plan elements (actors + lightweights) sharing the reference swatch.
+ * @param bActive		True while the "Same Swatch" build mode is the active build-gun mode.
+ * @param bLocked		True while the inspection lock is engaged.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnSameSwatchInfoChanged,
+	TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch>, SwatchDesc,
+	int32, Count,
+	bool, bActive,
+	bool, bLocked);
 
 
 /**
@@ -104,4 +121,27 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "Config")
 	bool GetClientPreview() const;
+
+	/**
+	 * Toggle the "Same Swatch" paint-mode inspection lock (client-side). Bind a key (e.g. H) to this
+	 * in Blueprint while painting: it freezes the reference swatch + highlight so the player can walk
+	 * the plan and see exactly which elements will be painted. No-op if not aiming at a painted plan
+	 * element when locking; toggling again releases the lock.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Paint")
+	void ToggleSameSwatchLock();
+
+	/**
+	 * Current "Same Swatch" selection info, for the HUD. All client-side (set by the highlight tick).
+	 *
+	 * @param	OutSwatchDesc	The reference swatch descriptor (aimed/locked element's swatch), or null.
+	 * @param	OutCount		Number of plan elements (actors + lightweights) sharing that swatch.
+	 * @param	OutLocked		True while the inspection lock is engaged.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Paint")
+	void GetSameSwatchInfo(TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch>& OutSwatchDesc, int32& OutCount, bool& OutLocked) const;
+
+	/** Event: the "Same Swatch" HUD info changed. Bind in your widget to refresh reactively. */
+	UPROPERTY(BlueprintAssignable, Category = "Paint")
+	FOnSameSwatchInfoChanged OnSameSwatchInfoChanged;
 };

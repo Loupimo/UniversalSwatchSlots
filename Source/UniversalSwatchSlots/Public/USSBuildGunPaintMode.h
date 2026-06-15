@@ -46,6 +46,10 @@ public:
 	/** Per-application customization cost scaled by a building count (whole-plan paint cost). */
 	static TArray<FItemAmount> ScaleCost(const TArray<FItemAmount>& perApplicationCost, int32 buildingCount);
 
+	/** Resolves this mod's world module from the given world (nullptr if unavailable). Public so the
+	 *  Same-Swatch mode can reach it to broadcast its HUD info event. */
+	static UUniversalSwatchSlotsWorldModule* GetWorldModule(UWorld* world);
+
 private:
 	/** Applies the active paint to every other building of the blueprint (actor buildables +
 	 *  lightweight instances). The proxy is captured before the original paint runs because a
@@ -69,9 +73,6 @@ private:
 
 	/** Removes the blueprint outline previously applied, if any. */
 	static void ClearBlueprintHighlight();
-
-	/** Resolves this mod's world module from the given world (nullptr if unavailable). */
-	static UUniversalSwatchSlotsWorldModule* GetWorldModule(UWorld* world);
 
 	/** Current indicator instance (local player only). Kept alive by the viewport. */
 	static TWeakObjectPtr<UUSSPaintModeWidget> IndicatorWidget;

@@ -229,6 +229,38 @@ void AUniversalSwatchSlotsSubsystem::ReapplySwatchColorsToBuildables(TArray<UUSS
 }
 
 
+bool AUniversalSwatchSlotsSubsystem::GetSwatchColors(TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> SwatchDesc, FLinearColor& OutPrimary, FLinearColor& OutSecondary) const
+{
+	OutPrimary = FLinearColor::Black;
+	OutSecondary = FLinearColor::Black;
+
+	if (!SwatchDesc)
+	{
+		return false;
+	}
+
+	// The swatch's slot index is its descriptor ID; the actual colours live in the game state's colour
+	// slots (replicated to clients), which is what's really rendered -- so this works for every swatch,
+	// including the default ones whose descriptors carry only a placeholder icon.
+	const UFGFactoryCustomizationDescriptor* descCDO = SwatchDesc.GetDefaultObject();
+	if (!descCDO)
+	{
+		return false;
+	}
+
+	AFGGameState* FGGameState = Cast<AFGGameState>(UGameplayStatics::GetGameState(this));
+	if (!FGGameState || !FGGameState->mBuildingColorSlots_Data.IsValidIndex(descCDO->ID))
+	{
+		return false;
+	}
+
+	const FFactoryCustomizationColorSlot& slot = FGGameState->mBuildingColorSlots_Data[descCDO->ID];
+	OutPrimary = slot.PrimaryColor;
+	OutSecondary = slot.SecondaryColor;
+	return true;
+}
+
+
 void AUniversalSwatchSlotsSubsystem::GeneratePalette(FUSSPalette Palette)
 {
 	UE_LOG(LogUSS_Subsystem, Display, TEXT("Generating Palette : %s"), *Palette.PaletteName.ToString());

@@ -2,6 +2,7 @@
 
 #include "UniversalSwatchSlots.h"
 #include "USSBuildGunPaintMode.h"
+#include "USSSameSwatchPaintMode.h"
 
 #define LOCTEXT_NAMESPACE "FUniversalSwatchesModule"
 
@@ -13,6 +14,7 @@ void FUniversalSwatchSlotsModule::StartupModule()
 	if (!WITH_EDITOR)
 	{
 		FUSSBuildGunPaintMode::RegisterHooks();
+		FUSSSameSwatchPaintMode::RegisterHooks();
 	}
 }
 

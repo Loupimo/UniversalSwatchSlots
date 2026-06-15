@@ -54,6 +54,20 @@ public:
 	void ReapplySwatchColorsToBuildables(TArray<UUSSSwatchDesc*> SwatchDescriptions);
 
 	/**
+	 * Get the primary + secondary colour a swatch descriptor resolves to, from the game state's colour
+	 * slots (the authoritative source, replicated to clients). Works for swatches with placeholder
+	 * icons (e.g. the default ones) so the UI can render a swatch image from the colours instead.
+	 *
+	 * @param	SwatchDesc		The swatch descriptor (e.g. the reference swatch from GetSameSwatchInfo).
+	 * @param	OutPrimary		The resolved primary colour.
+	 * @param	OutSecondary	The resolved secondary colour.
+	 *
+	 * @return True if the colours were resolved (valid swatch + populated slot), false otherwise.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Swatch")
+	bool GetSwatchColors(TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> SwatchDesc, FLinearColor& OutPrimary, FLinearColor& OutSecondary) const;
+
+	/**
 	 * Generate all the groups, swatches descriptor and receipes of the given palette.
 	 *
 	 * @param	Palette			The palette to generate.

@@ -2,6 +2,7 @@
 
 #include "UniversalSwatchSlots.h"            // LogUSS
 #include "USSModeDescriptor.h"
+#include "USSSameSwatchPaintMode.h"
 #include "USSPaintModeWidget.h"
 #include "UniversalSwatchSlotsWorldModule.h" // PaintModeWidgetClass
 
@@ -322,6 +323,7 @@ void FUSSBuildGunPaintMode::RegisterHooks()
 			{
 				out_buildModes.AddUnique(UUSSPaintModeDefault::StaticClass());
 				out_buildModes.AddUnique(UUSSModeDescriptor::StaticClass());
+				out_buildModes.AddUnique(UUSSPaintSameSwatchModeDescriptor::StaticClass());
 			}
 		});
 
@@ -368,6 +370,7 @@ void FUSSBuildGunPaintMode::RegisterHooks()
 			{
 				HideIndicator();
 				ClearBlueprintHighlight();
+				FUSSSameSwatchPaintMode::OnEndPaintState(state);
 			}
 		});
 
@@ -379,7 +382,8 @@ void FUSSBuildGunPaintMode::RegisterHooks()
 			scope(state, deltaTime);
 			if (state && state->IsA<UFGBuildGunStatePaint>())
 			{
-				UpdateBlueprintHighlight(state);
+				UpdateBlueprintHighlight(state);            // Blueprint mode (clears if inactive)
+				FUSSSameSwatchPaintMode::UpdateHighlight(state); // Same-Swatch mode (clears if inactive)
 			}
 		});
 
@@ -394,6 +398,28 @@ void FUSSBuildGunPaintMode::RegisterHooks()
 			// transient mesh-swap preview (so hitActor has no blueprint proxy), so we resolve the
 			// real aimed building and its proxy up front.
 			AFGBuildGun* gun = self ? self->GetBuildGun() : nullptr;
+
+			// "Same Swatch" mode: paint only the plan elements that share the aimed element's swatch.
+			// The reference swatch is resolved server-side from the aimed element (hitActor) -- the same
+			// way Blueprint mode resolves the plan -- so this is robust on dedicated servers without
+			// shipping the client's lock state across. The client's locked-fire guard ensures that,
+			// while locked, the player can only fire at a locked-swatch element (so hitActor's swatch
+			// is the locked one).
+			if (FUSSSameSwatchPaintMode::IsModeActive(gun))
+			{
+				AFGBuildable* aimed = ResolveAimedBuildable(self, hitActor);
+				AFGBlueprintProxy* ssProxy = aimed ? aimed->GetBlueprintProxy() : nullptr;
+				UClass* refSwatch = aimed ? FUSSSameSwatchPaintMode::GetBuildableSwatchClass(aimed) : nullptr;
+				if (!ssProxy || !refSwatch)
+				{
+					scope(self, mode, customizationData, hitActor); // not a plan / no swatch -> vanilla single
+					return;
+				}
+				scope.Cancel();
+				FUSSSameSwatchPaintMode::ApplyToPlanFiltered(self, &customizationData, ssProxy, refSwatch);
+				return;
+			}
+
 			const bool blueprintMode = gun && gun->GetCurrentBuildGunMode() == UUSSModeDescriptor::StaticClass();
 
 			AFGBuildable* skipBuildable = blueprintMode ? ResolveAimedBuildable(self, hitActor) : nullptr;

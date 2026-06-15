@@ -7,6 +7,8 @@
 #include "FGGameState.h"
 
 #include "USSBuildGunPaintMode.h"
+#include "USSSameSwatchPaintMode.h"
+#include "FGFactoryColoringTypes.h"
 #include "Equipment/FGBuildGun.h"
 #include "Equipment/FGBuildGunPaint.h"
 #include "Buildables/FGBuildable.h"
@@ -70,6 +72,18 @@ void UUniversalSwatchSlotsWorldModule::GetBlueprintPaintCost(AFGBuildGun* BuildG
 bool UUniversalSwatchSlotsWorldModule::GetClientPreview() const
 {
     return this->IsClientPreviewEnabled;
+}
+
+void UUniversalSwatchSlotsWorldModule::ToggleSameSwatchLock()
+{
+    FUSSSameSwatchPaintMode::ToggleLock();
+}
+
+void UUniversalSwatchSlotsWorldModule::GetSameSwatchInfo(TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch>& OutSwatchDesc, int32& OutCount, bool& OutLocked) const
+{
+    OutSwatchDesc = FUSSSameSwatchPaintMode::GetReferenceSwatch();
+    OutCount = FUSSSameSwatchPaintMode::GetMatchCount();
+    OutLocked = FUSSSameSwatchPaintMode::IsLocked();
 }
 
 TArray<FGlobalColorPreset> UUniversalSwatchSlotsWorldModule::ApplySwatchesColorOptionToPreset(TArray<UUSSSwatchDesc*> SwatchDescriptions, bool AddPrimaryColors, bool AddSecondaryColors, bool RemovePrimayColors, bool RemoveSecondaryColors)

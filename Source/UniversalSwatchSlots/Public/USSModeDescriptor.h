@@ -38,3 +38,20 @@ public:
 		mDisplayName = FText::FromString(TEXT("Default"));
 	}
 };
+
+/**
+ * "Same Swatch" paint mode: paints only the blueprint-plan elements that share the same
+ * swatch as the aimed (or locked) element. See FUSSSameSwatchPaintMode.
+ */
+UCLASS()
+class UNIVERSALSWATCHSLOTS_API UUSSPaintSameSwatchModeDescriptor : public UFGBuildGunModeDescriptor
+{
+	GENERATED_BODY()
+
+public:
+
+	UUSSPaintSameSwatchModeDescriptor()
+	{
+		mDisplayName = FText::FromString(TEXT("Same Swatch"));
+	}
+};
