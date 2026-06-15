@@ -14,6 +14,7 @@
 #include "FGColorInterface.h"
 #include "FGCharacterPlayer.h"
 #include "FGGameState.h"
+#include "FGFactoryColoringTypes.h"           // FFactoryCustomizationData::Initialize hook
 #include "FGCustomizationRecipe.h"
 #include "FGLightweightBuildableSubsystem.h"
 #include "FGInventoryComponent.h"
@@ -275,43 +276,38 @@ void FUSSBuildGunPaintMode::RegisterHooks()
 {
 	UFGBuildGunStatePaint* paintCDO = GetMutableDefault<UFGBuildGunStatePaint>();
 
-	// (f) Crash-safety for AFGGameState::GetBuildingColorDataForSlot(slot). The original indexes
-	//     mBuildingColorSlots_Data with no bounds check, and it is reached very early via
-	//     FFactoryCustomizationData::Initialize -> AFGBuildable::BeginPlay, before the slot array is
-	//     populated/replicated. Two unsafe situations to intercept:
-	//       1. NULL game state (joining client): the original dereferences a null 'this' (reads the
-	//          array field off ~0x668 -> crash).
-	//       2. slot beyond the array (server during initial buildable gather / save-load, or a client
-	//          mid-replication): the original reads out of bounds -> crash.
-	//     In BOTH cases we return a default colour and SKIP the original; the real colour is written
-	//     by the mod on the server and re-applied to instances once the slots are set up/replicated.
+	// (f) Crash-safety for joining clients / unpopulated colour slots. A building resolves its colour in
+	//     FFactoryCustomizationData::Initialize(gameState), which calls
+	//     gameState->GetBuildingColorDataForSlot(slot) -> indexes mBuildingColorSlots_Data. This runs
+	//     very early (AFGBuildable::BeginPlay, the buildable subsystem tick) and can run before the
+	//     game state / its colour-slot array is ready: a NULL game state dereferences a null 'this'
+	//     (reads the array field off ~0x668 -> crash), and a valid-but-empty array dereferences a null
+	//     data pointer. We hook Initialize and skip it while the colour slots aren't ready; the
+	//     buildable subsystem re-inits the building once they are (IsInitialized stays false meanwhile).
 	//
-	//     IMPORTANT: this hook is strictly READ-ONLY. An earlier version grew the array here
-	//     (SetNum) to keep the original's read in bounds. That reallocs the engine's *replicated*
-	//     array from inside BeginPlay and null-derefs in the allocator on dedicated servers (it
-	//     fires constantly during the initial buildable gather / save-load). Never mutate the game
-	//     state from this leaf hook -- only read its size and override out-of-range lookups.
-#if defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable: 4191) // SML reinterpret_cast for a by-value-class-return hook
-#endif
-	SUBSCRIBE_METHOD(AFGGameState::GetBuildingColorDataForSlot,
-		[](auto& scope, AFGGameState* self, uint8 slot)
+	//     IMPORTANT: we hook Initialize (returns void) rather than GetBuildingColorDataForSlot (returns
+	//     FFactoryCustomizationColorSlot BY VALUE). SML's by-value-return hook (ApplyCallUserTypeByValue)
+	//     inserts a hidden return pointer and assumes the MSVC argument order (this, then return-ptr).
+	//     On the Linux dedicated server (System V AMD64 ABI) a 40-byte struct return swaps that order
+	//     (sret pointer first, then this), so the trampoline corrupts the call -- crashing
+	//     AFGBuildableHologram::OnRep_CustomizationData even for normal in-range lookups (e.g. placing
+	//     the HUB). A void hook has no by-value return, so it is ABI-identical on every platform, and it
+	//     only intervenes while the slots are unavailable -- the server's build/paint paths run untouched.
+	SUBSCRIBE_METHOD(FFactoryCustomizationData::Initialize,
+		[](auto& scope, FFactoryCustomizationData* self, AFGGameState* gameState, int32 forceDataSize)
 		{
-			if (!self || self->mBuildingColorSlots_Data.Num() <= (int32)slot)
+			if (!gameState || gameState->mBuildingColorSlots_Data.Num() == 0)
 			{
-				// Null game state, or the slot isn't in the array yet: return a default and skip the
-				// original (which would dereference null / read out of bounds). The building resolves
-				// its real colour once the slots are populated and the dirty re-apply runs.
-				scope.Override(FFactoryCustomizationColorSlot());
+				// Colour slots not ready yet (null game state on a joining client, or the array hasn't
+				// been set up / replicated). Skip init so the original never dereferences a null 'this'
+				// or an empty array in GetBuildingColorDataForSlot; the buildable subsystem re-runs this
+				// once the slots exist (the colours are then applied by the load-time re-apply).
+				scope.Cancel();
 				return;
 			}
-			// In bounds with a valid game state -> auto-forward to the original (returns the real colour).
+			// Game state and colour slots are available -> run the original untouched.
 		});
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
-	UE_LOG(LogUSS, Verbose, TEXT("Registered GetBuildingColorDataForSlot bounds-safety hook."));
+	UE_LOG(LogUSS, Verbose, TEXT("Registered FFactoryCustomizationData::Initialize colour-slot safety hook."));
 
 	// (a) Expose two build modes (Default + Blueprint) while in the Paint state,
 	//     so the build gun shows a "Default / Blueprint" roller like Dismantle.

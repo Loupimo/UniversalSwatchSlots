@@ -13,7 +13,7 @@ A default palette comes with this mod and is activated by default. It contains t
 # How to Use
 In order to make the swatch slots appear in your game you need to configure the mod directly via the ingame menu or by editing the JSON file located at "YourStatifactoryGameFolder/FactoryGame/Configs/UniversalSwatchSlots/YourPaletteName.json"
 - **Step 1:** If you don't want to use the default palette your can create as many palettes as you want using the mod configueration menu.  
-You can add / edit / delete up to <span style="color:red">226 slots (default SF slots goes from 1 to 28 and slot 255 is for custom swatch). If you have More Swatch Slots installed it reduce the possibilities to 206 (as MSS has 20 slots)</span>. The fields are self explanatory and have tooltip to help you understand their purpose.  
+You can add / edit / delete up to <span style="color:red">226 slots (default SF slots goes from 1 to 28 and slot 255 is for custom swatch). If you have More Swatch Slots or Extra Finishes installed it reduce the possibilities (MSS has 20 slots, EF has 15 but start at index 32 so consider 19)</span>. The fields are self explanatory and have tooltip to help you understand their purpose.  
 Once your are happy with your palette don't forget to tick the checkbox to activate it.
 - **Step 3:** Start a game.
 - **Step 4:** Go to your nearest Awesome Shop, customization tab, and buy the Universal Swatch Slots upgrade for only 1 coupon !!!
@@ -91,4 +91,12 @@ If you wish to propose a translation of the default palette, please use this lin
 If you wish to share your own beautiful palette with other you can do it here:
 - **Share Your Palette**:  [GitHub Palettes](https://github.com/Loupimo/UniversalSwatchSlots/discussions/8)
 
-PS : This is my first mod so don't hesitate to report any issue
+❤️ Support This Mod
+
+This mod will always remain free and open source.
+
+If you enjoy using it and would like to support future updates, bug fixes, and new projects, consider leaving a tip. Support is completely optional, but always appreciated.
+
+☕ [Buy Loupimo a Coffee](https://ko-fi.com/loupimo)
+
+Thank you for helping keep these projects alive!
