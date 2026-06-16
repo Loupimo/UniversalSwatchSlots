@@ -29,7 +29,7 @@ Note: The swatch color are copied from the server to the player so changing a co
 
 # New painting modes
 
-Since version 1.3.0 this mod adds a new feature ! You can now press "R" when holding the customizer in hand to switch to blueprint mod painting. This allows you to paint all buildings of a same blueprint at once ! It works with USS swatches, vanilla swatches, patterns and materials.
+Since version 1.3.0 this mod adds a new feature ! You can now press "R" when holding the customizer in hand to switch to blueprint mode painting. This allows you to paint all buildings of a same blueprint at once ! It works with USS swatches, vanilla swatches, patterns and materials.
 
 Normally when using the material customizer, the targeted building will no longer be part of the blueprint it used to belong to. Here it will still be part of it after it changed. Currently, you will not be charged for modifying materials however you will not get refunded by the previous needed materials
 
@@ -39,11 +39,13 @@ If you are playing on a dedicated server or joining someone else you can activat
 
 Note: Changing color or material of a blueprint placed in game does not affect the original one.
 
-![BP Painte Mod](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/BP_Paint_Mode.png?raw=true)
+![BP Painte Mod](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Blueprint_Mode.gif?raw=true)
 
 Since version 1.3.5 this mod adds another painting mod: similar swatches. Jjust like the blueprint mod it allows you to paint all buildings of a blueprint that share the same swatch as the one applied on the  focused / locked building.
 
-![Similar Swatches Paint Mode](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Similar_Paint_Mode.png?raw=true)
+![Similar Swatches Paint Mode](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Similar_Mode.gif?raw=true)
+
+## Screenshots
 
 ![Awesome Shop](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/AS_Buy.png?raw=true)
 ![Swatches](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Swatches.png?raw=true)
@@ -54,6 +56,10 @@ Since version 1.3.5 this mod adds another painting mod: similar swatches. Jjust 
 **Is this mod compatible with More Swatch Slots ?**
 
 Now it should be fully compatible with MSS and not overwrite slots anymore and this regardless when you install / uninstall MSS
+
+**Is this mod compatible with Extra Finishes ?**
+
+Since 1.3.5 all crashes related to the Extra Finishes support are fixed. So yes it is (even if Extra Finishes' mod page says the opposite)
 
 **I have deleted some swatches in the default configuration and want them back, how do I do ?**
 
