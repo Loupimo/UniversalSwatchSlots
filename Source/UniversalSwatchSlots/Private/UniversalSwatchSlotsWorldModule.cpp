@@ -2,6 +2,7 @@
 
 
 #include "UniversalSwatchSlotsWorldModule.h"
+#include "UniversalSwatchSlots.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
 #include "FGGameState.h"
@@ -16,6 +17,62 @@
 #include "FGCharacterPlayer.h"
 #include "FGInventoryComponent.h"
 
+#if PLATFORM_WINDOWS
+#include <excpt.h>
+#endif
+
+namespace
+{
+	// Isolated so MSVC __try can catch AVs from corrupted FText shared data.
+	static void USS_FTextToStringUnsafe(const FText* Text, FString* OutString)
+	{
+		*OutString = Text->ToString();
+	}
+
+	/**
+	 * FText::ToString() / Rebuild() can ACCESS_VIOLATION on corrupted or stale preset
+	 * names (legacy saves, mod conflicts, invalid localization data). Never call ToString
+	 * unguarded on player color presets loaded from game state.
+	 */
+	static bool USS_TryFTextToString(const FText& Text, FString& OutString)
+	{
+		bool bOk = false;
+
+#if PLATFORM_WINDOWS
+		__try
+		{
+			USS_FTextToStringUnsafe(&Text, &OutString);
+			bOk = true;
+		}
+		__except (EXCEPTION_EXECUTE_HANDLER)
+		{
+			bOk = false;
+		}
+#else
+		OutString = Text.ToString();
+		bOk = true;
+#endif
+
+		if (!bOk)
+		{
+			OutString.Reset();
+		}
+
+		return bOk;
+	}
+
+	static FString USS_ResolveSwatchDisplayName(const FText& DisplayNameText, const FString& HashNameFallback)
+	{
+		FString DisplayName;
+		if (USS_TryFTextToString(DisplayNameText, DisplayName) && !DisplayName.IsEmpty())
+		{
+			return DisplayName;
+		}
+
+		// Culture-invariant fallback when mDisplayName is empty or unreadable.
+		return HashNameFallback;
+	}
+}
 
 void UUniversalSwatchSlotsWorldModule::GenerateSwatchesFromPalette(FUSSPalette Palette)
 {
@@ -115,8 +172,15 @@ TArray<FGlobalColorPreset> UUniversalSwatchSlotsWorldModule::ApplySwatchesColorO
             continue;
         }
 
-        const FString PrimName = CurrSwatch->mDisplayName.ToString() + TEXT(" - P");
-        const FString SecName = CurrSwatch->mDisplayName.ToString() + TEXT(" - S");
+        const FString BaseName = USS_ResolveSwatchDisplayName(CurrSwatch->mDisplayName, CurrSwatch->HashName);
+        if (BaseName.IsEmpty())
+        {
+            UE_LOG(LogUSS, Warning, TEXT("ApplySwatchesColorOptionToPreset: skipping swatch with unreadable display name."));
+            continue;
+        }
+
+        const FString PrimName = BaseName + TEXT(" - P");
+        const FString SecName = BaseName + TEXT(" - S");
 
         //
         // PRIMARY
@@ -128,6 +192,7 @@ TArray<FGlobalColorPreset> UUniversalSwatchSlotsWorldModule::ApplySwatchesColorO
             //
             ColorToRemove.Add(PrimName);
 
+            // FromString creates culture-invariant text (stable across language / I18N rebuilds).
             FinalColorPreset.Add(FGlobalColorPreset(FText::FromString(PrimName), CurrSwatch->PrimaryColour));
         }
         else if (RemovePrimayColors)
@@ -154,11 +219,18 @@ TArray<FGlobalColorPreset> UUniversalSwatchSlotsWorldModule::ApplySwatchesColorO
     }
 
     //
-    // Keep existing presets that are NOT removed
+    // Keep existing presets that are NOT removed.
+    // PresetName.ToString() must be guarded: corrupted FText in mPlayerGlobalColorPresets
+    // causes EXCEPTION_ACCESS_VIOLATION inside FText::Rebuild (seen in shipping crash dumps).
     //
     for (const FGlobalColorPreset& ExistingPreset : FGGameState->mPlayerGlobalColorPresets)
     {
-        const FString ExistingName = ExistingPreset.PresetName.ToString();
+        FString ExistingName;
+        if (!USS_TryFTextToString(ExistingPreset.PresetName, ExistingName))
+        {
+            UE_LOG(LogUSS, Warning, TEXT("ApplySwatchesColorOptionToPreset: dropping color preset with corrupted PresetName."));
+            continue;
+        }
 
         if (!ColorToRemove.Contains(ExistingName))
         {
@@ -175,10 +247,13 @@ TArray<FGlobalColorPreset> UUniversalSwatchSlotsWorldModule::ApplySwatchesColorO
         FGGameState->RemovePlayerColorPresetAtIndex(i);
     }
 
-    // Sort by swatch name
+    // Sort by swatch name (guarded — same corruption risk as above)
     FinalColorPreset.Sort([](const FGlobalColorPreset& Lhs, const FGlobalColorPreset& Rhs) -> bool {
-        if (Lhs.PresetName.ToString() < Rhs.PresetName.ToString()) return true;
-        return false;
+        FString LhsName;
+        FString RhsName;
+        USS_TryFTextToString(Lhs.PresetName, LhsName);
+        USS_TryFTextToString(Rhs.PresetName, RhsName);
+        return LhsName < RhsName;
         });
 
     return FinalColorPreset;
