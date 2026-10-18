@@ -39,17 +39,17 @@ If you are playing on a dedicated server or joining someone else you can activat
 
 Note: Changing color or material of a blueprint placed in game does not affect the original one.
 
-![BP Painte Mod](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Blueprint_Mode.gif?raw=true)
+![BP Painte Mod](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Mod_Presentation/Blueprint_Mode.gif?raw=true)
 
 Since version 1.3.5 this mod adds another painting mod: similar swatches. Jjust like the blueprint mod it allows you to paint all buildings of a blueprint that share the same swatch as the one applied on the  focused / locked building.
 
-![Similar Swatches Paint Mode](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Similar_Mode.gif?raw=true)
+![Similar Swatches Paint Mode](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Mod_Presentation/Similar_Mode.gif?raw=true)
 
 ## Screenshots
 
-![Awesome Shop](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/AS_Buy.png?raw=true)
-![Swatches](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Swatches.png?raw=true)
-![Color preset](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Resources/Color_preset.png?raw=true)
+![Awesome Shop](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Mod_Presentation/AS_Buy.png?raw=true)
+![Swatches](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Mod_Presentation/Swatches.png?raw=true)
+![Color preset](https://github.com/Loupimo/UniversalSwatchSlots/blob/main/Mod_Presentation/Color_preset.png?raw=true)
 
 # Q/A
 
