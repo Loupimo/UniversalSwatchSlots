@@ -33,6 +33,8 @@ TArray<TWeakObjectPtr<AFGBuildable>> FUSSBuildGunPaintMode::HighlightedBuildable
 TWeakObjectPtr<AFGCharacterPlayer> FUSSBuildGunPaintMode::HighlightCharacter;
 TWeakObjectPtr<AActor> FUSSBuildGunPaintMode::LightweightInstigator;
 TSet<TWeakObjectPtr<AFGBuildable>> FUSSBuildGunPaintMode::PreviewedBuildables;
+TMap<TWeakObjectPtr<AFGBuildable>, TPair<UClass*, int32>> FUSSBuildGunPaintMode::TemporaryLightweightRefs;
+TSet<TPair<UClass*, int32>> FUSSBuildGunPaintMode::PreviewedLightweights;
 TWeakObjectPtr<UClass> FUSSBuildGunPaintMode::LastPreviewDescClass;
 uint8 FUSSBuildGunPaintMode::LastPreviewPatternRotation = 0;
 TWeakObjectPtr<AFGBuildable> FUSSBuildGunPaintMode::LastGameFocusedBuildable;
@@ -649,6 +651,7 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 					if (tempInfo->Buildable)
 					{
 						HighlightedBuildables.AddUnique(tempInfo->Buildable);
+						TemporaryLightweightRefs.Add(tempInfo->Buildable, TPair<UClass*, int32>(*entry.BuildableClass, index));
 					}
 				}
 			}
@@ -741,6 +744,10 @@ void FUSSBuildGunPaintMode::UpdateBlueprintHighlight(UFGBuildGunState* paintStat
 			previewData.Initialize(gameState);
 			buildable->ApplyCustomizationData_Native(previewData); // visual only
 			PreviewedBuildables.Add(weakBuildable);
+			if (const TPair<UClass*, int32>* lightweightRef = TemporaryLightweightRefs.Find(weakBuildable))
+			{
+				PreviewedLightweights.Add(*lightweightRef);
+			}
 		}
 	}
 }
@@ -762,10 +769,10 @@ void FUSSBuildGunPaintMode::ClearBlueprintHighlight()
 			IFGColorInterface::Execute_StopIsAimedAtForColor(buildable, character);
 		}
 
-		// Revert ONLY the buildings we actually previewed (tracked in PreviewedBuildables): restores
-		// their real look, and keeps the racy colour writes to the same minimum as the apply.
-		// (Lightweight temps also revert on their own when the subsystem reclaims them.)
-		if (PreviewedBuildables.Contains(weakBuildable))
+		// Revert ONLY the actor buildings we actually previewed (tracked in PreviewedBuildables):
+		// restores their real look, and keeps the racy colour writes to the same minimum as the apply.
+		// Lightweight temps are reverted by instance index below.
+		if (PreviewedBuildables.Contains(weakBuildable) && !TemporaryLightweightRefs.Contains(weakBuildable))
 		{
 			const FFactoryCustomizationData& realData = buildable->GetCustomizationData_Native();
 			if (realData.IsInitialized())
@@ -775,20 +782,58 @@ void FUSSBuildGunPaintMode::ClearBlueprintHighlight()
 		}
 	}
 
-	// Remove the instigator so the subsystem reclaims the lightweight temporaries it kept alive.
-	if (AActor* instigator = LightweightInstigator.Get())
+	AActor* instigator = LightweightInstigator.Get();
+	UWorld* world = instigator ? instigator->GetWorld() : (character ? character->GetWorld() : nullptr);
+	AFGLightweightBuildableSubsystem* lightweightSubsystem = world ? AFGLightweightBuildableSubsystem::Get(world) : nullptr;
+
+	// Lightweight instances (foundations, walls, ...): the preview was written through a temporary
+	// actor onto the shared instanced mesh, and survives that temp being reclaimed (which can happen
+	// mid-highlight, leaving us with a dead actor pointer). Restore each previewed instance from its
+	// real runtime data through its current temp (respawned if needed; the instigator is still active
+	// here, and the subsystem reclaims the temp afterwards).
+	if (lightweightSubsystem && PreviewedLightweights.Num() > 0)
 	{
-		if (UWorld* world = instigator->GetWorld())
+		AFGGameState* gameState = world->GetGameState<AFGGameState>();
+		for (const TPair<UClass*, int32>& lightweightRef : PreviewedLightweights)
 		{
-			if (AFGLightweightBuildableSubsystem* lightweightSubsystem = AFGLightweightBuildableSubsystem::Get(world))
+			TSubclassOf<AFGBuildable> buildableClass = lightweightRef.Key;
+			FRuntimeBuildableInstanceData* runtimeData =
+				lightweightSubsystem->GetRuntimeDataForBuildableClassAndIndex(buildableClass, lightweightRef.Value);
+			if (!buildableClass || !runtimeData || !runtimeData->IsValid())
 			{
-				lightweightSubsystem->RemoveInstanceConverterInstigator(instigator);
+				continue; // instance removed meanwhile: nothing to restore
+			}
+
+			bool didSpawn = false;
+			FInstanceToTemporaryBuildable* tempInfo =
+				lightweightSubsystem->FindOrSpawnBuildableForRuntimeData(buildableClass, runtimeData, lightweightRef.Value, didSpawn);
+			if (!tempInfo || !IsValid(tempInfo->Buildable))
+			{
+				continue;
+			}
+
+			FFactoryCustomizationData realData = runtimeData->CustomizationData;
+			if (!realData.IsInitialized() && gameState)
+			{
+				realData.Initialize(gameState);
+			}
+			if (realData.IsInitialized())
+			{
+				tempInfo->Buildable->ApplyCustomizationData_Native(realData);
 			}
 		}
 	}
 
+	// Remove the instigator so the subsystem reclaims the lightweight temporaries it kept alive.
+	if (instigator && lightweightSubsystem)
+	{
+		lightweightSubsystem->RemoveInstanceConverterInstigator(instigator);
+	}
+
 	HighlightedBuildables.Reset();
 	PreviewedBuildables.Reset();
+	TemporaryLightweightRefs.Reset();
+	PreviewedLightweights.Reset();
 	LastPreviewDescClass = nullptr;
 	LastPreviewPatternRotation = 0;
 	LastGameFocusedBuildable = nullptr;

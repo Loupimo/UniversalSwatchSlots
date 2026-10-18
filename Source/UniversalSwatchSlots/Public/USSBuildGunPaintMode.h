@@ -90,6 +90,14 @@ private:
 	 *  instead of every tick, and re-apply only when the active customization changes. */
 	static TSet<TWeakObjectPtr<AFGBuildable>> PreviewedBuildables;
 
+	/** Lightweight instance (buildable class + runtime index) backing each temporary actor we highlight. */
+	static TMap<TWeakObjectPtr<AFGBuildable>, TPair<UClass*, int32>> TemporaryLightweightRefs;
+
+	/** Lightweight instances (class + index) that received the colour preview. The preview written
+	 *  through a temporary actor stays on the shared instanced mesh after the subsystem reclaims that
+	 *  temp (it can be reclaimed / respawned mid-highlight), so we revert by index, not by actor. */
+	static TSet<TPair<UClass*, int32>> PreviewedLightweights;
+
 	/** The customization the colour preview was last applied with; a change forces a single
 	 *  re-apply across every plan building. */
 	static TWeakObjectPtr<UClass> LastPreviewDescClass;

@@ -26,7 +26,7 @@ namespace
 	// Isolated so MSVC __try can catch AVs from corrupted FText shared data.
 	static void USS_FTextToStringUnsafe(const FText* Text, FString* OutString)
 	{
-		*OutString = Text->ToString();
+        *OutString = Text->ToString();
 	}
 
 	/**
