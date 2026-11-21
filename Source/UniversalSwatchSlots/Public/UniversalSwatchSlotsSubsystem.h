@@ -239,4 +239,7 @@ protected:
 
 	/* The internal map to check if all previous saved swatches have a macthing loaded swatch. If a key is not equal to its value we should get all actors of FGBuilding type to re-reference the swatches. */
 	TMap <int, int> InternalSwatchMatch;
+
+	/* Tells if the buildings have already been remapped this session (remapping twice would shift them again). */
+	bool BuildingsPatched = false;
 };

@@ -532,8 +532,10 @@ bool AUniversalSwatchSlotsSubsystem::GenerateNewSwatchUsingInfo(UUSSSwatchGroup*
 		this->InternalSwatchMatch.Add(tmpSaved.SwatchSlotID, slotID);
 		UE_LOG(LogUSS_Subsystem, Verbose, TEXT("Found saved color \"%s\" at slot : %d"), *genName, tmpSaved.SwatchSlotID);
 	}
-	else
-	{	// There is none
+	else if (!this->InternalSwatchMatch.Contains(slotID))
+	{	// There is none. Don't overwrite a remap already registered for this key: buildings saved with
+		// this slot belong to the saved swatch that used it, which may have moved (e.g. a swatch removed
+		// earlier in the palette shifts every following one, and a new swatch takes the freed last slot).
 
 		this->InternalSwatchMatch.Add(slotID, slotID);
 	}
@@ -548,6 +550,13 @@ bool AUniversalSwatchSlotsSubsystem::GenerateNewSwatchUsingInfo(UUSSSwatchGroup*
 
 void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
 {
+	if (this->BuildingsPatched || this->InternalSwatchMatch.Num() <= 0)
+	{	// Already done for this session (remapping twice would shift the buildings again), or the
+		// palette hasn't been matched against the save yet (UpdateSavedSwatches must run first).
+
+		return;
+	}
+
 	TArray<AActor*> foundActors;
 	bool shouldPatch = false;
 
@@ -686,6 +695,8 @@ void AUniversalSwatchSlotsSubsystem::PatchBuildingsSwatchDescriptor()
 
 		UE_LOG(LogUSS_Subsystem, Display, TEXT("Patched USS swatch descriptors: %d actor buildings, %d lightweight instances."), patchedActors, patchedLightweights);
 	}
+
+	this->BuildingsPatched = true;
 }
 
 

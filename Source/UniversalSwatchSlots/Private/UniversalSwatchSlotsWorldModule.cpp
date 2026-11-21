@@ -219,16 +219,30 @@ TArray<FGlobalColorPreset> UUniversalSwatchSlotsWorldModule::ApplySwatchesColorO
     }
 
     //
+    // The preset array itself can be unreadable (e.g. game-state layout not matching the headers on a
+    // dedicated server build): Num() is then garbage and every entry faults, which floods the log and
+    // makes the remove loop below run "forever". Bail out without touching the game state in that case.
+    //
+    const int32 MaxSanePresetCount = 4096;
+    const int32 ExistingPresetCount = FGGameState->mPlayerGlobalColorPresets.Num();
+    if (ExistingPresetCount < 0 || ExistingPresetCount > MaxSanePresetCount)
+    {
+        UE_LOG(LogUSS, Error, TEXT("ApplySwatchesColorOptionToPreset: player color preset array looks invalid (%d entries). Leaving presets untouched."), ExistingPresetCount);
+        return TArray<FGlobalColorPreset>();
+    }
+
+    //
     // Keep existing presets that are NOT removed.
     // PresetName.ToString() must be guarded: corrupted FText in mPlayerGlobalColorPresets
     // causes EXCEPTION_ACCESS_VIOLATION inside FText::Rebuild (seen in shipping crash dumps).
     //
+    int32 CorruptedPresetCount = 0;
     for (const FGlobalColorPreset& ExistingPreset : FGGameState->mPlayerGlobalColorPresets)
     {
         FString ExistingName;
         if (!USS_TryFTextToString(ExistingPreset.PresetName, ExistingName))
         {
-            UE_LOG(LogUSS, Warning, TEXT("ApplySwatchesColorOptionToPreset: dropping color preset with corrupted PresetName."));
+            ++CorruptedPresetCount;
             continue;
         }
 
@@ -236,6 +250,17 @@ TArray<FGlobalColorPreset> UUniversalSwatchSlotsWorldModule::ApplySwatchesColorO
         {
             FinalColorPreset.Add(ExistingPreset);
         }
+    }
+
+    if (CorruptedPresetCount > 0)
+    {
+        if (CorruptedPresetCount == ExistingPresetCount)
+        {	// Not a few stale names: nothing in the array is readable, so don't wipe it on that basis.
+            UE_LOG(LogUSS, Error, TEXT("ApplySwatchesColorOptionToPreset: none of the %d player color presets is readable. Leaving presets untouched."), ExistingPresetCount);
+            return TArray<FGlobalColorPreset>();
+        }
+
+        UE_LOG(LogUSS, Warning, TEXT("ApplySwatchesColorOptionToPreset: dropped %d/%d color presets with corrupted PresetName."), CorruptedPresetCount, ExistingPresetCount);
     }
 
     //
